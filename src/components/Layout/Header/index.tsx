@@ -6,12 +6,12 @@ import {
   Typography,
 } from '@material-ui/core';
 
+import { AppName } from 'constantsApp';
 import { appBarSpacer } from '../../ThemeContext/styles';
-import { AppName } from '../../../constants/index';
 import { Items } from './Items';
 
 const useStyles = makeStyles((theme) => ({
-  appBarSpacer: appBarSpacer(theme),
+  appBarSpacer: appBarSpacer(theme, true),
 }));
 
 export const Header = () => {
