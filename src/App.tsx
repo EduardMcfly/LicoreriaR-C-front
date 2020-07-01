@@ -5,6 +5,7 @@ import {
   Route,
   Redirect,
 } from 'react-router-dom';
+import { CssBaseline } from '@material-ui/core';
 
 import { ThemeProvider } from 'components/ThemeContext';
 import { PathRoutes } from './constantsApp';
@@ -13,6 +14,7 @@ import { Landing } from './pages/Landing';
 function App() {
   return (
     <ThemeProvider>
+      <CssBaseline />
       <HashRouter>
         <Switch>
           <Route
