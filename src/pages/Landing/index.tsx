@@ -11,6 +11,7 @@ import {
 import { AppName } from 'constantsApp';
 import { Header } from 'components/Layout';
 import nails from 'assets/nails.webp';
+import Banners from './Banners/index';
 
 const useStyles = makeStyles((theme) => {
   const timeTransition = '1s';
@@ -55,6 +56,9 @@ const useStyles = makeStyles((theme) => {
     summaryButton: {
       marginTop: theme.spacing(-2),
     },
+    banners: {
+      padding: theme.spacing(2),
+    },
   };
 });
 
@@ -94,6 +98,9 @@ export const Landing = () => {
           Más información
         </Button>
       </Grid>
+      <div className={classes.banners}>
+        <Banners />
+      </div>
     </>
   );
 };
