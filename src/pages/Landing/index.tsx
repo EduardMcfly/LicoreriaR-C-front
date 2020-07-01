@@ -8,6 +8,7 @@ import {
   Typography,
 } from '@material-ui/core';
 
+import { AppName } from 'constantsApp';
 import { Header } from 'components/Layout';
 import nails from 'assets/nails.webp';
 
@@ -79,7 +80,7 @@ export const Landing = () => {
         >
           <Grid item xs>
             <Typography variant="h4" align="center">
-              Bienvenido a Danails
+              Bienvenido a {AppName}
             </Typography>
           </Grid>
         </Grid>
