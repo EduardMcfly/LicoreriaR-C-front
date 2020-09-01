@@ -1,5 +1,4 @@
-import pink from '@material-ui/core/colors/pink';
-import purple from '@material-ui/core/colors/purple';
+import green from '@material-ui/core/colors/green';
 import { ThemeOptions } from '@material-ui/core/styles/createMuiTheme';
 import { PaletteType } from '@material-ui/core';
 import { darken } from '@material-ui/core/styles';
@@ -8,9 +7,9 @@ import grey from '@material-ui/core/colors/grey';
 export const initialTheme: (
   paletteType: PaletteType,
 ) => ThemeOptions = (paletteType) => {
-  const primary = paletteType === 'light' ? pink[400] : pink[500];
+  const primary = paletteType === 'light' ? grey[800] : grey[900];
   const secondary =
-    paletteType === 'light' ? darken(purple.A400, 0) : purple[300];
+    paletteType === 'light' ? darken(green[600], 0) : green[600];
   return {
     palette: {
       primary: {
