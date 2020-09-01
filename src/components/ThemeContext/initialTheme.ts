@@ -10,10 +10,12 @@ export const initialTheme: (
   const primary = paletteType === 'light' ? grey[800] : grey[900];
   const secondary =
     paletteType === 'light' ? darken(green[600], 0) : green[600];
+  const contrastText = '#d8c095';
   return {
     palette: {
       primary: {
         main: primary,
+        contrastText,
       },
       secondary: {
         main: secondary,
