@@ -12,15 +12,16 @@ import GridListTileBar from '@material-ui/core/GridListTileBar';
 import { getGrid, useWidth } from 'utils';
 import { bannersList } from './bannersList';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
+const useStyles = makeStyles((theme: Theme) => {
+  const { contrastText } = theme.palette.primary;
+  return createStyles({
     root: {
       display: 'flex',
       justifyContent: 'space-around',
       overflow: 'hidden',
     },
     icon: {
-      color: 'rgba(255, 255, 255, 0.54)',
+      color: contrastText,
     },
     gridListTile: {
       '&:hover': {
@@ -31,8 +32,11 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     gridListTileBar: { transition: `height 0.5s ease` },
-  }),
-);
+    titleWrap: {
+      color: contrastText,
+    },
+  });
+});
 
 export const Banners = () => {
   const classes = useStyles();
@@ -60,6 +64,7 @@ export const Banners = () => {
               title={title}
               subtitle={subTitle}
               className={classes.gridListTileBar}
+              classes={{ titleWrap: classes.titleWrap }}
             />
           </GridListTile>
         );
