@@ -4,10 +4,11 @@ import {
   createStyles,
   makeStyles,
 } from '@material-ui/core/styles';
-import { ButtonBase } from '@material-ui/core';
+import { ButtonBase, Typography } from '@material-ui/core';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
+import currencyFormatter from 'currency-formatter';
 
 import { getGrid, useWidth } from 'utils';
 import { bannersList } from './bannersList';
@@ -52,7 +53,7 @@ export const Banners = () => {
 
   return (
     <GridList cellHeight={180} cols={cols} className={classes.root}>
-      {bannersList.map(({ title, subTitle, image }, i) => {
+      {bannersList.map(({ title, price, image }, i) => {
         return (
           <GridListTile
             component={ButtonBase}
@@ -62,7 +63,14 @@ export const Banners = () => {
             <img src={image} alt={title} />
             <GridListTileBar
               title={title}
-              subtitle={subTitle}
+              subtitle={
+                <Typography>
+                  {currencyFormatter.format(price, {
+                    code: 'COP',
+                    precision: 0,
+                  })}
+                </Typography>
+              }
               className={classes.gridListTileBar}
               classes={{ titleWrap: classes.titleWrap }}
             />
