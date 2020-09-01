@@ -15,17 +15,18 @@ import Banners from './Banners/index';
 
 const useStyles = makeStyles((theme) => {
   const timeTransition = '1s';
+  const { contrastText } = theme.palette.primary;
   return {
     summary: {
       height: theme.spacing(50),
       overflow: 'hidden',
       position: 'relative',
       transition: `color ${timeTransition} ease`,
-      color: theme.palette.background.paper,
+      color: contrastText,
       '&:hover': {
-        color: emphasize(theme.palette.background.paper, 1),
+        color: emphasize(contrastText, 1),
         '& $overlay': {
-          background: fade(theme.palette.background.paper, 0.4),
+          background: fade(contrastText, 0.4),
         },
       },
     },
@@ -46,7 +47,7 @@ const useStyles = makeStyles((theme) => {
     overlay: {
       transition: `background ${timeTransition} ease`,
       background: emphasize(
-        fade(theme.palette.background.paper, 0.4),
+        fade(theme.palette.background.paper, 0.8),
         0.8,
       ),
       position: 'absolute',
