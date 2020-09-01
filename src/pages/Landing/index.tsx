@@ -10,7 +10,7 @@ import {
 
 import { AppName } from 'constantsApp';
 import { Header } from 'components/Layout';
-import nails from 'assets/nails.webp';
+import background from 'assets/background.png';
 import Banners from './Banners/index';
 
 const useStyles = makeStyles((theme) => {
@@ -75,7 +75,7 @@ export const Landing = () => {
           justify="center"
           alignItems="center"
         >
-          <img src={nails} className={classes.image} alt="nails" />
+          <img src={background} className={classes.image} alt="background" />
           <div className={classes.overlay}></div>
         </Grid>
         <Grid
