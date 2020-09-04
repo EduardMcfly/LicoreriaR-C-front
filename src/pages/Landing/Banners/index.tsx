@@ -32,7 +32,10 @@ const useStyles = makeStyles((theme: Theme) => {
         },
       },
     },
-    gridListTileBar: { transition: `height 0.5s ease` },
+    gridListTileBar: {
+      transition: `height 0.5s ease`,
+      borderRadius: theme.spacing(4, 4, 0, 0),
+    },
     titleWrap: {
       color: contrastText,
     },
