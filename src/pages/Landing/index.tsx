@@ -37,6 +37,7 @@ const useStyles = makeStyles((theme) => {
       position: 'absolute',
       height: '100%',
       zIndex: -1,
+      background: emphasize(theme.palette.background.paper, 0.9),
     },
     image: {
       height: 'auto',
@@ -75,7 +76,11 @@ export const Landing = () => {
           justify="center"
           alignItems="center"
         >
-          <img src={background} className={classes.image} alt="background" />
+          <img
+            src={background}
+            className={classes.image}
+            alt="background"
+          />
           <div className={classes.overlay}></div>
         </Grid>
         <Grid
