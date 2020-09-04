@@ -10,7 +10,7 @@ export const Items = () => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <Button color="secondary">RESERVA TU CITA</Button>
+      <Button color="secondary">Hacer un pedido</Button>
     </div>
   );
 };
