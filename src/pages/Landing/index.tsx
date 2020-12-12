@@ -24,9 +24,9 @@ const useStyles = makeStyles((theme) => {
       transition: `color ${timeTransition} ease`,
       color: contrastText,
       '&:hover': {
-        color: emphasize(contrastText, 1),
+        color: emphasize(emphasize(contrastText, 1), 1),
         '& $overlay': {
-          background: fade(contrastText, 0.4),
+          background: fade(contrastText, 0.3),
         },
       },
     },
