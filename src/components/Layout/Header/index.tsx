@@ -19,7 +19,7 @@ export const Header = () => {
   return (
     <>
       <AppBar>
-        <Toolbar variant="dense">
+        <Toolbar variant="regular">
           <Typography variant="h5">{AppName}</Typography>
           <Items />
         </Toolbar>
