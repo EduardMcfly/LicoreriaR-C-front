@@ -38,7 +38,7 @@ interface AddCartProps {
 export default function AddCart({ product: item }: AddCartProps) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-  const [amount, setAmount] = React.useState<number | ''>('');
+  const [amount, setAmount] = React.useState<number>(0);
   const { addItem, items } = useShop();
 
   const getMax = React.useCallback(() => {
@@ -52,10 +52,10 @@ export default function AddCart({ product: item }: AddCartProps) {
     if (amount > max) setAmount(max);
   }, [amount, getMax, setAmount]);
 
-  const handleChange = (event: { value: string | number }) => {
+  const handleChange = (newValue: string | number) => {
     const max = getMax();
-    const value = Number(event.value);
-    setAmount(value > max ? max : value || '');
+    const value = Number(newValue);
+    setAmount(value > max ? max : value);
   };
 
   const handleClickOpen = () => {
@@ -89,13 +89,13 @@ export default function AddCart({ product: item }: AddCartProps) {
               type="number"
               id="my-input"
               aria-describedby="my-helper-text"
-              value={amount}
+              value={amount || ''}
               startAdornment={
                 <IconButton
                   color="primary"
                   aria-label="reduce"
                   onClick={() => {
-                    // setCount(Math.max(count - 1, 0));
+                    handleChange(Math.max(amount - 1, 0));
                   }}
                 >
                   <RemoveIcon fontSize="small" />
@@ -106,14 +106,14 @@ export default function AddCart({ product: item }: AddCartProps) {
                   color="primary"
                   aria-label="increase"
                   onClick={() => {
-                    // setCount(count + 1);
+                    handleChange(amount + 1);
                   }}
                 >
                   <AddIcon fontSize="small" />
                 </IconButton>
               }
               onChange={({ target: { value } }) =>
-                handleChange({ value })
+                handleChange(value)
               }
             />
           </FormControl>
