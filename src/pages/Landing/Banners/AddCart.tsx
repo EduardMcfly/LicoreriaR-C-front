@@ -9,6 +9,7 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
+  Typography,
 } from '@material-ui/core';
 
 import { useShop } from 'contexts/Shop';
@@ -78,7 +79,7 @@ export default function AddCart({ product: item }: AddCartProps) {
             }}
             color="secondary"
           >
-            Agregar al carrito
+            <Typography noWrap>Agregar al carrito</Typography>
           </Button>
         </DialogActions>
       </Dialog>
