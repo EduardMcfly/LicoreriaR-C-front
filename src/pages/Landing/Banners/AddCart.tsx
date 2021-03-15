@@ -22,13 +22,13 @@ interface AddCartProps {
 export default function AddCart({ product: item }: AddCartProps) {
   const [open, setOpen] = React.useState(false);
   const [amount, setAmount] = React.useState<number>(0);
-  const { addItem, items } = useShop();
+  const { addProduct, products } = useShop();
 
   const getMax = React.useCallback(() => {
-    const itemShop = items.find(({ id }) => item.id === id);
+    const itemShop = products.find(({ id }) => item.id === id);
     const max = item.max - (itemShop?.amount || 0);
     return max;
-  }, [items, item]);
+  }, [products, item]);
 
   React.useEffect(() => {
     const max = getMax();
@@ -73,7 +73,7 @@ export default function AddCart({ product: item }: AddCartProps) {
           <Button
             onClick={() => {
               if (amount) {
-                addItem({ id: item.id, amount });
+                addProduct({ id: item.id, amount });
               }
             }}
             color="secondary"
