@@ -8,9 +8,9 @@ interface Item {
 interface ShopPropsBase {}
 
 interface ShopProps extends ShopPropsBase {
-  items: Item[];
-  setItems: React.Dispatch<React.SetStateAction<Item[]>>;
-  addItem: (item: Item) => void;
+  products: Item[];
+  setProducts: React.Dispatch<React.SetStateAction<Item[]>>;
+  addProduct: (item: Item) => void;
 }
 
 const ShopContext = React.createContext<ShopProps>(
@@ -22,9 +22,9 @@ export const ShopProvider = ({
 }: React.PropsWithChildren<
   ShopPropsBase & { isCreating?: boolean }
 >) => {
-  const [items, setItems] = React.useState<Item[]>([]);
-  const addItem = (item: Item) => {
-    const newItems = [item, ...items].reduce<Record<string, Item>>(
+  const [products, setProducts] = React.useState<Item[]>([]);
+  const addProduct = (item: Item) => {
+    const newItems = [item, ...products].reduce<Record<string, Item>>(
       (previousValue, currentValue) => {
         const { id, amount } = currentValue;
         if (previousValue[id]) previousValue[id].amount += amount;
@@ -33,12 +33,13 @@ export const ShopProvider = ({
       },
       {},
     );
-    setItems(Object.values(newItems));
+    setProducts(Object.values(newItems));
   };
-  console.log(items);
 
   return (
-    <ShopContext.Provider value={{ items, setItems, addItem }}>
+    <ShopContext.Provider
+      value={{ products, setProducts, addProduct }}
+    >
       {children}
     </ShopContext.Provider>
   );
