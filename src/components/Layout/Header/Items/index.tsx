@@ -13,12 +13,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 export const Items = () => {
   const classes = useStyles();
-  const { items } = useShop();
+  const { products } = useShop();
   return (
     <div className={classes.root}>
       <IconButton>
         <Badge
-          badgeContent={items.length}
+          badgeContent={products.length}
           className={classes.icon}
           color="secondary"
           aria-label="cart"
