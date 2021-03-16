@@ -75,6 +75,7 @@ export default function AddCart({ product: item }: AddCartProps) {
             onClick={() => {
               if (amount) {
                 addProduct({ id: item.id, amount });
+                handleClose();
               }
             }}
             color="secondary"
