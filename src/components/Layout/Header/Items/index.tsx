@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles, Badge, IconButton } from '@material-ui/core';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import { useShop } from '../../../../contexts/Shop/index';
+import CardDialog from '../../../Cart';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -14,9 +15,10 @@ const useStyles = makeStyles((theme) => ({
 export const Items = () => {
   const classes = useStyles();
   const { products } = useShop();
+  const [open, setOpen] = React.useState(false);
   return (
     <div className={classes.root}>
-      <IconButton>
+      <IconButton onClick={() => setOpen(true)}>
         <Badge
           badgeContent={products.length}
           className={classes.icon}
@@ -26,6 +28,7 @@ export const Items = () => {
           <ShoppingCartIcon />
         </Badge>
       </IconButton>
+      <CardDialog open={open} onClose={() => setOpen(false)} />
     </div>
   );
 };
