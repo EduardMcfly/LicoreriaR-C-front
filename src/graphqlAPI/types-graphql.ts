@@ -31,6 +31,8 @@ export type Product = {
   name: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   price: Scalars['Float'];
+  image?: Maybe<Scalars['String']>;
+  max?: Maybe<Scalars['Float']>;
   creationDate: Scalars['DateTime'];
 };
 
