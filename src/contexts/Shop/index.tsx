@@ -1,9 +1,10 @@
 import React from 'react';
 
-interface Item {
-  id: number;
+import { Product } from 'graphqlAPI';
+
+type Item = Pick<Product, 'id'> & {
   amount: number;
-}
+};
 
 interface ShopPropsBase {}
 
