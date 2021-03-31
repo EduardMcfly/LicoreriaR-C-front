@@ -13,8 +13,8 @@ import {
 } from '@material-ui/core';
 
 import { useShop } from 'contexts/Shop';
-import { Product } from './products';
 import { Amount } from 'components/Fields/Amount';
+import { Product } from 'graphqlAPI';
 
 interface AddCartProps {
   product: Product;
@@ -27,7 +27,7 @@ export default function AddCart({ product: item }: AddCartProps) {
 
   const getMax = React.useCallback(() => {
     const itemShop = products.find(({ id }) => item.id === id);
-    const max = item.max - (itemShop?.amount || 0);
+    const max = (item.max || 99) - (itemShop?.amount || 0);
     return max;
   }, [products, item]);
 
@@ -59,9 +59,9 @@ export default function AddCart({ product: item }: AddCartProps) {
         <DialogTitle>
           <ListItem>
             <ListItemAvatar>
-              <Avatar alt={item.title} src={item.image} />
+              <Avatar alt={item.name} src={item.image || ''} />
             </ListItemAvatar>
-            <ListItemText primary={item.title} />
+            <ListItemText primary={item.name} />
           </ListItem>
         </DialogTitle>
         <DialogContent>

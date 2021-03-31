@@ -11,8 +11,8 @@ import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import currencyFormatter from 'currency-formatter';
 
+import { useProducts } from 'graphqlAPI';
 import { getGrid, useWidth } from 'utils';
-import { products } from './products';
 import AddCart from './AddCart';
 
 const useStyles = makeStyles((theme: Theme) => {
@@ -66,16 +66,17 @@ export const Banners = () => {
     },
     width,
   );
+  const { data } = useProducts();
 
   return (
     <GridList cellHeight={300} cols={cols} className={classes.root}>
-      {products.map((product, i) => {
-        const { title, price, image } = product;
+      {data?.products.map((product, i) => {
+        const { name, price, image } = product;
         return (
           <GridListTile key={i} className={classes.gridListTile}>
-            <img src={image} alt={title} />
+            <img src={image || ''} alt={name} />
             <GridListTileBar
-              title={title}
+              title={name}
               subtitle={
                 <>
                   <Typography>
