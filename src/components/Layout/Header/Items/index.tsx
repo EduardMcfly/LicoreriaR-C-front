@@ -1,8 +1,8 @@
 import React from 'react';
 import { makeStyles, Badge, IconButton } from '@material-ui/core';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import { useShop } from '../../../../contexts/Shop/index';
-import CardDialog from '../../../Cart';
+import PersonIcon from '@material-ui/icons/Person';
+
+import { CartItem } from './CartItem';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -12,23 +12,21 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.common.white,
   },
 }));
+
 export const Items = () => {
   const classes = useStyles();
-  const { products } = useShop();
-  const [open, setOpen] = React.useState(false);
   return (
     <div className={classes.root}>
-      <IconButton onClick={() => setOpen(true)}>
+      <CartItem className={classes.icon} />
+      <IconButton onClick={() => true}>
         <Badge
-          badgeContent={products.length}
           className={classes.icon}
           color="secondary"
           aria-label="cart"
         >
-          <ShoppingCartIcon />
+          <PersonIcon />
         </Badge>
       </IconButton>
-      <CardDialog open={open} onClose={() => setOpen(false)} />
     </div>
   );
 };
