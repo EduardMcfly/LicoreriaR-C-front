@@ -12,6 +12,8 @@ interface ShopProps extends ShopPropsBase {
   products: Item[];
   setProducts: React.Dispatch<React.SetStateAction<Item[]>>;
   addProduct: (item: Item) => void;
+  changeAmount: (item: Item) => void;
+  removeProduct: (item: Item) => void;
 }
 
 const ShopContext = React.createContext<ShopProps>(
@@ -37,9 +39,33 @@ export const ShopProvider = ({
     setProducts(Object.values(newItems));
   };
 
+  const changeAmount = (item: Item) => {
+    const newProducts = products.map(
+      (product): Item => {
+        const { id } = product;
+        if (item.id === id) {
+          return item;
+        } else return product;
+      },
+    );
+    setProducts(newProducts);
+  };
+  const removeProduct = (item: Item) => {
+    const newProducts = products.filter(
+      (product) => product.id !== item.id,
+    );
+    setProducts(newProducts);
+  };
+
   return (
     <ShopContext.Provider
-      value={{ products, setProducts, addProduct }}
+      value={{
+        products,
+        setProducts,
+        addProduct,
+        changeAmount,
+        removeProduct,
+      }}
     >
       {children}
     </ShopContext.Provider>
