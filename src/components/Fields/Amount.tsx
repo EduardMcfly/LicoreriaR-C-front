@@ -40,6 +40,7 @@ export const Amount = ({ value, handleChange }: AmountProps) => (
         </IconButton>
       }
       onChange={({ target: { value } }) => handleChange(+value)}
+      disableUnderline
     />
   </FormControl>
 );
