@@ -1,7 +1,9 @@
 import React from 'react';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
-import FormControl from '@material-ui/core/FormControl';
+import FormControl, {
+  FormControlProps,
+} from '@material-ui/core/FormControl';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import { IconButton } from '@material-ui/core';
@@ -9,10 +11,15 @@ import { IconButton } from '@material-ui/core';
 interface AmountProps {
   value: number;
   handleChange: (value: number) => void;
+  formControlProps?: FormControlProps;
 }
 
-export const Amount = ({ value, handleChange }: AmountProps) => (
-  <FormControl fullWidth>
+export const Amount = ({
+  value,
+  handleChange,
+  formControlProps,
+}: AmountProps) => (
+  <FormControl fullWidth {...formControlProps}>
     <InputLabel>Cantidad</InputLabel>
     <Input
       type="number"
