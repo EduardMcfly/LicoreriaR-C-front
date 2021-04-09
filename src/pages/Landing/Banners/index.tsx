@@ -12,7 +12,9 @@ import GridListTileBar from '@material-ui/core/GridListTileBar';
 import currencyFormatter from 'currency-formatter';
 
 import { useProducts } from 'graphqlAPI';
+import { createAPIImageRoute } from 'constantsApp';
 import { getGrid, useWidth } from 'utils';
+
 import AddCart from './AddCart';
 
 const useStyles = makeStyles((theme: Theme) => {
@@ -87,6 +89,11 @@ export const Banners = () => {
             classes={{
               imgFullHeight: classes.gridListTileImgFullHeight,
             }}
+          >
+            <img
+              src={(image && createAPIImageRoute(image)) || ''}
+              alt={name}
+            />
             <GridListTileBar
               title={name}
               subtitle={
