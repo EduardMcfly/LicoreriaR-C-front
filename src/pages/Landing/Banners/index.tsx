@@ -35,6 +35,14 @@ const useStyles = makeStyles((theme: Theme) => {
         },
       },
     },
+    gridListTileImgFullHeight: {
+      width: '100%',
+      position: 'relative',
+      objectFit: 'contain',
+      top: 'unset',
+      left: 'unset',
+      transform: 'unset',
+    },
     gridListTileBar: {
       background: fade(
         emphasize(theme.palette.background.paper, 1),
@@ -73,8 +81,12 @@ export const Banners = () => {
       {data?.products.map((product, i) => {
         const { name, price, image } = product;
         return (
-          <GridListTile key={i} className={classes.gridListTile}>
-            <img src={image || ''} alt={name} />
+          <GridListTile
+            key={i}
+            className={classes.gridListTile}
+            classes={{
+              imgFullHeight: classes.gridListTileImgFullHeight,
+            }}
             <GridListTileBar
               title={name}
               subtitle={
