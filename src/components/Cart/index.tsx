@@ -1,4 +1,4 @@
-import React from 'react';
+import qs from 'querystring';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -16,6 +16,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { useShop } from 'contexts/Shop';
 
 import { CartItems } from './CartItems';
+import { useProducts } from 'graphqlAPI';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -43,6 +44,7 @@ export default function CartDialog({
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const { products } = useShop();
+  const { data, loading } = useProducts();
 
   const handleClose = () => {
     onClose();
@@ -85,14 +87,30 @@ export default function CartDialog({
                 ¡Miles de productos te esperan!
               </Typography>
             </div>
-          )) || <CartItems />}
+          )) || (
+            <CartItems products={data?.products} {...{ loading }} />
+          )}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button autoFocus onClick={handleClose} color="primary">
           Cerrar
         </Button>
-        <Button onClick={handleClose} color="primary" autoFocus>
+        <Button
+          onClick={() => {
+            let text = `Hola\n`;
+            text += `Estoy interad@ en comprar estos productos:\n`;
+            for (const { id, amount } of products) {
+              const product = data?.products.find((x) => x.id === id);
+              if (product) text += `${product.name}: ${amount}\n`;
+            }
+            let url = 'https://wa.me/573204283576?';
+            url += qs.stringify({ text });
+            window.location.href = url;
+          }}
+          color="primary"
+          autoFocus
+        >
           Comprar
         </Button>
       </DialogActions>
