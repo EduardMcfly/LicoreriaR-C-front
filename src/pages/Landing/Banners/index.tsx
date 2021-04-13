@@ -5,7 +5,11 @@ import {
   emphasize,
   fade,
 } from '@material-ui/core/styles';
-import { Typography } from '@material-ui/core';
+import {
+  CircularProgress,
+  Grid,
+  Typography,
+} from '@material-ui/core';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
@@ -62,6 +66,7 @@ const useStyles = makeStyles((theme: Theme) => {
       color: contrastText,
     },
     button: { margin: theme.spacing(1, 0, 1) },
+    loading: { marginTop: theme.spacing(4) },
   });
 });
 
@@ -76,8 +81,14 @@ export const Banners = () => {
     },
     width,
   );
-  const { data } = useProducts();
+  const { data, loading } = useProducts();
 
+  if (loading)
+    return (
+      <Grid className={classes.loading} container justify="center">
+        <CircularProgress size={80} />
+      </Grid>
+    );
   return (
     <GridList cellHeight={300} cols={cols} className={classes.root}>
       {data?.products.map((product, i) => {
