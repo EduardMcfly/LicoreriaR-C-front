@@ -16,16 +16,38 @@ interface ShopProps extends ShopPropsBase {
   removeProduct: (item: Item) => void;
 }
 
+const key = 'products';
+
 const ShopContext = React.createContext<ShopProps>(
   Object.create(null),
 );
+
+const getStorage = () => {
+  try {
+    const products: Item[] = JSON.parse(
+      localStorage.getItem(key) || '',
+    );
+    return products;
+  } catch (error) {
+    return [];
+  }
+};
 
 export const ShopProvider = ({
   children,
 }: React.PropsWithChildren<
   ShopPropsBase & { isCreating?: boolean }
 >) => {
-  const [products, setProducts] = React.useState<Item[]>([]);
+  const [products, setProducts] = React.useState<Item[]>(getStorage);
+
+  const saveStorage = React.useCallback(() => {
+    localStorage.setItem(key, JSON.stringify(products));
+  }, [products]);
+
+  React.useEffect(() => {
+    saveStorage();
+  }, [saveStorage]);
+
   const addProduct = (item: Item) => {
     const newItems = [item, ...products].reduce<Record<string, Item>>(
       (previousValue, currentValue) => {
