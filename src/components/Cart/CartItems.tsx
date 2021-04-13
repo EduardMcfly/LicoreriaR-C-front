@@ -52,7 +52,7 @@ export const CartItems = () => {
                       src={
                         (product.image &&
                           createAPIImageRoute(product.image, {
-                            width: 180,
+                            width: 300,
                           })) ||
                         undefined
                       }
