@@ -10,22 +10,12 @@ import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
-import {
-  Avatar,
-  Grid,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  makeStyles,
-  Typography,
-} from '@material-ui/core';
+import { makeStyles, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
-import { createAPIImageRoute } from 'constantsApp';
 import { useShop } from 'contexts/Shop';
-import { useProducts } from 'graphqlAPI';
 
-import { Amount } from '../Fields/Amount';
+import { CartItems } from './CartItems';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -37,11 +27,6 @@ const useStyles = makeStyles((theme) => ({
   },
   cartEmpty: {
     padding: theme.spacing(6),
-  },
-  large: {
-    margin: theme.spacing(2),
-    width: theme.spacing(10),
-    height: theme.spacing(10),
   },
 }));
 
@@ -57,8 +42,7 @@ export default function CartDialog({
   const classes = useStyles();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  const { products, changeAmount } = useShop();
-  const { data } = useProducts();
+  const { products } = useShop();
 
   const handleClose = () => {
     onClose();
@@ -101,71 +85,7 @@ export default function CartDialog({
                 ¡Miles de productos te esperan!
               </Typography>
             </div>
-          )) || (
-            <Grid
-              container
-              style={{ padding: '10px' }}
-              spacing={4}
-              justify="center"
-            >
-              {products.map(({ id, amount }) => {
-                const product = data?.products.find(
-                  (a) => a.id === id,
-                );
-                if (!product) return null;
-
-                const getMax = () => {
-                  const max = product?.max || 99;
-                  return max;
-                };
-                return (
-                  <Grid item xs={12} md={6} lg={4}>
-                    <Grid container alignItems="center">
-                      <Grid item xs sm={8}>
-                        <ListItem>
-                          <ListItemAvatar>
-                            <Avatar
-                              className={classes.large}
-                              alt={product.name}
-                              src={
-                                (product.image &&
-                                  createAPIImageRoute(product.image, {
-                                    width: 180,
-                                  })) ||
-                                undefined
-                              }
-                            />
-                          </ListItemAvatar>
-                          <ListItemText
-                            primary={product.name}
-                            primaryTypographyProps={{
-                              variant: 'h6',
-                              noWrap: true,
-                            }}
-                          />
-                        </ListItem>
-                      </Grid>
-                      <Grid item sm={4}>
-                        <Amount
-                          handleChange={(newAmount) => {
-                            const max = getMax();
-                            console.log(max);
-
-                            changeAmount({
-                              id,
-                              amount:
-                                newAmount > max ? max : newAmount,
-                            });
-                          }}
-                          value={amount}
-                        />
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                );
-              })}
-            </Grid>
-          )}
+          )) || <CartItems />}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
