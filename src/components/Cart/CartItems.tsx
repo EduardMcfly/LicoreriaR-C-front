@@ -5,6 +5,7 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
+  CircularProgress,
 } from '@material-ui/core';
 
 import { createAPIImageRoute } from 'constantsApp';
@@ -24,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 export const CartItems = () => {
   const classes = useStyles();
   const { products, changeAmount } = useShop();
-  const { data } = useProducts();
+  const { data, loading } = useProducts();
   return (
     <Grid
       container
@@ -32,6 +33,13 @@ export const CartItems = () => {
       spacing={4}
       justify="center"
     >
+      {loading && (
+        <Grid item xs={12}>
+          <Grid container justify="center">
+            <CircularProgress size={60} />
+          </Grid>
+        </Grid>
+      )}
       {products.map(({ id, amount }) => {
         const product = data?.products.find((a) => a.id === id);
         if (!product) return null;
