@@ -21,6 +21,7 @@ import {
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
+import { createAPIImageRoute } from 'constantsApp';
 import { useShop } from 'contexts/Shop';
 import { useProducts } from 'graphqlAPI';
 
@@ -107,56 +108,60 @@ export default function CartDialog({
               spacing={4}
               justify="center"
             >
-              <Grid item xs={12}>
-                Tienes {products.length}
-                {` producto${(products.length === 1 && '') || 's'}`}
-              </Grid>
               {products.map(({ id, amount }) => {
                 const product = data?.products.find(
                   (a) => a.id === id,
                 );
+                if (!product) return null;
 
                 const getMax = () => {
                   const max = product?.max || 99;
                   return max;
                 };
                 return (
-                  product && (
-                    <Grid item xs={12} md={6} lg={4}>
-                      <Grid container alignItems="center">
-                        <Grid item xs sm={8}>
-                          <ListItem>
-                            <ListItemAvatar>
-                              <Avatar
-                                className={classes.large}
-                                alt={product.name}
-                                src={
-                                  product.image ||
-                                  'https://previews.123rf.com/images/jemastock/jemastock1802/jemastock180207893/96046578-botella-de-licor-con-dise%C3%B1o-de-etiqueta-de-icono-de-ilustraci%C3%B3n-vectorial-blanco-y-negro-de-la-l%C3%ADnea.jpg'
-                                }
-                              />
-                            </ListItemAvatar>
-                            <ListItemText primary={product.name} />
-                          </ListItem>
-                        </Grid>
-                        <Grid item sm={4}>
-                          <Amount
-                            handleChange={(newAmount) => {
-                              const max = getMax();
-                              console.log(max);
-
-                              changeAmount({
-                                id,
-                                amount:
-                                  newAmount > max ? max : newAmount,
-                              });
+                  <Grid item xs={12} md={6} lg={4}>
+                    <Grid container alignItems="center">
+                      <Grid item xs sm={8}>
+                        <ListItem>
+                          <ListItemAvatar>
+                            <Avatar
+                              className={classes.large}
+                              alt={product.name}
+                              src={
+                                (product.image &&
+                                  createAPIImageRoute(product.image, {
+                                    width: 180,
+                                  })) ||
+                                undefined
+                              }
+                            />
+                          </ListItemAvatar>
+                          <ListItemText
+                            primary={product.name}
+                            primaryTypographyProps={{
+                              variant: 'h6',
+                              noWrap: true,
                             }}
-                            value={amount}
                           />
-                        </Grid>
+                        </ListItem>
+                      </Grid>
+                      <Grid item sm={4}>
+                        <Amount
+                          handleChange={(newAmount) => {
+                            const max = getMax();
+                            console.log(max);
+
+                            changeAmount({
+                              id,
+                              amount:
+                                newAmount > max ? max : newAmount,
+                            });
+                          }}
+                          value={amount}
+                        />
                       </Grid>
                     </Grid>
-                  )
+                  </Grid>
                 );
               })}
             </Grid>
