@@ -10,7 +10,7 @@ import {
 
 import { createAPIImageRoute } from 'constantsApp';
 import { useShop } from 'contexts/Shop';
-import { useProducts } from 'graphqlAPI';
+import { Product } from 'graphqlAPI';
 
 import { Amount } from '../Fields/Amount';
 
@@ -22,10 +22,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const CartItems = () => {
+interface CartItemsProps {
+  products?: Product[];
+  loading: boolean;
+}
+
+export const CartItems = ({ products, loading }: CartItemsProps) => {
   const classes = useStyles();
-  const { products, changeAmount } = useShop();
-  const { data, loading } = useProducts();
+  const shop = useShop();
   return (
     <Grid
       container
@@ -40,8 +44,8 @@ export const CartItems = () => {
           </Grid>
         </Grid>
       )}
-      {products.map(({ id, amount }) => {
-        const product = data?.products.find((a) => a.id === id);
+      {shop.products.map(({ id, amount }) => {
+        const product = products?.find((a) => a.id === id);
         if (!product) return null;
 
         const getMax = () => {
@@ -81,7 +85,7 @@ export const CartItems = () => {
                     const max = getMax();
                     console.log(max);
 
-                    changeAmount({
+                    shop.changeAmount({
                       id,
                       amount: newAmount > max ? max : newAmount,
                     });
