@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Button,
   Grid,
@@ -11,6 +10,7 @@ import {
 import { AppName } from 'constantsApp';
 import { Header } from 'components/Layout';
 import background from 'assets/background.png';
+import texture from 'assets/texture.png';
 import Banners from './Banners/index';
 
 const useStyles = makeStyles((theme) => {
@@ -37,13 +37,15 @@ const useStyles = makeStyles((theme) => {
       position: 'absolute',
       height: '100%',
       zIndex: -1,
-      background: emphasize(theme.palette.background.paper, 0.9),
+      background: `url(${texture})`,
     },
     image: {
       height: 'auto',
+      maxWidth: '100%',
       minHeight: '100%',
       objectFit: 'cover',
-      maxWidth: '100%',
+      position: 'absolute',
+      bottom: '0px',
     },
     overlay: {
       transition: `background ${timeTransition} ease`,
