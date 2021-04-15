@@ -67,6 +67,9 @@ const useStyles = makeStyles((theme) => {
     banners: {
       padding: theme.spacing(2),
     },
+    addProduct: {
+      marginBottom: theme.spacing(4),
+    },
   };
 });
 
@@ -116,7 +119,11 @@ export const Landing = () => {
       </Grid>
       <div className={classes.banners}>
         {isAdmin && (
-          <Grid container justify="flex-end">
+          <Grid
+            container
+            justify="flex-end"
+            className={classes.addProduct}
+          >
             <Grid item>
               <Button
                 variant="contained"
