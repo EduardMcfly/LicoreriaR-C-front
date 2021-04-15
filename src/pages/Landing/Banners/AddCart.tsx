@@ -27,7 +27,7 @@ export default function AddCart({ product: item }: AddCartProps) {
 
   const getMax = React.useCallback(() => {
     const itemShop = products.find(({ id }) => item.id === id);
-    const max = (item.max || 99) - (itemShop?.amount || 0);
+    const max = (item.amount || 99) - (itemShop?.amount || 0);
     return max;
   }, [products, item]);
 
