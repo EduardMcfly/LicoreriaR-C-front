@@ -105,7 +105,7 @@ export const Banners = () => {
         const { name, price, image } = product;
         return (
           <GridListTile
-            key={i}
+            key={product.id}
             className={classes.gridListTile}
             classes={{
               imgFullHeight: classes.gridListTileImgFullHeight,
