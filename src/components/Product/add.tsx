@@ -38,16 +38,18 @@ enum FieldImage {
   imageUrl,
 }
 
+const defaultValues: Fields = {
+  name: '',
+  description: '',
+  price: '',
+  amount: '',
+  imageUrl: '',
+};
+
 export const AddProduct = ({ open, onClose }: AddProductProps) => {
   const classes = useStyles();
   const [createProduct, { loading }] = useCreateProduct();
-  const [values, setValues] = React.useState<Fields>({
-    name: '',
-    description: '',
-    price: '',
-    amount: '',
-    imageUrl: '',
-  });
+  const [values, setValues] = React.useState<Fields>(defaultValues);
 
   const [fieldImage, setFieldImage] = React.useState<FieldImage>(
     FieldImage.image,
@@ -207,6 +209,7 @@ export const AddProduct = ({ open, onClose }: AddProductProps) => {
                   },
                 });
                 onClose && onClose();
+                setValues(defaultValues);
               }
             }}
             color="primary"
