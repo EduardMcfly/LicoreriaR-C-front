@@ -49,7 +49,7 @@ export const CartItems = ({ products, loading }: CartItemsProps) => {
         if (!product) return null;
 
         const getMax = () => {
-          const max = product?.max || 99;
+          const max = product?.amount || 99;
           return max;
         };
         return (
