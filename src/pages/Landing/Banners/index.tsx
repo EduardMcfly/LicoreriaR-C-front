@@ -18,6 +18,7 @@ import currencyFormatter from 'currency-formatter';
 import { useProducts } from 'graphqlAPI';
 import { createAPIImageRoute } from 'constantsApp';
 import { getGrid, useWidth } from 'utils';
+import beer from 'assets/beer.png';
 
 import AddCart from './AddCart';
 
@@ -42,12 +43,21 @@ const useStyles = makeStyles((theme: Theme) => {
       },
     },
     gridListTileImgFullHeight: {
-      width: '100%',
-      position: 'relative',
       objectFit: 'contain',
+      padding: theme.spacing(2),
+      width: '100%',
       top: 'unset',
       left: 'unset',
       transform: 'unset',
+      height: 'unset',
+    },
+    gridListTileImgFullWidth: {
+      objectFit: 'contain',
+      padding: theme.spacing(2),
+      width: '100%',
+    },
+    gridListTileTile: {
+      display: 'flex',
     },
     gridListTileBar: {
       background: fade(
@@ -75,9 +85,9 @@ export const Banners = () => {
   const width = useWidth();
   const cols = getGrid(
     {
-      md: 6,
-      sm: 3,
       xs: 1,
+      sm: 3,
+      md: 6,
     },
     width,
   );
@@ -99,10 +109,12 @@ export const Banners = () => {
             className={classes.gridListTile}
             classes={{
               imgFullHeight: classes.gridListTileImgFullHeight,
+              imgFullWidth: classes.gridListTileImgFullWidth,
+              tile: classes.gridListTileTile,
             }}
           >
             <img
-              src={(image && createAPIImageRoute(image)) || ''}
+              src={(image && createAPIImageRoute(image)) || beer}
               alt={name}
             />
             <GridListTileBar
