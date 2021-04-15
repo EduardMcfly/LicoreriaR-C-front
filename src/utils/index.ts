@@ -7,6 +7,7 @@ import {
 } from '@material-ui/core/styles/createBreakpoints';
 
 export * from './helpers';
+export * from './useSearch';
 
 export function useWidth() {
   const theme = useTheme();
