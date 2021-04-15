@@ -68,5 +68,6 @@ export type ProductInput = {
   price: Scalars['Float'];
   amount: Scalars['Float'];
   image?: Maybe<Scalars['Upload']>;
+  imageUrl?: Maybe<Scalars['String']>;
 };
 
