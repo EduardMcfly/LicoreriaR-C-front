@@ -11,6 +11,8 @@ export type Scalars = {
   Float: number;
   /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
   DateTime: any;
+  /** The `Upload` scalar type represents a file upload. */
+  Upload: any;
 };
 
 export type Query = {
@@ -32,7 +34,7 @@ export type Product = {
   description?: Maybe<Scalars['String']>;
   price: Scalars['Float'];
   image?: Maybe<Scalars['String']>;
-  max?: Maybe<Scalars['Float']>;
+  amount?: Maybe<Scalars['Float']>;
   creationDate: Scalars['DateTime'];
 };
 
@@ -64,4 +66,7 @@ export type ProductInput = {
   name: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   price: Scalars['Float'];
+  amount: Scalars['Float'];
+  image?: Maybe<Scalars['Upload']>;
 };
+
