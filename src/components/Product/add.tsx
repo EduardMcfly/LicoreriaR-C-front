@@ -184,7 +184,7 @@ export const AddProduct = ({ open, onClose }: AddProductProps) => {
           </Button>
           <Button
             disabled={loading}
-            onClick={() => {
+            onClick={async () => {
               const {
                 name,
                 description,
@@ -194,7 +194,7 @@ export const AddProduct = ({ open, onClose }: AddProductProps) => {
                 imageUrl,
               } = values;
               if (price && name && amount) {
-                createProduct({
+                await createProduct({
                   variables: {
                     product: {
                       name,
@@ -206,6 +206,7 @@ export const AddProduct = ({ open, onClose }: AddProductProps) => {
                     },
                   },
                 });
+                onClose && onClose();
               }
             }}
             color="primary"
