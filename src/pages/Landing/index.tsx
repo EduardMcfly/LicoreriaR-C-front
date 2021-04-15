@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   Button,
   Grid,
@@ -6,12 +7,15 @@ import {
   emphasize,
   Typography,
 } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 
 import { AppName } from 'constantsApp';
 import { Header } from 'components/Layout';
+import { useSearch } from 'utils';
 import background from 'assets/background.png';
 import texture from 'assets/texture.png';
 import Banners from './Banners/index';
+import AddProduct from '../../components/Product/add';
 
 const useStyles = makeStyles((theme) => {
   const timeTransition = '1s';
@@ -68,6 +72,10 @@ const useStyles = makeStyles((theme) => {
 
 export const Landing = () => {
   const classes = useStyles();
+  const { user } = useSearch();
+  const isAdmin = user === 'admin';
+  const [open, setOpen] = React.useState(false);
+
   return (
     <>
       <Header />
@@ -107,8 +115,28 @@ export const Landing = () => {
         </Button>
       </Grid>
       <div className={classes.banners}>
+        {isAdmin && (
+          <Grid container justify="flex-end">
+            <Grid item>
+              <Button
+                variant="contained"
+                color="secondary"
+                startIcon={<AddIcon />}
+                onClick={() => setOpen(true)}
+              >
+                Agregar producto
+              </Button>
+            </Grid>
+          </Grid>
+        )}
         <Banners />
       </div>
+      <AddProduct
+        open={open}
+        onClose={() => {
+          setOpen(false);
+        }}
+      />
     </>
   );
 };
