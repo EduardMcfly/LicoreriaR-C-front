@@ -123,7 +123,7 @@ export const AddProduct = ({ open, onClose }: AddProductProps) => {
             justify="center"
             className={classes.fileRoot}
           >
-            <Grid xs="auto">
+            <Grid item xs="auto">
               <ButtonGroup
                 disableElevation
                 variant="text"
@@ -141,7 +141,7 @@ export const AddProduct = ({ open, onClose }: AddProductProps) => {
                 </Button>
               </ButtonGroup>
             </Grid>
-            <Grid xs={12}>
+            <Grid item xs={12}>
               {fieldImage === FieldImage.imageUrl && (
                 <TextField
                   label="Enlace de la imagen"
