@@ -13,7 +13,7 @@ interface ShopProps extends ShopPropsBase {
   setProducts: React.Dispatch<React.SetStateAction<Item[]>>;
   addProduct: (item: Item) => void;
   changeAmount: (item: Item) => void;
-  removeProduct: (item: Item) => void;
+  removeProduct: (item: Item['id']) => void;
 }
 
 const key = 'products';
@@ -72,9 +72,9 @@ export const ShopProvider = ({
     );
     setProducts(newProducts);
   };
-  const removeProduct = (item: Item) => {
+  const removeProduct = (id: Item['id']) => {
     const newProducts = products.filter(
-      (product) => product.id !== item.id,
+      (product) => product.id !== id,
     );
     setProducts(newProducts);
   };
