@@ -7,6 +7,8 @@ import {
   ListItemText,
   CircularProgress,
 } from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import { createAPIImageRoute } from 'constantsApp';
 import { useShop } from 'contexts/Shop';
@@ -19,6 +21,12 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2),
     width: theme.spacing(10),
     height: theme.spacing(10),
+  },
+  gridRoot: { position: 'relative' },
+  delete: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
   },
 }));
 
@@ -52,9 +60,14 @@ export const CartItems = ({ products, loading }: CartItemsProps) => {
           const max = product?.amount || 99;
           return max;
         };
+
         return (
           <Grid item xs={12} md={6} lg={4}>
-            <Grid container alignItems="center">
+            <Grid
+              container
+              alignItems="center"
+              className={classes.gridRoot}
+            >
               <Grid item xs sm={8}>
                 <ListItem>
                   <ListItemAvatar>
@@ -83,8 +96,6 @@ export const CartItems = ({ products, loading }: CartItemsProps) => {
                 <Amount
                   handleChange={(newAmount) => {
                     const max = getMax();
-                    console.log(max);
-
                     shop.changeAmount({
                       id,
                       amount: newAmount > max ? max : newAmount,
@@ -93,6 +104,16 @@ export const CartItems = ({ products, loading }: CartItemsProps) => {
                   value={amount}
                 />
               </Grid>
+              <IconButton
+                className={classes.delete}
+                color="primary"
+                aria-label="Remove"
+                onClick={() => {
+                  shop.removeProduct(product.id);
+                }}
+              >
+                <DeleteIcon fontSize="small" />
+              </IconButton>
             </Grid>
           </Grid>
         );
