@@ -18,8 +18,14 @@ export type Scalars = {
 export type Query = {
   __typename?: 'Query';
   hello: Scalars['String'];
-  products: Array<Product>;
+  products: ProductConnection;
   product: Product;
+};
+
+
+export type QueryProductsArgs = {
+  pagination?: Maybe<Pagination>;
+  category?: Maybe<Scalars['String']>;
 };
 
 
@@ -27,17 +33,42 @@ export type QueryProductArgs = {
   id: Scalars['String'];
 };
 
+export type ProductConnection = {
+  __typename?: 'ProductConnection';
+  data: Array<Product>;
+  cursor: PageInfo;
+};
+
 export type Product = {
   __typename?: 'Product';
   id: Scalars['ID'];
   name: Scalars['String'];
   description?: Maybe<Scalars['String']>;
+  category?: Maybe<Scalars['String']>;
   price: Scalars['Float'];
   image?: Maybe<Scalars['String']>;
   amount?: Maybe<Scalars['Float']>;
   creationDate: Scalars['DateTime'];
 };
 
+
+export type PageInfo = {
+  __typename?: 'PageInfo';
+  after?: Maybe<Scalars['String']>;
+  count: Scalars['Int'];
+};
+
+export type Pagination = {
+  after?: Maybe<Scalars['String']>;
+  direction?: Maybe<OrderTypes>;
+  limit?: Maybe<Scalars['Int']>;
+};
+
+/** The basic directions */
+export enum OrderTypes {
+  Asc = 'Asc',
+  Desc = 'Desc'
+}
 
 export type Mutation = {
   __typename?: 'Mutation';
