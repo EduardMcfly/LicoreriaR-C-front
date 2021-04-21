@@ -88,7 +88,10 @@ export default function CartDialog({
               </Typography>
             </div>
           )) || (
-            <CartItems products={data?.products} {...{ loading }} />
+            <CartItems
+              products={data?.products.data}
+              {...{ loading }}
+            />
           )}
         </DialogContentText>
       </DialogContent>
@@ -101,7 +104,9 @@ export default function CartDialog({
             let text = `Hola\n`;
             text += `Estoy interad@ en comprar estos productos:\n`;
             for (const { id, amount } of products) {
-              const product = data?.products.find((x) => x.id === id);
+              const product = data?.products.data.find(
+                (x) => x.id === id,
+              );
               if (product) text += `${product.name}: ${amount}\n`;
             }
             let url = 'https://wa.me/573204283576?';
