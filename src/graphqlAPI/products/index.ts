@@ -15,6 +15,7 @@ export const PRODUCTS_QUERY = gql`
         image
         description
         price
+        amount
       }
       cursor {
         after
