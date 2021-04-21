@@ -33,6 +33,10 @@ const getStorage = () => {
   }
 };
 
+const min = 1;
+
+const getValue = (amount: number) => (amount < min ? min : amount);
+
 export const ShopProvider = ({
   children,
 }: React.PropsWithChildren<
@@ -52,7 +56,8 @@ export const ShopProvider = ({
     const newItems = [item, ...products].reduce<Record<string, Item>>(
       (previousValue, currentValue) => {
         const { id, amount } = currentValue;
-        if (previousValue[id]) previousValue[id].amount += amount;
+        if (previousValue[id])
+          previousValue[id].amount += getValue(amount);
         else previousValue[id] = currentValue;
         return previousValue;
       },
@@ -62,12 +67,12 @@ export const ShopProvider = ({
   };
 
   const changeAmount = (item: Item) => {
+    const { amount } = item;
     const newProducts = products.map(
       (product): Item => {
         const { id } = product;
-        if (item.id === id) {
-          return item;
-        } else return product;
+        if (item.id === id) return { id, amount: getValue(amount) };
+        else return product;
       },
     );
     setProducts(newProducts);
