@@ -22,7 +22,7 @@ interface AddCartProps {
 
 export default function AddCart({ product: item }: AddCartProps) {
   const [open, setOpen] = React.useState(false);
-  const [amount, setAmount] = React.useState<number>(0);
+  const [amount, setAmount] = React.useState<number>(1);
   const { addProduct, products } = useShop();
 
   const getMax = React.useCallback(() => {
