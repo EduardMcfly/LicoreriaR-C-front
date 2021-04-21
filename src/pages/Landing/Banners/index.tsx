@@ -101,7 +101,7 @@ export const Banners = () => {
     );
   return (
     <GridList cellHeight={300} cols={cols} className={classes.root}>
-      {data?.products.map((product, i) => {
+      {data?.products.data.map((product, i) => {
         const { name, price, image } = product;
         return (
           <GridListTile
