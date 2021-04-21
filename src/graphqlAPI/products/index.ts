@@ -7,13 +7,19 @@ import {
 
 export type TDataProducts = Pick<Query, 'products' | '__typename'>;
 export const PRODUCTS_QUERY = gql`
-  query {
-    products {
-      id
-      name
-      image
-      description
-      price
+  query($pagination: Pagination, $category: String) {
+    products(pagination: $pagination, category: $category) {
+      data {
+        id
+        name
+        image
+        description
+        price
+      }
+      cursor {
+        after
+        count
+      }
     }
   }
 `;
