@@ -10,7 +10,7 @@ import {
 import AddIcon from '@material-ui/icons/Add';
 
 import { AppName } from 'constantsApp';
-import { Header } from 'components/Layout';
+import { Header, Footer } from 'components/Layout';
 import { useSearch } from 'utils';
 import background from 'assets/background.png';
 import texture from 'assets/texture.png';
@@ -138,6 +138,7 @@ export const Landing = () => {
         )}
         <Banners />
       </div>
+      <Footer />
       <AddProduct
         open={open}
         onClose={() => {
