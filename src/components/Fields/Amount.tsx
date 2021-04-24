@@ -1,16 +1,19 @@
-import React from 'react';
-import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import FormControl, {
   FormControlProps,
 } from '@material-ui/core/FormControl';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
-import { IconButton, makeStyles } from '@material-ui/core';
+import {
+  IconButton,
+  makeStyles,
+  Typography,
+} from '@material-ui/core';
 
 const useStyles = makeStyles(() => ({
-  input: {
+  textCenter: {
     textAlign: 'center',
+    width: '100%',
   },
 }));
 
@@ -29,11 +32,13 @@ export const Amount = ({
 
   return (
     <FormControl fullWidth {...formControlProps}>
-      <InputLabel>Cantidad</InputLabel>
+      <Typography variant="caption" align="center">
+        Cantidad
+      </Typography>
       <Input
         type="number"
         value={value || ''}
-        classes={{ input: classes.input }}
+        classes={{ input: classes.textCenter }}
         startAdornment={
           <IconButton
             color="primary"
