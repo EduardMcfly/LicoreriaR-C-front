@@ -3,7 +3,6 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -77,23 +76,21 @@ export default function CartDialog({
         Carrito de compras
       </DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          {(!products.length && (
-            <div className={classes.cartEmpty}>
-              <Typography align="center" variant="h4">
-                Tu carrito esta vacío. ¿No sabes qué comprar?
-              </Typography>
-              <Typography align="center" variant="h6">
-                ¡Miles de productos te esperan!
-              </Typography>
-            </div>
-          )) || (
-            <CartItems
-              products={data?.products.data}
-              {...{ loading }}
-            />
-          )}
-        </DialogContentText>
+        {(!products.length && (
+          <div className={classes.cartEmpty}>
+            <Typography align="center" variant="h4">
+              Tu carrito esta vacío. ¿No sabes qué comprar?
+            </Typography>
+            <Typography align="center" variant="h6">
+              ¡Miles de productos te esperan!
+            </Typography>
+          </div>
+        )) || (
+          <CartItems
+            products={data?.products.data}
+            {...{ loading }}
+          />
+        )}
       </DialogContent>
       <DialogActions>
         <Button autoFocus onClick={handleClose} color="primary">
