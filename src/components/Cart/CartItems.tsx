@@ -6,9 +6,12 @@ import {
   ListItemAvatar,
   ListItemText,
   CircularProgress,
+  Divider,
+  Typography,
 } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
+import currencyFormatter from 'currency-formatter';
 
 import { createAPIImageRoute } from 'constantsApp';
 import { useShop } from 'contexts/Shop';
@@ -22,12 +25,11 @@ const useStyles = makeStyles((theme) => ({
     width: theme.spacing(10),
     height: theme.spacing(10),
   },
-  gridRoot: { position: 'relative' },
-  delete: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
+  fullWidth: { width: '100%' },
+  textCenter: {
+    textAlign: 'center',
   },
+  gridRoot: { position: 'relative' },
 }));
 
 interface CartItemsProps {
@@ -39,12 +41,7 @@ export const CartItems = ({ products, loading }: CartItemsProps) => {
   const classes = useStyles();
   const shop = useShop();
   return (
-    <Grid
-      container
-      style={{ padding: '10px' }}
-      spacing={4}
-      justify="center"
-    >
+    <Grid container justify="center">
       {loading && (
         <Grid item xs={12}>
           <Grid container justify="center">
@@ -52,23 +49,23 @@ export const CartItems = ({ products, loading }: CartItemsProps) => {
           </Grid>
         </Grid>
       )}
-      {shop.products.map(({ id, amount }) => {
+      {shop.products.map(({ id, amount }, i) => {
         const product = products?.find((a) => a.id === id);
         if (!product) return null;
-
+        const { price } = product;
         const getMax = () => {
           const max = product?.amount || 99;
           return max;
         };
 
         return (
-          <Grid item xs={12} md={6} lg={4}>
+          <Grid item xs={12}>
             <Grid
               container
               alignItems="center"
               className={classes.gridRoot}
             >
-              <Grid item xs sm={8}>
+              <Grid item xs={12} md={5}>
                 <ListItem>
                   <ListItemAvatar>
                     <Avatar
@@ -92,7 +89,7 @@ export const CartItems = ({ products, loading }: CartItemsProps) => {
                   />
                 </ListItem>
               </Grid>
-              <Grid item sm={4}>
+              <Grid item xs={12} md={2}>
                 <Amount
                   handleChange={(newAmount) => {
                     const max = getMax();
@@ -104,17 +101,66 @@ export const CartItems = ({ products, loading }: CartItemsProps) => {
                   value={amount}
                 />
               </Grid>
-              <IconButton
-                className={classes.delete}
-                color="primary"
-                aria-label="Remove"
-                onClick={() => {
-                  shop.removeProduct(product.id);
-                }}
-              >
-                <DeleteIcon fontSize="small" />
-              </IconButton>
+              <Grid item xs={6} md={2}>
+                <Grid
+                  container
+                  direction="column"
+                  className={classes.textCenter}
+                >
+                  <Grid item xs>
+                    <Typography variant="caption" align="center">
+                      Precio unitario:
+                    </Typography>
+                  </Grid>
+                  <Grid item xs>
+                    <ListItemText
+                      primary={currencyFormatter.format(price, {
+                        code: 'COP',
+                        precision: 0,
+                      })}
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item xs={6} md={2}>
+                <Grid
+                  container
+                  direction="column"
+                  className={classes.textCenter}
+                >
+                  <Grid item xs>
+                    <Typography variant="caption" align="center">
+                      Precio total:
+                    </Typography>
+                  </Grid>
+                  <Grid item xs>
+                    <ListItemText
+                      primary={currencyFormatter.format(
+                        price * amount,
+                        {
+                          code: 'COP',
+                          precision: 0,
+                        },
+                      )}
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item xs={12} md={1}>
+                <Grid container justify="center" alignItems="center">
+                  <IconButton
+                    color="primary"
+                    aria-label="Remove"
+                    onClick={() => {
+                      shop.removeProduct(product.id);
+                    }}
+                  >
+                    <DeleteIcon fontSize="small" />
+                  </IconButton>
+                </Grid>
+              </Grid>
             </Grid>
+            {!!(shop.products.length - (i + 1)) && <Divider />}
           </Grid>
         );
       })}
