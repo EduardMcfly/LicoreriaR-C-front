@@ -71,7 +71,10 @@ export const CartItem = (props?: CartItemProps) => {
     <>
       {!open && animation && <div className={classes.background} />}
       <IconButton
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          setOpen(true);
+          setAnimation(false);
+        }}
         style={{
           zIndex: 11,
         }}
