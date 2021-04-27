@@ -67,9 +67,10 @@ export const CartItem = (props?: CartItemProps) => {
       setAnimation(true);
     }
   }, [open, length, prevLength]);
+  const showAnimation = !open && animation;
   return (
     <>
-      {!open && animation && <div className={classes.background} />}
+      {showAnimation && <div className={classes.background} />}
       <IconButton
         onClick={() => {
           setOpen(true);
@@ -79,7 +80,7 @@ export const CartItem = (props?: CartItemProps) => {
           zIndex: 11,
         }}
       >
-        {!open && animation && <div className={classes.circle} />}
+        {showAnimation && <div className={classes.circle} />}
         <Badge
           badgeContent={products.length}
           className={className}
