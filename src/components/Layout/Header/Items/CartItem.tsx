@@ -8,7 +8,8 @@ import {
 } from '@material-ui/core';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
-import { useShop } from '../../../../contexts/Shop';
+import { usePrevious } from 'utils';
+import { useShop } from 'contexts/Shop';
 import CartDialog from '../../../Cart';
 
 interface CartItemProps {
@@ -44,14 +45,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-
-function usePrevious<V extends any>(value: V) {
-  const ref = React.useRef<V>(value);
-  React.useEffect(() => {
-    ref.current = value;
-  });
-  return ref.current;
-}
 
 export const CartItem = (props?: CartItemProps) => {
   const classes = useStyles();
