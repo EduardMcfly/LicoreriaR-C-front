@@ -58,6 +58,9 @@ export const CartItem = (props?: CartItemProps) => {
   React.useEffect(() => {
     if (!open && prevLength !== length && length === 1) {
       setAnimation(true);
+      setTimeout(() => {
+        setAnimation(false);
+      }, 3000);
     }
   }, [open, length, prevLength]);
   const showAnimation = !open && animation;
