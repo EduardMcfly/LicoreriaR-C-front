@@ -8,6 +8,7 @@ import {
 
 export * from './helpers';
 export * from './useSearch';
+export * from './usePrevious';
 
 export function useWidth() {
   const theme = useTheme();
