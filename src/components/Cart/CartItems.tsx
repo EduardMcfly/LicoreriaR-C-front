@@ -1,6 +1,5 @@
 import {
   makeStyles,
-  Avatar,
   Grid,
   ListItem,
   ListItemAvatar,
@@ -18,6 +17,7 @@ import { useShop } from 'contexts/Shop';
 import { Product } from 'graphqlAPI';
 
 import { Amount } from '../Fields/Amount';
+import { AvatarProduct } from '../Product';
 
 const useStyles = makeStyles((theme) => ({
   large: {
@@ -68,7 +68,7 @@ export const CartItems = ({ products, loading }: CartItemsProps) => {
               <Grid item xs={12} md={5}>
                 <ListItem>
                   <ListItemAvatar>
-                    <Avatar
+                    <AvatarProduct
                       className={classes.large}
                       alt={product.name}
                       src={
