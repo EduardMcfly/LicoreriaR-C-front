@@ -11,6 +11,7 @@ import {
   ListItemText,
   Typography,
 } from '@material-ui/core';
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 
 import { useShop } from 'contexts/Shop';
 import { Amount } from 'components/Fields/Amount';
@@ -72,6 +73,7 @@ export default function AddCart({ product: item }: AddCartProps) {
             Cancelar
           </Button>
           <Button
+            endIcon={<AddShoppingCartIcon />}
             onClick={() => {
               if (amount) {
                 addProduct({ id: item.id, amount });
