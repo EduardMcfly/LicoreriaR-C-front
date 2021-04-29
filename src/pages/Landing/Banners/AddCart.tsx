@@ -5,7 +5,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {
-  Avatar,
   ListItem,
   ListItemAvatar,
   ListItemText,
@@ -13,9 +12,12 @@ import {
 } from '@material-ui/core';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 
-import { useShop } from 'contexts/Shop';
-import { Amount } from 'components/Fields/Amount';
+import { createAPIImageRoute } from 'constantsApp';
 import { Product } from 'graphqlAPI';
+import { useShop } from 'contexts/Shop';
+import beer from 'assets/beer.png';
+import { Amount } from 'components/Fields/Amount';
+import { AvatarProduct } from 'components/Product';
 
 interface AddCartProps {
   product: Product;
@@ -60,7 +62,13 @@ export default function AddCart({ product: item }: AddCartProps) {
         <DialogTitle>
           <ListItem>
             <ListItemAvatar>
-              <Avatar alt={item.name} src={item.image || ''} />
+              <AvatarProduct
+                alt={item.name}
+                src={
+                  (item.image && createAPIImageRoute(item.image)) ||
+                  beer
+                }
+              />
             </ListItemAvatar>
             <ListItemText primary={item.name} />
           </ListItem>
