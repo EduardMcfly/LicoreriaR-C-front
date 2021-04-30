@@ -95,6 +95,7 @@ export default function AddCart({ product: item }: AddCartProps) {
               if (amount) {
                 addProduct({ id: item.id, amount });
                 handleClose();
+                setAmount(1);
               }
             }}
             color="secondary"
