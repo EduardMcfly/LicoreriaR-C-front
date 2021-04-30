@@ -9,6 +9,7 @@ import {
   ListItemAvatar,
   ListItemText,
   Typography,
+  Grid,
 } from '@material-ui/core';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 
@@ -18,6 +19,7 @@ import { useShop } from 'contexts/Shop';
 import beer from 'assets/beer.png';
 import { Amount } from 'components/Fields/Amount';
 import { AvatarProduct } from 'components/Product';
+import { Prices } from 'components/Prices';
 
 interface AddCartProps {
   product: Product;
@@ -75,6 +77,13 @@ export default function AddCart({ product: item }: AddCartProps) {
         </DialogTitle>
         <DialogContent>
           <Amount handleChange={handleChange} value={amount} />
+          <Grid container>
+            <Prices
+              {...{ amount, price: item.price }}
+              xs={12}
+              sm={6}
+            />
+          </Grid>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
