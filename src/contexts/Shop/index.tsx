@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Product } from 'graphqlAPI';
+import { getValidAmount } from './utils';
 
 type Item = Pick<Product, 'id'> & {
   amount: number;
@@ -33,10 +34,7 @@ const getStorage = () => {
   }
 };
 
-const min = 1;
-
-const getValue = (amount: number) => (amount < min ? min : amount);
-
+export * from './utils';
 export const ShopProvider = ({
   children,
 }: React.PropsWithChildren<
@@ -57,7 +55,7 @@ export const ShopProvider = ({
       (previousValue, currentValue) => {
         const { id, amount } = currentValue;
         if (previousValue[id])
-          previousValue[id].amount += getValue(amount);
+          previousValue[id].amount += getValidAmount(amount);
         else previousValue[id] = currentValue;
         return previousValue;
       },
@@ -71,7 +69,8 @@ export const ShopProvider = ({
     const newProducts = products.map(
       (product): Item => {
         const { id } = product;
-        if (item.id === id) return { id, amount: getValue(amount) };
+        if (item.id === id)
+          return { id, amount: getValidAmount(amount) };
         else return product;
       },
     );
