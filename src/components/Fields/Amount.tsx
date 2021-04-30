@@ -4,6 +4,7 @@ import FormControl, {
 } from '@material-ui/core/FormControl';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
+import { getValidAmount } from '../../contexts/Shop/utils';
 import {
   IconButton,
   makeStyles,
@@ -29,7 +30,9 @@ export const Amount = ({
   formControlProps,
 }: AmountProps) => {
   const classes = useStyles();
-
+  const onChange = (value: number) => {
+    handleChange(getValidAmount(value));
+  };
   return (
     <FormControl fullWidth {...formControlProps}>
       <Typography variant="caption" align="center">
@@ -44,7 +47,7 @@ export const Amount = ({
             color="primary"
             aria-label="reduce"
             onClick={() => {
-              handleChange(Math.max(value - 1, 0));
+              onChange(value);
             }}
           >
             <RemoveIcon fontSize="small" />
@@ -55,13 +58,13 @@ export const Amount = ({
             color="primary"
             aria-label="increase"
             onClick={() => {
-              handleChange(value + 1);
+              onChange(value + 1);
             }}
           >
             <AddIcon fontSize="small" />
           </IconButton>
         }
-        onChange={({ target: { value } }) => handleChange(+value)}
+        onChange={({ target: { value } }) => onChange(+value)}
         disableUnderline
       />
     </FormControl>
