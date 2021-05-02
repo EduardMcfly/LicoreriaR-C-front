@@ -47,7 +47,7 @@ export const Amount = ({
             color="primary"
             aria-label="reduce"
             onClick={() => {
-              onChange(value);
+              onChange(value - 1);
             }}
           >
             <RemoveIcon fontSize="small" />
