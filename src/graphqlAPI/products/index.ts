@@ -1,4 +1,5 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
+import { QueryProductsArgs } from '../types-graphql';
 import {
   Query,
   Mutation,
@@ -7,7 +8,7 @@ import {
 
 export type TDataProducts = Pick<Query, 'products' | '__typename'>;
 export const PRODUCTS_QUERY = gql`
-  query($pagination: Pagination, $category: String) {
+  query ($pagination: Pagination, $category: String) {
     products(pagination: $pagination, category: $category) {
       data {
         id
@@ -25,11 +26,19 @@ export const PRODUCTS_QUERY = gql`
   }
 `;
 
-export const useProducts = () => {
-  return useQuery<TDataProducts>(PRODUCTS_QUERY);
+interface UseProductsProps {
+  variables?: QueryProductsArgs;
+}
+
+export const useProducts = (props?: UseProductsProps) => {
+  const { variables } = { ...props };
+  return useQuery<TDataProducts, QueryProductsArgs>(PRODUCTS_QUERY, {
+    variables,
+  });
 };
+
 export const CREATE_PRODUCT_MUTATION = gql`
-  mutation($product: ProductInput!) {
+  mutation ($product: ProductInput!) {
     createProduct(product: $product) {
       id
       name
