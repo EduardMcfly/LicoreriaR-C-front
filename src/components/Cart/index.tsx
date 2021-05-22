@@ -12,10 +12,9 @@ import { useTheme } from '@material-ui/core/styles';
 import { makeStyles, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
-import { useShop } from 'contexts/Shop';
+import { useShop, useProducts } from 'contexts';
 
 import { CartItems } from './CartItems';
-import { useProducts } from 'graphqlAPI';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
