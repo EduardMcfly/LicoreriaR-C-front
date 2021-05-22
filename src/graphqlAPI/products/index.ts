@@ -1,4 +1,9 @@
-import { gql, useMutation, useQuery } from '@apollo/client';
+import {
+  gql,
+  QueryHookOptions,
+  useMutation,
+  useQuery,
+} from '@apollo/client';
 import { QueryProductsArgs } from '../types-graphql';
 import {
   Query,
@@ -26,15 +31,16 @@ export const PRODUCTS_QUERY = gql`
   }
 `;
 
-interface UseProductsProps {
-  variables?: QueryProductsArgs;
-}
+type UseProductsProps = QueryHookOptions<
+  TDataProducts,
+  QueryProductsArgs
+>;
 
 export const useProducts = (props?: UseProductsProps) => {
-  const { variables } = { ...props };
-  return useQuery<TDataProducts, QueryProductsArgs>(PRODUCTS_QUERY, {
-    variables,
-  });
+  return useQuery<TDataProducts, QueryProductsArgs>(
+    PRODUCTS_QUERY,
+    props,
+  );
 };
 
 export const CREATE_PRODUCT_MUTATION = gql`
