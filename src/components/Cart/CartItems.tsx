@@ -22,9 +22,8 @@ export const CartItems = ({ products, loading }: CartItemsProps) => {
         </Grid>
       )}
       {shop.products.map((product, i) => (
-        <Grid item xs={12}>
+        <Grid item xs={12} key={product.id}>
           <CartItem
-            key={product.id}
             {...{
               product: products?.find((a) => a.id === product.id),
               amount: product.amount,
