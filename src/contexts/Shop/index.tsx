@@ -66,14 +66,12 @@ export const ShopProvider = ({
 
   const changeAmount = (item: Item) => {
     const { amount } = item;
-    const newProducts = products.map(
-      (product): Item => {
-        const { id } = product;
-        if (item.id === id)
-          return { id, amount: getValidAmount(amount) };
-        else return product;
-      },
-    );
+    const newProducts = products.map((product): Item => {
+      const { id } = product;
+      if (item.id === id)
+        return { id, amount: getValidAmount(amount) };
+      else return product;
+    });
     setProducts(newProducts);
   };
   const removeProduct = (id: Item['id']) => {
