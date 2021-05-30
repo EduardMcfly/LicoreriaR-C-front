@@ -17,9 +17,10 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
-  hello: Scalars['String'];
   products: ProductConnection;
   product: Product;
+  cartProducts: Array<Product>;
+  cartProduct: Product;
 };
 
 
@@ -33,6 +34,16 @@ export type QueryProductArgs = {
   id: Scalars['String'];
 };
 
+
+export type QueryCartProductsArgs = {
+  products: Array<Scalars['ID']>;
+};
+
+
+export type QueryCartProductArgs = {
+  product: Scalars['ID'];
+};
+
 export type ProductConnection = {
   __typename?: 'ProductConnection';
   data: Array<Product>;
@@ -44,11 +55,17 @@ export type Product = {
   id: Scalars['ID'];
   name: Scalars['String'];
   description?: Maybe<Scalars['String']>;
-  category?: Maybe<Scalars['String']>;
+  category?: Maybe<Category>;
   price: Scalars['Float'];
   image?: Maybe<Scalars['String']>;
   amount?: Maybe<Scalars['Float']>;
   creationDate: Scalars['DateTime'];
+};
+
+export type Category = {
+  __typename?: 'Category';
+  id: Scalars['ID'];
+  name: Scalars['String'];
 };
 
 
@@ -73,6 +90,7 @@ export enum OrderTypes {
 export type Mutation = {
   __typename?: 'Mutation';
   createProduct: Product;
+  createProducts: Array<Product>;
   editProduct: Product;
   deleteProduct: Scalars['Boolean'];
 };
@@ -80,6 +98,11 @@ export type Mutation = {
 
 export type MutationCreateProductArgs = {
   product: ProductInput;
+};
+
+
+export type MutationCreateProductsArgs = {
+  products: Array<ProductInput>;
 };
 
 
