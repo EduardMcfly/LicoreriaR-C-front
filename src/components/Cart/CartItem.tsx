@@ -27,18 +27,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface CartItemProps {
+  id: Product['id'];
   product?: Product;
   amount: number;
 }
 
 export const CartItem = ({
+  id,
   product,
   amount,
 }: CartItemProps): JSX.Element | null => {
   const classes = useStyles();
   const shop = useShop();
   if (!product) return null;
-  const { id, price } = product;
+  const { image, name, price } = product;
   const getMax = () => {
     const max = product?.amount || 99;
     return max;
@@ -51,10 +53,10 @@ export const CartItem = ({
           <ListItemAvatar>
             <AvatarProduct
               className={classes.large}
-              alt={product.name}
+              alt={name}
               src={
-                (product.image &&
-                  createAPIImageRoute(product.image, {
+                (image &&
+                  createAPIImageRoute(image, {
                     width: 300,
                   })) ||
                 undefined
@@ -62,7 +64,7 @@ export const CartItem = ({
             />
           </ListItemAvatar>
           <ListItemText
-            primary={product.name}
+            primary={name}
             primaryTypographyProps={{
               variant: 'h6',
               noWrap: true,
@@ -89,7 +91,7 @@ export const CartItem = ({
             color="primary"
             aria-label="Remove"
             onClick={() => {
-              shop.removeProduct(product.id);
+              shop.removeProduct(id);
             }}
           >
             <DeleteIcon fontSize="small" />
