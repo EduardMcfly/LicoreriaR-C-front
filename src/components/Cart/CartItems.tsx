@@ -10,8 +10,34 @@ interface CartItemsProps {
   loading: boolean;
 }
 
-export const CartItems = ({ products, loading }: CartItemsProps) => {
+interface ProductsProps {
+  products: Product[];
+}
+
+const Products = ({ products }: ProductsProps) => {
   const shop = useShop();
+
+  return (
+    <>
+      {shop.products?.map((product, i) => {
+        return (
+          <Grid item xs={12} key={product.id}>
+            <CartItem
+              {...{
+                id: product.id,
+                product: products?.find((a) => a.id === product.id),
+                amount: product.amount,
+              }}
+            />
+            {!!(shop.products.length - (i + 1)) && <Divider />}
+          </Grid>
+        );
+      })}
+    </>
+  );
+};
+
+export const CartItems = ({ products, loading }: CartItemsProps) => {
   return (
     <Grid container justify="center">
       {loading && (
@@ -21,17 +47,7 @@ export const CartItems = ({ products, loading }: CartItemsProps) => {
           </Grid>
         </Grid>
       )}
-      {shop.products.map((product, i) => (
-        <Grid item xs={12} key={product.id}>
-          <CartItem
-            {...{
-              product: products?.find((a) => a.id === product.id),
-              amount: product.amount,
-            }}
-          />
-          {!!(shop.products.length - (i + 1)) && <Divider />}
-        </Grid>
-      ))}
+      {products && <Products {...{ products }} />}
     </Grid>
   );
 };
