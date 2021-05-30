@@ -4,24 +4,21 @@ import {
   useMutation,
   useQuery,
 } from '@apollo/client';
-import { QueryProductsArgs } from '../types-graphql';
+
 import {
+  QueryProductsArgs,
   Query,
   Mutation,
   MutationCreateProductArgs,
 } from '../types-graphql';
+import { productFragment } from './fragments';
 
 export type TDataProducts = Pick<Query, 'products' | '__typename'>;
 export const PRODUCTS_QUERY = gql`
   query ($pagination: Pagination, $category: String) {
     products(pagination: $pagination, category: $category) {
       data {
-        id
-        name
-        image
-        description
-        price
-        amount
+        ...ProductFragment
       }
       cursor {
         after
@@ -29,6 +26,7 @@ export const PRODUCTS_QUERY = gql`
       }
     }
   }
+  ${productFragment}
 `;
 
 type UseProductsProps = QueryHookOptions<
