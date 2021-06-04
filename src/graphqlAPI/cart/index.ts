@@ -1,6 +1,6 @@
 import { gql, QueryHookOptions, useQuery } from '@apollo/client';
 
-import { QueryProductsArgs, Query } from '../types-graphql';
+import { QueryCartProductsArgs, Query } from '../types-graphql';
 import { productFragment } from '../products/fragments';
 
 export type TDataCartProducts = Pick<
@@ -18,11 +18,11 @@ export const CART_PRODUCTS_QUERY = gql`
 
 type UseCartProductsProps = QueryHookOptions<
   TDataCartProducts,
-  QueryProductsArgs
+  QueryCartProductsArgs
 >;
 
 export const useCartProducts = (props?: UseCartProductsProps) => {
-  return useQuery<TDataCartProducts, QueryProductsArgs>(
+  return useQuery<TDataCartProducts, QueryCartProductsArgs>(
     CART_PRODUCTS_QUERY,
     props,
   );
