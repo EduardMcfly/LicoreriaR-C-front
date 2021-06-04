@@ -12,6 +12,7 @@ import {
   MutationCreateProductArgs,
 } from '../types-graphql';
 import { productFragment } from './fragments';
+import { QueryProductArgs } from '../types-graphql';
 
 export type TDataProducts = Pick<Query, 'products' | '__typename'>;
 export const PRODUCTS_QUERY = gql`
@@ -37,6 +38,28 @@ type UseProductsProps = QueryHookOptions<
 export const useProducts = (props?: UseProductsProps) => {
   return useQuery<TDataProducts, QueryProductsArgs>(
     PRODUCTS_QUERY,
+    props,
+  );
+};
+
+export type TDataProduct = Pick<Query, 'product' | '__typename'>;
+export const PRODUCT_QUERY = gql`
+  query ($id: ID!) {
+    product(id: $id) {
+      ...ProductFragment
+    }
+  }
+  ${productFragment}
+`;
+
+type UseProductProps = QueryHookOptions<
+  TDataProduct,
+  QueryProductArgs
+>;
+
+export const useProduct = (props?: UseProductProps) => {
+  return useQuery<TDataProduct, QueryProductArgs>(
+    PRODUCT_QUERY,
     props,
   );
 };
