@@ -18,8 +18,9 @@ export type Scalars = {
 export type Query = {
   __typename?: 'Query';
   products: ProductConnection;
-  product: Category;
+  product: Product;
   categories: Array<Category>;
+  category: Category;
   cartProducts: Array<Product>;
   cartProduct: Product;
 };
@@ -34,6 +35,11 @@ export type QueryProductsArgs = {
 
 
 export type QueryProductArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryCategoryArgs = {
   id: Scalars['String'];
 };
 
