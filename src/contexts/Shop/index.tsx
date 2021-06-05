@@ -17,7 +17,7 @@ type ChangeMap = (
   value: Pick<UserMap, keyof UserMap> | UserMap,
 ) => any;
 
-interface ShopProps extends ShopPropsBase {
+export interface ShopProps extends ShopPropsBase {
   products: CartProduct[];
   map: UserMap & { onChange: ChangeMap };
   addProduct: (item: CartProductBase) => void;
@@ -47,6 +47,7 @@ export const ShopProvider = ({
   const productsLoaded = productsBase.data?.products.data;
 
   const [productsStorage] = React.useState(getStorage);
+  const loadedStorageProducts = React.useRef(false);
 
   const productsNotExist = productsStorage
     .map(({ id }) => id)
@@ -84,7 +85,8 @@ export const ShopProvider = ({
   );
 
   React.useEffect(() => {
-    if (loadingAll) return;
+    if (loadingAll || loadedStorageProducts.current) return;
+    loadedStorageProducts.current = true;
     const newProducts = new Map<string, CartProduct>();
     for (const productStorage of productsStorage) {
       const { id } = productStorage;
