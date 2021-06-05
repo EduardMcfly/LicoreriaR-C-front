@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface CartItemProps {
   id: Product['id'];
-  cartProduct?: CartProduct;
+  cartProduct: CartProduct;
 }
 
 export const CartItem = ({
@@ -37,13 +37,11 @@ export const CartItem = ({
 }: CartItemProps): JSX.Element | null => {
   const classes = useStyles();
   const shop = useShop();
-  if (!cartProduct) return null;
-  const {
-    amount,
-    product: { image, name, price },
-  } = cartProduct;
+  const { amount, product } = cartProduct;
+  if (!product) return null;
+  const { image, name, price } = product;
   const getMax = () => {
-    const max = cartProduct?.product.amount || 99;
+    const max = product.amount || 99;
     return max;
   };
 
