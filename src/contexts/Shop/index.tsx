@@ -1,8 +1,7 @@
 import React from 'react';
 
-import { Product } from 'graphqlAPI';
+import { Product, useCartProducts } from 'graphqlAPI';
 import { useProducts } from 'contexts/Products';
-import { useCartProducts } from '../../graphqlAPI/cart';
 import { getValidAmount } from './utils';
 
 interface CartProductBase {
