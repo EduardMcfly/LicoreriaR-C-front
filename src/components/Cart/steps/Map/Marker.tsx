@@ -8,7 +8,9 @@ interface MarkerProps {
 
 const useStyles = makeStyles(() => ({
   marker: {
-    transform: 'translate(-50%,-50%)',
+    position: 'absolute',
+    bottom: '0px',
+    transform: 'translate(-50%)',
   },
 }));
 
@@ -16,7 +18,7 @@ export const Marker = (_props: MarkerProps) => {
   const classes = useStyles();
   return (
     <div className={classes.marker}>
-      <RoomIcon color="primary" fontSize={'large'} />;
+      <RoomIcon color="primary" fontSize={'large'} />
     </div>
   );
 };
