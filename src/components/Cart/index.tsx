@@ -12,7 +12,7 @@ import { useTheme } from '@material-ui/core/styles';
 import { makeStyles, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
-import { useShop, useProducts } from 'contexts';
+import { useShop } from 'contexts';
 
 import { CartItems } from './CartItems';
 
@@ -41,8 +41,7 @@ export default function CartDialog({
   const classes = useStyles();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  const { products } = useShop();
-  const { data, loading } = useProducts();
+  const { products, loading } = useShop();
 
   const handleClose = () => {
     onClose();
@@ -95,10 +94,11 @@ export default function CartDialog({
             let text = `Hola\n`;
             text += `Estoy interad@ en comprar estos productos:\n`;
             for (const { id, amount } of products) {
-              const product = data?.products.data.find(
-                (x) => x.id === id,
-              );
-              if (product) text += `${product.name}: ${amount}\n`;
+              const cartProduct = products.find((x) => x.id === id);
+              if (cartProduct) {
+                const { product } = cartProduct;
+                text += `${product.name}: ${amount}\n`;
+              }
             }
             let url = 'https://wa.me/573204283576?';
             url += qs.stringify({ text });
