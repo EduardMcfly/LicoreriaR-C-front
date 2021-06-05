@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   Badge,
+  CircularProgress,
   emphasize,
   fade,
   IconButton,
@@ -49,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
 export const CartItem = (props?: CartItemProps) => {
   const classes = useStyles();
   const { className } = { ...props };
-  const { products } = useShop();
+  const { products, loading } = useShop();
   const [open, setOpen] = React.useState(false);
   const [animation, setAnimation] = React.useState(false);
   const prevLength = usePrevious(products.length);
@@ -64,6 +65,11 @@ export const CartItem = (props?: CartItemProps) => {
     }
   }, [open, length, prevLength]);
   const showAnimation = !open && animation;
+  const badgeContent = loading ? (
+    <CircularProgress color="inherit" size={10} />
+  ) : (
+    products.length
+  );
   return (
     <>
       {showAnimation && <div className={classes.background} />}
@@ -78,7 +84,7 @@ export const CartItem = (props?: CartItemProps) => {
       >
         {showAnimation && <div className={classes.circle} />}
         <Badge
-          badgeContent={products.length}
+          badgeContent={badgeContent}
           className={className}
           color="secondary"
           aria-label="cart"
