@@ -37,6 +37,9 @@ const useStyles = makeStyles((theme) => ({
   cartEmpty: {
     padding: theme.spacing(6),
   },
+  dialogActions: {
+    justifyContent: 'center',
+  },
 }));
 
 interface CartDialogProps {
@@ -178,7 +181,7 @@ export default function CartDialog({
           </Step>
         </Stepper>
       </DialogContent>
-      <DialogActions>
+      <DialogActions className={classes.dialogActions}>
         <Button
           autoFocus
           size="large"
