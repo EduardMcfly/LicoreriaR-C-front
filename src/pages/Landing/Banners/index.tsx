@@ -42,7 +42,6 @@ export const Banners = () => {
       remove();
     };
   }, [fetchMore, loading]);
-  console.log(loading);
 
   return (
     <div className={classes.root}>
