@@ -9,7 +9,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { makeStyles } from '@material-ui/core';
 
 import { createAPIImageRoute } from 'constantsApp';
-import { useShop } from 'contexts/Shop';
+import { useShop, CartProduct } from 'contexts/Shop';
 import { Product } from 'graphqlAPI';
 
 import { Amount } from '../Fields/Amount';
@@ -28,21 +28,22 @@ const useStyles = makeStyles((theme) => ({
 
 interface CartItemProps {
   id: Product['id'];
-  product?: Product;
-  amount: number;
+  cartProduct?: CartProduct;
 }
 
 export const CartItem = ({
   id,
-  product,
-  amount,
+  cartProduct,
 }: CartItemProps): JSX.Element | null => {
   const classes = useStyles();
   const shop = useShop();
-  if (!product) return null;
-  const { image, name, price } = product;
+  if (!cartProduct) return null;
+  const {
+    amount,
+    product: { image, name, price },
+  } = cartProduct;
   const getMax = () => {
-    const max = product?.amount || 99;
+    const max = cartProduct?.product.amount || 99;
     return max;
   };
 
