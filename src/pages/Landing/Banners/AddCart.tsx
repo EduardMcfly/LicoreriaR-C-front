@@ -25,22 +25,34 @@ import beer from 'assets/beer.png';
 interface AddCartProps {
   product: Product;
 }
+const useStyles = makeStyles((theme) => {
+  const color = theme.palette.error;
+  return {
+    exhausted: {
+      background: lighten(color.main, 0.3) + '!important',
+      color: color.contrastText + '!important',
+    },
+  };
+});
 
 export default function AddCart({ product: item }: AddCartProps) {
+  const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [amount, setAmount] = React.useState<number>(1);
   const { addProduct, products } = useShop();
 
+  const productAmount = item.amount || 99;
+
   const getMax = React.useCallback(() => {
     const itemShop = products.find(({ id }) => item.id === id);
-    const max = (item.amount || 99) - (itemShop?.amount || 0);
+    const max = productAmount - (itemShop?.amount || 0);
     return max;
-  }, [products, item]);
+  }, [item.id, products, productAmount]);
 
+  const max = getMax();
   React.useEffect(() => {
-    const max = getMax();
     if (amount > max) setAmount(max);
-  }, [amount, getMax, setAmount]);
+  }, [amount, max, setAmount]);
 
   const handleChange = (newValue: string | number) => {
     const max = getMax();
@@ -56,10 +68,16 @@ export default function AddCart({ product: item }: AddCartProps) {
     setOpen(false);
   };
 
+  const exhausted = max;
   return (
     <div>
-      <Button color="secondary" onClick={handleClickOpen}>
-        Comprar
+      <Button
+        color="secondary"
+        onClick={handleClickOpen}
+        disabled={!exhausted}
+        className={(!exhausted && classes.exhausted) || undefined}
+      >
+        {exhausted ? 'Comprar' : 'Agotado'}
       </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>
