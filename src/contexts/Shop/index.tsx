@@ -57,7 +57,7 @@ export const ShopProvider = ({
 
   const productsLoaded = productsBase.data?.products.data;
 
-  const productsStorage = getStorage();
+  const [productsStorage] = React.useState(getStorage);
 
   const productsNotExist = productsStorage
     .map(({ id }) => id)
@@ -65,20 +65,28 @@ export const ShopProvider = ({
       (id) => !productsLoaded?.some((product) => product.id === id),
     );
 
+  const [loading, setLoading] = React.useState(true);
+
   const cartProducts = useCartProducts({
     variables: {
       products: productsNotExist,
     },
-    skip: !!productsBase.loading || !productsNotExist.length,
+    skip:
+      !!productsBase.loading || !productsNotExist.length || !loading,
   });
 
-  const loading = productsBase.loading || cartProducts.loading;
+  const loadingAll = productsBase.loading || cartProducts.loading;
+
+  React.useEffect(() => {
+    if (loading && !loadingAll) setLoading(false);
+  }, [loading, loadingAll]);
 
   const cartProductsData = cartProducts.data?.cartProducts;
+
   const allProducts = React.useMemo(() => {
-    if (loading) return array;
+    if (loadingAll) return array;
     return [...(productsLoaded || []), ...(cartProductsData || [])];
-  }, [productsLoaded, cartProductsData, loading]);
+  }, [productsLoaded, cartProductsData, loadingAll]);
 
   const getProduct = React.useCallback(
     (id: CartProduct['id']) =>
@@ -88,21 +96,21 @@ export const ShopProvider = ({
 
   React.useEffect(() => {
     let newProduct = false;
-    for (const productStorage of getStorage()) {
-      if (!products.has(productStorage.id)) {
-        const product = getProduct(productStorage.id);
-        if (product) {
-          newProduct = true;
-          products.set(product.id, {
-            id: product.id,
-            amount: productStorage.amount,
-            product,
-          });
-        }
+    for (const productStorage of productsStorage) {
+      const { id } = productStorage;
+      const cartProduct = products.has(id);
+      const product = getProduct(id);
+      if (!cartProduct && product) {
+        newProduct = true;
+        products.set(id, {
+          id,
+          amount: productStorage.amount,
+          product,
+        });
       }
     }
     if (newProduct) setProducts(new Map(products));
-  }, [products, getProduct]);
+  }, [productsStorage, products, getProduct, loadingAll]);
 
   const getProducts = React.useCallback(
     () => Array.from(products.values()),
@@ -125,11 +133,11 @@ export const ShopProvider = ({
     const { id, amount } = item;
     const product = getProduct(id);
     if (product) {
-      const shopProduct = products.get(id);
+      const cartProduct = products.get(id);
       products.set(id, {
         ...item,
         amount:
-          ((shopProduct && shopProduct.amount) || 0) +
+          ((cartProduct && cartProduct.amount) || 0) +
           getValidAmount(amount),
         product,
       });
