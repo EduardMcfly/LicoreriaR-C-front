@@ -11,6 +11,7 @@ import { makeStyles } from '@material-ui/core';
 import { createAPIImageRoute } from 'constantsApp';
 import { useShop, CartProduct } from 'contexts/Shop';
 import { Product } from 'graphqlAPI';
+import beer from 'assets/beer.png';
 
 import { Amount } from '../Fields/Amount';
 import { AvatarProduct } from '../Product';
@@ -58,7 +59,7 @@ export const CartItem = ({
                   createAPIImageRoute(image, {
                     width: 300,
                   })) ||
-                undefined
+                beer
               }
             />
           </ListItemAvatar>
