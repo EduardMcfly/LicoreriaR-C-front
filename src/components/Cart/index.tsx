@@ -90,6 +90,7 @@ export default function CartDialog({
           Cerrar
         </Button>
         <Button
+          disabled={!products.length}
           onClick={() => {
             let text = `Hola\n`;
             text += `Estoy interad@ en comprar estos productos:\n`;
