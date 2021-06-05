@@ -13,6 +13,7 @@ type Breakpoints = Partial<Record<Breakpoint, boolean | GridSize>>;
 interface PricesProps extends Breakpoints {
   amount: number;
   price: number;
+  showTotal?: boolean;
 }
 
 export const useStyles = makeStyles(() => ({
@@ -21,7 +22,12 @@ export const useStyles = makeStyles(() => ({
   },
 }));
 
-export function Prices({ amount, price, ...rest }: PricesProps) {
+export function Prices({
+  amount,
+  price,
+  showTotal = true,
+  ...rest
+}: PricesProps) {
   const classes = useStyles();
   const breakpoints = keys.reduce<Breakpoints>(
     (p, c) => ({ ...p, [c]: rest[c] }),
@@ -32,13 +38,15 @@ export function Prices({ amount, price, ...rest }: PricesProps) {
       <Grid item {...breakpoints}>
         <UnitPrice value={price} className={classes.textCenter} />
       </Grid>
-      <Grid item {...breakpoints}>
-        <TotalPrice
-          amount={amount}
-          price={price}
-          className={classes.textCenter}
-        />
-      </Grid>
+      {showTotal && (
+        <Grid item {...breakpoints}>
+          <TotalPrice
+            amount={amount}
+            price={price}
+            className={classes.textCenter}
+          />
+        </Grid>
+      )}
     </>
   );
 }
