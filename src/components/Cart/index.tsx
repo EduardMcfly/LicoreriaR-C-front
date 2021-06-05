@@ -9,7 +9,12 @@ import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
-import { makeStyles, Typography } from '@material-ui/core';
+import {
+  makeStyles,
+  Typography,
+  Grid,
+  CircularProgress,
+} from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
 import { useShop } from 'contexts';
@@ -74,7 +79,14 @@ export default function CartDialog({
         Carrito de compras
       </DialogTitle>
       <DialogContent>
-        {(!products.length && (
+        {loading && (
+          <Grid item xs={12}>
+            <Grid container justify="center">
+              <CircularProgress size={60} />
+            </Grid>
+          </Grid>
+        )}
+        {!products.length && !loading && (
           <div className={classes.cartEmpty}>
             <Typography align="center" variant="h4">
               Tu carrito esta vacío. ¿No sabes qué comprar?
@@ -83,7 +95,8 @@ export default function CartDialog({
               ¡Miles de productos te esperan!
             </Typography>
           </div>
-        )) || <CartItems {...{ loading }} />}
+        )}
+        {!!products.length && <CartItems {...{ loading }} />}
       </DialogContent>
       <DialogActions>
         <Button autoFocus onClick={handleClose} color="primary">
