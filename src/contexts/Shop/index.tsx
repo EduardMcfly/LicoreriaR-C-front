@@ -19,6 +19,7 @@ type ChangeMap = (
 
 interface ShopProps extends ShopPropsBase {
   products: CartProduct[];
+  map: UserMap & { onChange: ChangeMap };
   addProduct: (item: CartProductBase) => void;
   changeAmount: (item: CartProductBase) => void;
   removeProduct: (item: CartProduct['id']) => void;
@@ -39,6 +40,7 @@ export const ShopProvider = ({
   const [products, setProducts] = React.useState(
     () => new Map<CartProduct['id'], CartProduct>(),
   );
+  const [map, setMap] = React.useState<UserMap>(getStorageMap());
 
   const productsBase = useProducts();
 
@@ -144,6 +146,17 @@ export const ShopProvider = ({
     saveStorage();
   };
 
+  const onChangeMap: ChangeMap = ({ center, zoom }) => {
+    let newState: Partial<UserMap> | null = null;
+    if (center) newState = { ...(newState || {}), center };
+    if (zoom) newState = { ...(newState || {}), zoom };
+    if (newState) {
+      const newMap = { ...map, ...newState };
+      setMap(newMap);
+      setStorageMap(newMap);
+    }
+  };
+
   return (
     <ShopContext.Provider
       value={{
@@ -152,6 +165,10 @@ export const ShopProvider = ({
         changeAmount,
         removeProduct,
         loading,
+        map: {
+          ...map,
+          onChange: onChangeMap,
+        },
       }}
     >
       {children}
@@ -160,3 +177,5 @@ export const ShopProvider = ({
 };
 export const ShopConsumer = ShopContext.Consumer;
 export const useShop = () => React.useContext(ShopContext);
+export * from './utils';
+export * from './types';
