@@ -52,6 +52,9 @@ export default function CartDialog({
     onClose();
   };
 
+
+  const title = 'Carrito de compras';
+
   return (
     <Dialog
       fullScreen={fullScreen}
@@ -64,6 +67,7 @@ export default function CartDialog({
       {fullScreen && (
         <AppBar className={classes.appBar}>
           <Toolbar>
+            <Typography className={classes.title}>{title}</Typography>
             <IconButton
               edge="start"
               color="inherit"
@@ -75,9 +79,11 @@ export default function CartDialog({
           </Toolbar>
         </AppBar>
       )}
-      <DialogTitle id="responsive-dialog-title">
-        Carrito de compras
-      </DialogTitle>
+      {!fullScreen && (
+        <DialogTitle id="responsive-dialog-title">
+          {title}
+        </DialogTitle>
+      )}
       <DialogContent>
         {loading && (
           <Grid item xs={12}>
