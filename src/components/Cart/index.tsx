@@ -84,12 +84,7 @@ export default function CartDialog({
               ¡Miles de productos te esperan!
             </Typography>
           </div>
-        )) || (
-          <CartItems
-            products={data?.products.data}
-            {...{ loading }}
-          />
-        )}
+        )) || <CartItems {...{ loading }} />}
       </DialogContent>
       <DialogActions>
         <Button autoFocus onClick={handleClose} color="primary">
