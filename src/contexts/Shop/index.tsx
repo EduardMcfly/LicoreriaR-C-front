@@ -84,22 +84,21 @@ export const ShopProvider = ({
   );
 
   React.useEffect(() => {
-    let newProduct = false;
+    if (loadingAll) return;
+    const newProducts = new Map<string, CartProduct>();
     for (const productStorage of productsStorage) {
       const { id } = productStorage;
-      const cartProduct = products.has(id);
       const product = getProduct(id);
-      if (!cartProduct && product) {
-        newProduct = true;
-        products.set(id, {
+      if (product) {
+        newProducts.set(id, {
           id,
           amount: productStorage.amount,
           product,
         });
       }
     }
-    if (newProduct) setProducts(new Map(products));
-  }, [productsStorage, products, getProduct, loadingAll]);
+    setProducts(newProducts);
+  }, [productsStorage, getProduct, loadingAll]);
 
   const getProducts = React.useCallback(
     () => Array.from(products.values()),
