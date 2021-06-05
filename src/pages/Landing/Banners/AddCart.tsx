@@ -80,8 +80,9 @@ export default function AddCart({ product: item }: AddCartProps) {
           <Grid container>
             <Prices
               {...{ amount, price: item.price }}
+              showTotal={amount > 1}
               xs={12}
-              sm={6}
+              sm={amount > 1 ? 6 : 12}
             />
           </Grid>
         </DialogContent>
