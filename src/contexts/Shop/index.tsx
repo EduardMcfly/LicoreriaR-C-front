@@ -2,18 +2,20 @@ import React from 'react';
 
 import { Product, useCartProducts } from 'graphqlAPI';
 import { useProducts } from 'contexts/Products';
-import { getValidAmount } from './utils';
-
-interface CartProductBase {
-  id: Product['id'];
-  amount: number;
-}
-
-export interface CartProduct extends CartProductBase {
-  product: Product;
-}
+import {
+  getValidAmount,
+  getStorage,
+  setStorage,
+  getStorageMap,
+  setStorageMap,
+} from './utils';
+import { UserMap, CartProductBase, CartProduct } from './types';
 
 interface ShopPropsBase {}
+
+type ChangeMap = (
+  value: Pick<UserMap, keyof UserMap> | UserMap,
+) => any;
 
 interface ShopProps extends ShopPropsBase {
   products: CartProduct[];
@@ -23,24 +25,9 @@ interface ShopProps extends ShopPropsBase {
   loading: boolean;
 }
 
-const key = 'products';
-
 const ShopContext = React.createContext<ShopProps>(
   Object.create(null),
 );
-
-const getStorage = () => {
-  try {
-    const products: CartProductBase[] = JSON.parse(
-      localStorage.getItem(key) || '',
-    );
-    return products;
-  } catch (error) {
-    return [];
-  }
-};
-
-export * from './utils';
 
 const array: Product[] = [];
 
@@ -118,15 +105,7 @@ export const ShopProvider = ({
   );
 
   const saveStorage = React.useCallback(() => {
-    localStorage.setItem(
-      key,
-      JSON.stringify(
-        getProducts().map<CartProductBase>(({ id, amount }) => ({
-          id,
-          amount,
-        })),
-      ),
-    );
+    setStorage(getProducts());
   }, [getProducts]);
 
   const addProduct = (item: CartProductBase) => {
