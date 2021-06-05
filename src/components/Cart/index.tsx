@@ -1,3 +1,4 @@
+import React from 'react';
 import qs from 'querystring';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -14,6 +15,10 @@ import {
   Typography,
   Grid,
   CircularProgress,
+  Stepper,
+  Step,
+  StepLabel,
+  StepContent,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
@@ -46,12 +51,73 @@ export default function CartDialog({
   const classes = useStyles();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  const { products, loading } = useShop();
+  const { products, loading, map } = useShop();
+  const [activeStep, setActiveStep] = React.useState(0);
+
+  const maxStep = 2;
+  const stepsValid: Record<number, boolean> = {
+    0: !!products.length,
+    1: !!map.center,
+  };
 
   const handleClose = () => {
     onClose();
   };
 
+  const BuyButton = (
+    <Button
+      disabled={
+        !Object.values(stepsValid).every((valid) => valid) ||
+        activeStep !== maxStep - 1
+      }
+      onClick={() => {
+        let text = `Hola\n`;
+        text += `Estoy interad@ en comprar estos productos:\n`;
+        for (const { id, amount } of products) {
+          const cartProduct = products.find((x) => x.id === id);
+          if (cartProduct) {
+            const { product } = cartProduct;
+            text += `${product.name}: ${amount}\n`;
+          }
+        }
+        let url = 'https://wa.me/573204283576?';
+        url += qs.stringify({ text });
+        window.location.href = url;
+      }}
+      color="primary"
+      autoFocus
+    >
+      Comprar
+    </Button>
+  );
+
+  const StepActions = (
+    <DialogActions>
+      <Button
+        disabled={!activeStep}
+        onClick={() => {
+          const newActiveStep = activeStep - 1;
+          setActiveStep(newActiveStep);
+        }}
+        color="primary"
+      >
+        Atrás
+      </Button>
+      {(activeStep < maxStep - 1 && (
+        <Button
+          disabled={!stepsValid[activeStep]}
+          onClick={() => {
+            const newActiveStep = activeStep + 1;
+            setActiveStep(newActiveStep);
+          }}
+          color="primary"
+        >
+          Siguiente
+        </Button>
+      )) ||
+        BuyButton}
+    </DialogActions>
+  );
 
   const title = 'Carrito de compras';
 
@@ -85,49 +151,41 @@ export default function CartDialog({
         </DialogTitle>
       )}
       <DialogContent>
-        {loading && (
-          <Grid item xs={12}>
-            <Grid container justify="center">
-              <CircularProgress size={60} />
-            </Grid>
-          </Grid>
-        )}
-        {!products.length && !loading && (
-          <div className={classes.cartEmpty}>
-            <Typography align="center" variant="h4">
-              Tu carrito esta vacío. ¿No sabes qué comprar?
-            </Typography>
-            <Typography align="center" variant="h6">
-              ¡Miles de productos te esperan!
-            </Typography>
-          </div>
-        )}
-        {!!products.length && <CartItems {...{ loading }} />}
+        <Stepper activeStep={activeStep} orientation="vertical">
+          <Step>
+            <StepLabel>Productos</StepLabel>
+            <StepContent>
+              {loading && (
+                <Grid item xs={12}>
+                  <Grid container justify="center">
+                    <CircularProgress size={60} />
+                  </Grid>
+                </Grid>
+              )}
+              {!products.length && !loading && (
+                <div className={classes.cartEmpty}>
+                  <Typography align="center" variant="h4">
+                    Tu carrito esta vacío. ¿No sabes qué comprar?
+                  </Typography>
+                  <Typography align="center" variant="h6">
+                    ¡Miles de productos te esperan!
+                  </Typography>
+                </div>
+              )}
+              {!!products.length && <CartItems {...{ loading }} />}
+              {StepActions}
+            </StepContent>
+          </Step>
+        </Stepper>
       </DialogContent>
       <DialogActions>
-        <Button autoFocus onClick={handleClose} color="primary">
-          Cerrar
-        </Button>
         <Button
-          disabled={!products.length}
-          onClick={() => {
-            let text = `Hola\n`;
-            text += `Estoy interad@ en comprar estos productos:\n`;
-            for (const { id, amount } of products) {
-              const cartProduct = products.find((x) => x.id === id);
-              if (cartProduct) {
-                const { product } = cartProduct;
-                text += `${product.name}: ${amount}\n`;
-              }
-            }
-            let url = 'https://wa.me/573204283576?';
-            url += qs.stringify({ text });
-            window.location.href = url;
-          }}
-          color="primary"
           autoFocus
+          size="large"
+          onClick={handleClose}
+          color="secondary"
         >
-          Comprar
+          Cerrar
         </Button>
       </DialogActions>
     </Dialog>
