@@ -13,9 +13,9 @@ import { useShop, CartProduct } from 'contexts/Shop';
 import { Product } from 'graphqlAPI';
 import beer from 'assets/beer.png';
 
-import { Amount } from '../Fields/Amount';
-import { AvatarProduct } from '../Product';
-import { Prices } from '../Prices';
+import { Amount } from '../../../Fields/Amount';
+import { AvatarProduct } from '../../../Product';
+import { Prices } from '../../../Prices';
 
 const useStyles = makeStyles((theme) => ({
   large: {
