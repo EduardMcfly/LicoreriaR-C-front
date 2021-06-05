@@ -1,5 +1,5 @@
 import React from 'react';
-import qs from 'querystring';
+import ReactIs from 'react-is';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -13,8 +13,6 @@ import { useTheme } from '@material-ui/core/styles';
 import {
   makeStyles,
   Typography,
-  Grid,
-  CircularProgress,
   Stepper,
   Step,
   StepLabel,
@@ -22,10 +20,9 @@ import {
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
-import { useShop } from 'contexts';
-
-import { CartItems } from './CartItems';
-import Map from './Map';
+import steps from './steps';
+import { StepActions } from './steps/StepActions';
+import { Action, useOnBuy } from './steps/common';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -34,9 +31,6 @@ const useStyles = makeStyles((theme) => ({
   title: {
     marginLeft: theme.spacing(2),
     flex: 1,
-  },
-  cartEmpty: {
-    padding: theme.spacing(6),
   },
   dialogActions: {
     justifyContent: 'center',
@@ -55,75 +49,30 @@ export default function CartDialog({
   const classes = useStyles();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  const { products, loading, map } = useShop();
   const [activeStep, setActiveStep] = React.useState(0);
 
-  const maxStep = 2;
-  const stepsValid: Record<number, boolean> = {
-    0: !!products.length,
-    1: !!map.center,
-  };
+  const onBuy = useOnBuy();
 
   const handleClose = () => {
     onClose();
   };
 
-  const BuyButton = (
-    <Button
-      disabled={
-        !Object.values(stepsValid).every((valid) => valid) ||
-        activeStep !== maxStep - 1
-      }
-      onClick={() => {
-        let text = `Hola\n`;
-        text += `Estoy interad@ en comprar estos productos:\n`;
-        for (const { id, amount } of products) {
-          const cartProduct = products.find((x) => x.id === id);
-          if (cartProduct) {
-            const { product } = cartProduct;
-            text += `${product.name}: ${amount}\n`;
-          }
-        }
-        let url = 'https://wa.me/573204283576?';
-        url += qs.stringify({ text });
-        window.location.href = url;
-      }}
-      color="primary"
-      autoFocus
-    >
-      Comprar
-    </Button>
-  );
-
-  const StepActions = (
-    <DialogActions>
-      <Button
-        disabled={!activeStep}
-        onClick={() => {
-          const newActiveStep = activeStep - 1;
-          setActiveStep(newActiveStep);
-        }}
-        color="primary"
-      >
-        Atrás
-      </Button>
-      {(activeStep < maxStep - 1 && (
-        <Button
-          disabled={!stepsValid[activeStep]}
-          onClick={() => {
-            const newActiveStep = activeStep + 1;
-            setActiveStep(newActiveStep);
-          }}
-          color="primary"
-        >
-          Siguiente
-        </Button>
-      )) ||
-        BuyButton}
-    </DialogActions>
-  );
-
   const title = 'Carrito de compras';
+
+  const handleAction = (action?: Action | number) => {
+    if (action === Action.buy) {
+      onBuy();
+      return;
+    }
+    const getNewActiveStep = () => {
+      if (action === Action.back) return activeStep - 1;
+      if (action === Action.next) return activeStep + 1;
+      return action || activeStep;
+    };
+    const newActiveStep = getNewActiveStep();
+    if (newActiveStep >= 0 && newActiveStep <= steps.length)
+      setActiveStep(newActiveStep);
+  };
 
   return (
     <Dialog
@@ -156,43 +105,38 @@ export default function CartDialog({
       )}
       <DialogContent>
         <Stepper activeStep={activeStep} orientation="vertical">
-          <Step>
-            <StepLabel>Productos</StepLabel>
-            <StepContent>
-              {loading && (
-                <Grid item xs={12}>
-                  <Grid container justify="center">
-                    <CircularProgress size={60} />
-                  </Grid>
-                </Grid>
-              )}
-              {!products.length && !loading && (
-                <div className={classes.cartEmpty}>
-                  <Typography align="center" variant="h4">
-                    Tu carrito esta vacío. ¿No sabes qué comprar?
-                  </Typography>
-                  <Typography align="center" variant="h6">
-                    ¡Miles de productos te esperan!
-                  </Typography>
-                </div>
-              )}
-              {!!products.length && <CartItems {...{ loading }} />}
-              {StepActions}
-            </StepContent>
-          </Step>
-          <Step>
-            <StepLabel>Tu ubicación</StepLabel>
-            <StepContent>
-              <Map />
-              {StepActions}
-            </StepContent>
-          </Step>
+          {steps.map(({ label, content, buttons }, i) => {
+            const Content = content;
+            return (
+              <Step key={i}>
+                <StepLabel>{label}</StepLabel>
+                <StepContent>
+                  <Content />
+                  <StepActions
+                    {...{
+                      buttons: buttons.map((button) => {
+                        if (ReactIs.isValidElementType(button))
+                          return button;
+                        const { action } = button;
+                        return {
+                          ...button,
+                          onClick: () => {
+                            handleAction(action);
+                          },
+                        };
+                      }),
+                    }}
+                  />
+                </StepContent>
+              </Step>
+            );
+          })}
         </Stepper>
       </DialogContent>
       <DialogActions className={classes.dialogActions}>
         <Button
           autoFocus
-          size="large"
+          size="small"
           onClick={handleClose}
           color="secondary"
         >
