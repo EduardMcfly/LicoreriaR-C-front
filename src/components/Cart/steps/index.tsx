@@ -3,14 +3,14 @@ import React from 'react';
 import { Products } from './Products';
 import Map from './Map';
 import { StepButtonObject } from './StepActions';
-import { Go } from './common';
+import { Action } from './common';
 
 interface StepType {
   label: React.ReactNode;
   content: React.ComponentType;
   buttons: (
     | (StepButtonObject & {
-        go?: number | Go;
+        action?: number | Action;
       })
     | React.ElementType
   )[];
@@ -24,7 +24,7 @@ export const steps: StepType[] = [
       { label: 'Atrás', disabled: true },
       {
         label: 'Siguiente',
-        go: Go.next,
+        action: Action.next,
         disabled: ({ products }) => !products.length,
       },
     ],
@@ -33,10 +33,10 @@ export const steps: StepType[] = [
     label: 'Tu ubicación',
     content: Map,
     buttons: [
-      { label: 'Atrás', go: Go.back },
+      { label: 'Atrás', action: Action.back },
       {
         label: 'Comprar',
-        go: Go.buy,
+        action: Action.buy,
         disabled: ({ map }) => !map.center,
       },
     ],

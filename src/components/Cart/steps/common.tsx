@@ -20,7 +20,7 @@ export const useOnBuy = () => {
   };
 };
 
-export enum Go {
+export enum Action {
   back = 'back',
   next = 'next',
   buy = 'buy',
