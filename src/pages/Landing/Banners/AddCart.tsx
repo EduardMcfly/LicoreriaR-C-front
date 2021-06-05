@@ -1,25 +1,26 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import {
+  Button,
+  Grid,
   ListItem,
   ListItemAvatar,
   ListItemText,
   Typography,
-  Grid,
 } from '@material-ui/core';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import { lighten, makeStyles } from '@material-ui/core/styles';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 
-import { createAPIImageRoute } from 'constantsApp';
 import { Product } from 'graphqlAPI';
 import { useShop } from 'contexts/Shop';
-import beer from 'assets/beer.png';
 import { Amount } from 'components/Fields/Amount';
-import { AvatarProduct } from 'components/Product';
 import { Prices } from 'components/Prices';
+import { AvatarProduct } from 'components/Product';
+import { createAPIImageRoute } from 'constantsApp';
+import beer from 'assets/beer.png';
 
 interface AddCartProps {
   product: Product;
