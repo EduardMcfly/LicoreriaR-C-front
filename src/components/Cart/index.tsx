@@ -25,6 +25,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { useShop } from 'contexts';
 
 import { CartItems } from './CartItems';
+import Map from './Map';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -176,6 +177,13 @@ export default function CartDialog({
                 </div>
               )}
               {!!products.length && <CartItems {...{ loading }} />}
+              {StepActions}
+            </StepContent>
+          </Step>
+          <Step>
+            <StepLabel>Tu ubicación</StepLabel>
+            <StepContent>
+              <Map />
               {StepActions}
             </StepContent>
           </Step>
