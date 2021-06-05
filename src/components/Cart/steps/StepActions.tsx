@@ -52,7 +52,7 @@ export const StepActions = ({ buttons }: StepActionsProps) => {
               onClick={() => {
                 onClick && onClick();
               }}
-              color="primary"
+              color="secondary"
               {...buttonProps}
             >
               {label}

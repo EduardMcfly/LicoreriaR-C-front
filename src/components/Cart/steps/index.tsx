@@ -33,7 +33,11 @@ export const steps: StepType[] = [
     label: 'Tu ubicación',
     content: Map,
     buttons: [
-      { label: 'Atrás', action: Action.back },
+      {
+        label: 'Atrás',
+        action: Action.back,
+        buttonProps: { color: 'primary' },
+      },
       {
         label: 'Comprar',
         action: Action.buy,

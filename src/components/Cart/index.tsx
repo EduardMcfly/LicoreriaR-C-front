@@ -138,7 +138,7 @@ export default function CartDialog({
           autoFocus
           size="small"
           onClick={handleClose}
-          color="secondary"
+          color="primary"
         >
           Cerrar
         </Button>
