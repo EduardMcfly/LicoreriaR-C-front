@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactIs from 'react-is';
+import * as ReactIs from 'react-is';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
