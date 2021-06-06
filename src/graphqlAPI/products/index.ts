@@ -16,8 +16,16 @@ import { QueryProductArgs } from '../types-graphql';
 
 export type TDataProducts = Pick<Query, 'products' | '__typename'>;
 export const PRODUCTS_QUERY = gql`
-  query ($pagination: Pagination, $category: String) {
-    products(pagination: $pagination, category: $category) {
+  query (
+    $pagination: Pagination
+    $category: String
+    $filter: String
+  ) {
+    products(
+      pagination: $pagination
+      category: $category
+      filter: $filter
+    ) {
       data {
         ...ProductFragment
       }
