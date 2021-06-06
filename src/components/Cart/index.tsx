@@ -21,7 +21,7 @@ import {
 import CloseIcon from '@material-ui/icons/Close';
 
 import steps from './steps';
-import { StepActions } from './steps/StepActions';
+import { StepActions, StepButton } from './steps/StepActions';
 import { Action, useOnBuy } from './steps/common';
 
 const useStyles = makeStyles((theme) => ({
@@ -107,6 +107,16 @@ export default function CartDialog({
         <Stepper activeStep={activeStep} orientation="vertical">
           {steps.map(({ label, content, buttons }, i) => {
             const Content = content;
+            const mapButtons = buttons.map<StepButton>((button) => {
+              if (ReactIs.isValidElementType(button)) return button;
+              const { action } = button;
+              return {
+                ...button,
+                onClick: () => {
+                  handleAction(action);
+                },
+              };
+            });
             return (
               <Step key={i}>
                 <StepLabel>{label}</StepLabel>
@@ -114,17 +124,7 @@ export default function CartDialog({
                   <Content />
                   <StepActions
                     {...{
-                      buttons: buttons.map((button) => {
-                        if (ReactIs.isValidElementType(button))
-                          return button;
-                        const { action } = button;
-                        return {
-                          ...button,
-                          onClick: () => {
-                            handleAction(action);
-                          },
-                        };
-                      }),
+                      buttons: mapButtons,
                     }}
                   />
                 </StepContent>
