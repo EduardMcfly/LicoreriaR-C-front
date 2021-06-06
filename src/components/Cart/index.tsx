@@ -32,6 +32,9 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(2),
     flex: 1,
   },
+  dialogContent: {
+    padding: 0,
+  },
   dialogActions: {
     justifyContent: 'center',
   },
@@ -103,7 +106,7 @@ export default function CartDialog({
           {title}
         </DialogTitle>
       )}
-      <DialogContent>
+      <DialogContent className={classes.dialogContent}>
         <Stepper activeStep={activeStep} orientation="vertical">
           {steps.map(({ label, content, buttons }, i) => {
             const Content = content;
