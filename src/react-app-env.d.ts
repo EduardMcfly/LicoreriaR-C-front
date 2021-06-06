@@ -5,5 +5,6 @@ declare namespace NodeJS {
     REACT_APP_NAME: string;
     REACT_APP_API: string;
     REACT_APP_MAPS: string;
+    REACT_APP_PHONE: string;
   }
 }
