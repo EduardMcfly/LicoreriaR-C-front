@@ -6,6 +6,8 @@ import {
   BreakpointValues,
 } from '@material-ui/core/styles/createBreakpoints';
 
+import { PhoneNumber } from 'constantsApp';
+
 export * from './helpers';
 export * from './useSearch';
 export * from './usePrevious';
@@ -33,4 +35,8 @@ export const getGrid = (
       if (isWidthDown(width, key) && breakpoints[key])
         return breakpoints[key];
   return 1;
+};
+
+export const getUrlWhatsapp = () => {
+  return `https://wa.me/${PhoneNumber.replace('+', '')}?`;
 };
