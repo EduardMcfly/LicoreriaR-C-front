@@ -25,7 +25,8 @@ export const steps: StepType[] = [
       {
         label: 'Siguiente',
         action: Action.next,
-        disabled: ({ products }) => !products.length,
+        disabled: ({ products }) =>
+          !products.every(({ amount }) => !!amount),
       },
     ],
   },
