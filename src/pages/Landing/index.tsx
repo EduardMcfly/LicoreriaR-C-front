@@ -9,11 +9,11 @@ import {
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
+import texture from 'assets/texture.png';
+import background from 'assets/background.png';
 import { AppName } from 'constantsApp';
 import { Header, Footer } from 'components/Layout';
-import { useSearch } from 'utils';
-import background from 'assets/background.png';
-import texture from 'assets/texture.png';
+import { useIsAdmin } from 'contexts';
 import AddProduct from '../../components/Product/add';
 import Banners from './Banners/index';
 import MoreInformation from './MoreInformation';
@@ -76,8 +76,7 @@ const useStyles = makeStyles((theme) => {
 
 export const Landing = () => {
   const classes = useStyles();
-  const { user } = useSearch();
-  const isAdmin = user === 'admin';
+  const isAdmin = useIsAdmin();
   const [open, setOpen] = React.useState(false);
 
   return (
