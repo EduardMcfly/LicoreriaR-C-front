@@ -17,6 +17,10 @@ type ProductsProps = Pick<
   fetchMore: () =>
     | Promise<void | ApolloQueryResult<TDataProducts>>
     | undefined;
+  variables: QueryProductsArgs;
+  setVariables: React.Dispatch<
+    React.SetStateAction<Partial<QueryProductsArgs>>
+  >;
 };
 
 const ProductsContext = React.createContext<ProductsProps>(
@@ -27,19 +31,24 @@ export const ProductsProvider = ({
   children,
   variables: variablesBase,
 }: React.PropsWithChildren<ProductsPropsBase>) => {
-  const variables = mergeDeep<QueryProductsArgs[]>(
-    { pagination: { limit: 10 } },
-    {
-      ...variablesBase,
-    },
+  const [variables, setVariables] = React.useState(
+    mergeDeep<QueryProductsArgs[]>(
+      { pagination: { limit: 10 } },
+      {
+        ...variablesBase,
+      },
+    ),
   );
-  const { data, fetchMore, ...rest } = useProductsBase({ variables });
+  const { data, fetchMore, ...rest } = useProductsBase({
+    variables: { ...variables },
+  });
   const [loading, setLoading] = React.useState(false);
 
   const cursor = React.useMemo(() => data?.products.cursor, [data]);
 
   const fetchMoreProducts = React.useCallback(() => {
     const after = cursor?.after;
+
     if (after) {
       setLoading(true);
       return fetchMore({
@@ -69,12 +78,21 @@ export const ProductsProvider = ({
     }
   }, [fetchMore, cursor, variables]);
   const allLoading = loading || rest.loading;
+
   return (
     <ProductsContext.Provider
       value={{
         data,
         loading: allLoading,
         fetchMore: fetchMoreProducts,
+        variables,
+        setVariables: (values) => {
+          const newVariables = {
+            ...variables,
+            ...values,
+          };
+          setVariables(newVariables);
+        },
       }}
     >
       {children}
