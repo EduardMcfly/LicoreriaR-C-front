@@ -6,6 +6,7 @@ import { useProducts } from 'contexts';
 
 import Products from './Products';
 import { Loading } from './Loading';
+import { Filter } from './Filter';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -46,6 +47,9 @@ export const Banners = () => {
   return (
     <div className={classes.root}>
       <Grid container spacing={4} innerRef={grid}>
+        <Grid item xs={12}>
+          <Filter />
+        </Grid>
         {data && <Products data={data} />}
         {loading && <Loading />}
       </Grid>
