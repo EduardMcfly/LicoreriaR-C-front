@@ -11,8 +11,11 @@ import { ApolloProvider } from '@apollo/client';
 import { ThemeProvider } from 'components/ThemeContext';
 import { PathRoutes } from './constantsApp';
 import { Landing } from './pages/Landing';
-import { ShopProvider } from './contexts/Shop';
-import { ProductsProvider } from './contexts/Products';
+import {
+  ShopProvider,
+  ProductsProvider,
+  SessionProvider,
+} from './contexts';
 import { client } from './client';
 
 function App() {
@@ -23,18 +26,20 @@ function App() {
         <ProductsProvider>
           <ShopProvider>
             <HashRouter>
-              <Switch>
-                <Route
-                  exact
-                  path={PathRoutes.LANDING}
-                  component={Landing}
-                />
-                <Redirect
-                  exact
-                  from={PathRoutes.ROOT}
-                  to={PathRoutes.LANDING}
-                />
-              </Switch>
+              <SessionProvider>
+                <Switch>
+                  <Route
+                    exact
+                    path={PathRoutes.LANDING}
+                    component={Landing}
+                  />
+                  <Redirect
+                    exact
+                    from={PathRoutes.ROOT}
+                    to={PathRoutes.LANDING}
+                  />
+                </Switch>
+              </SessionProvider>
             </HashRouter>
           </ShopProvider>
         </ProductsProvider>
