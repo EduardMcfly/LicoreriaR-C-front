@@ -1,5 +1,4 @@
 import React from 'react';
-import * as ReactIs from 'react-is';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -23,6 +22,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import steps from './steps';
 import { StepActions, StepButton } from './steps/StepActions';
 import { Action, useOnBuy } from './steps/common';
+import { isValidElementType } from './utils';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -108,7 +108,7 @@ export default function CartDialog({
           {steps.map(({ label, content, buttons }, i) => {
             const Content = content;
             const mapButtons = buttons.map<StepButton>((button) => {
-              if (ReactIs.isValidElementType(button)) return button;
+              if (isValidElementType(button)) return button;
               const { action } = button;
               return {
                 ...button,

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Products } from './Products';
 import Map from './Map';
-import { StepButtonObject } from './StepActions';
+import { StepButtonObject, StepButtonComponent } from './StepActions';
 import { Action } from './common';
 
 interface StepType {
@@ -12,7 +12,7 @@ interface StepType {
     | (StepButtonObject & {
         action?: number | Action;
       })
-    | React.ElementType
+    | StepButtonComponent
   )[];
 }
 

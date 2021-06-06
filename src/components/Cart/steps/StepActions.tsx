@@ -1,9 +1,9 @@
-import * as ReactIs from 'react-is';
 import Button, { ButtonProps } from '@material-ui/core/Button';
 import DialogActions from '@material-ui/core/DialogActions';
 
 import { ShopProps, useShop } from 'contexts';
 import React from 'react';
+import { isValidElementType } from '../utils';
 
 export interface StepButtonObject {
   label: React.ReactNode;
@@ -15,7 +15,8 @@ export interface StepButtonObject {
   buttonProps?: ButtonProps;
 }
 
-export type StepButton = StepButtonObject | React.ElementType;
+export type StepButtonComponent = React.ComponentType;
+export type StepButton = StepButtonObject | StepButtonComponent;
 
 interface StepActionsProps {
   buttons: StepButton[];
@@ -26,8 +27,8 @@ export const StepActions = ({ buttons }: StepActionsProps) => {
   return (
     <DialogActions>
       {buttons.map((button, i) => {
-        if (ReactIs.isValidElementType(button)) {
-          const Element: React.ElementType = button;
+        if (isValidElementType(button)) {
+          const Element: StepButtonComponent = button;
           return <Element key={i} />;
         }
         const {
