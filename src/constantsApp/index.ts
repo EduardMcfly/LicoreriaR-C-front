@@ -1,6 +1,10 @@
 import { stringify, ParsedUrlQueryInput } from 'querystring';
 
 export const AppName = process.env.REACT_APP_NAME;
+export const PhoneNumber = process.env.REACT_APP_PHONE;
+if (!PhoneNumber) {
+  console.warn('REACT_APP_PHONE is required');
+}
 
 export enum PathRoutes {
   LANDING = '/landing',
