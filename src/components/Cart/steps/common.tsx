@@ -1,6 +1,7 @@
 import qs from 'querystring';
 
 import { useShop } from 'contexts';
+import { getUrlWhatsapp } from 'utils';
 
 export const useOnBuy = () => {
   const { products } = useShop();
@@ -14,7 +15,7 @@ export const useOnBuy = () => {
         text += `${product.name}: ${amount}\n`;
       }
     }
-    let url = 'https://wa.me/573204283576?';
+    let url = getUrlWhatsapp();
     url += qs.stringify({ text });
     window.location.href = url;
   };
