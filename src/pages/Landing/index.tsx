@@ -14,8 +14,9 @@ import { Header, Footer } from 'components/Layout';
 import { useSearch } from 'utils';
 import background from 'assets/background.png';
 import texture from 'assets/texture.png';
-import Banners from './Banners/index';
 import AddProduct from '../../components/Product/add';
+import Banners from './Banners/index';
+import MoreInformation from './MoreInformation';
 
 const useStyles = makeStyles((theme) => {
   const timeTransition = '1s';
@@ -113,9 +114,7 @@ export const Landing = () => {
         justify="center"
         className={classes.summaryButton}
       >
-        <Button color="primary" size="small">
-          Más información
-        </Button>
+        <MoreInformation />
       </Grid>
       <div className={classes.banners}>
         {isAdmin && (
