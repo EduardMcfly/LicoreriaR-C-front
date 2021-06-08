@@ -2,15 +2,25 @@ import GoogleMapReact from 'google-map-react';
 
 import { useShop } from 'contexts';
 import { Marker } from './Marker';
+import { makeStyles } from '@material-ui/core';
 
 const { REACT_APP_MAPS } = process.env;
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    height: `calc(100vh - ${theme.spacing(50)}px)`,
+    width: '100%',
+    minHeight: theme.spacing(40),
+  },
+}));
+
 const Map = () => {
+  const classes = useStyles();
   const { map } = useShop();
   const { defaultCenter, defaultZoom, center, zoom, onChange } = map;
 
   return (
-    <div style={{ height: '600px', width: '100%' }}>
+    <div className={classes.root}>
       <GoogleMapReact
         bootstrapURLKeys={{ key: REACT_APP_MAPS }}
         defaultCenter={defaultCenter}
