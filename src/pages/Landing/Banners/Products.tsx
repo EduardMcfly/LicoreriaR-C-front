@@ -1,4 +1,5 @@
 import { TDataProducts } from 'graphqlAPI';
+
 import Product from './Product';
 
 interface ProductsProps {
