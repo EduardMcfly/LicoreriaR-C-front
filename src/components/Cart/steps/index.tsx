@@ -31,7 +31,7 @@ export const steps: StepType[] = [
     ],
   },
   {
-    label: 'Tu ubicación',
+    label: 'Selecciona tu ubicación',
     content: Map,
     buttons: [
       {
