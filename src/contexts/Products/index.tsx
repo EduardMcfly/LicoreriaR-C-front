@@ -38,7 +38,7 @@ export const ProductsProvider = ({
 
   const [variables, setVariables] = React.useState(
     mergeDeep<QueryProductsArgs[]>(
-      { pagination: { limit: 10 } },
+      { pagination: { limit: 20 } },
       {
         ...variablesBase,
       },
@@ -131,7 +131,9 @@ export const ProductsProvider = ({
           };
         },
       })
-        .then(({ data }) => {
+        .then(() => {
+          const { data } = query.getCurrentResult();
+          debugger;
           setResult({ data, loading: false });
         })
         .catch((e) => {
