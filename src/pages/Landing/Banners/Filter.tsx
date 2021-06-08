@@ -17,25 +17,31 @@ const useStyles = makeStyles((theme) => ({
 
 export const Filter = () => {
   const classes = useStyles();
-  const { variables, setVariables } = useProducts();
-  const [name, setName] = React.useState(variables.filter);
+  const { loading, variables, setVariables, cancel } = useProducts();
+  const [name, setName] = React.useState(() => variables.filter);
   const handler = React.useRef(
     throttle((value: string) => {
-      console.log(value);
+      cancel();
       setVariables({ filter: value });
-    }, 2000),
+    }, 1000),
   );
+
+  React.useEffect(() => {
+    if (!loading) handler.current.flush();
+  }, [loading]);
+
   return (
     <Grid container justify="center">
       <Grid item xs={12} sm={8} md={6} lg={4}>
         <Paper className={classes.root}>
           <TextField
             onChange={({ target }) => {
-              setName(target.value);
-              handler.current(target.value);
+              const value = target.value;
+              setName(value);
+              handler.current(value);
             }}
             placeholder="Busque sus productos..."
-            value={name}
+            value={name || ''}
             InputProps={{
               disableUnderline: true,
             }}
