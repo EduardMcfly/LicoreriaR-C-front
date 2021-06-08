@@ -6,8 +6,10 @@ import {
   fade,
   emphasize,
   Typography,
+  lighten,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+import RoomIcon from '@material-ui/icons/Room';
 
 import texture from 'assets/texture.png';
 import background from 'assets/background.png';
@@ -27,11 +29,19 @@ const useStyles = makeStyles((theme) => {
       overflow: 'hidden',
       position: 'relative',
       transition: `color ${timeTransition} ease`,
-      color: contrastText,
+      color: lighten(contrastText, 0.6),
       '&:hover': {
         color: emphasize(emphasize(contrastText, 1), 1),
         '& $overlay': {
           background: fade(contrastText, 0.3),
+        },
+        '& $text': {
+          borderRadius: theme.spacing(2),
+          background: emphasize(
+            fade(theme.palette.background.paper, 0.9),
+            0.8,
+          ),
+          padding: theme.spacing(8, 0),
         },
       },
     },
@@ -55,13 +65,15 @@ const useStyles = makeStyles((theme) => {
     overlay: {
       transition: `background ${timeTransition} ease`,
       background: emphasize(
-        fade(theme.palette.background.paper, 0.8),
+        fade(theme.palette.background.paper, 0.6),
         0.8,
       ),
       position: 'absolute',
       height: '100%',
       width: '100%',
     },
+    text: { transition: `all ${timeTransition} ease` },
+    location: { color: theme.palette.background.paper },
     summaryButton: {
       marginTop: theme.spacing(-2),
     },
@@ -101,10 +113,34 @@ export const Landing = () => {
           container
           alignItems="center"
         >
-          <Grid item xs>
-            <Typography variant="h4" align="center">
+          <Grid item xs={12} />
+          <Grid item xs={12}>
+            <Typography
+              variant="h4"
+              align="center"
+              className={classes.text}
+            >
               Bienvenido a {AppName}
             </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Grid container justify="center" spacing={2}>
+              <Grid item xs={12} sm="auto">
+                <Grid container justify="center" alignItems="center">
+                  <RoomIcon />
+                </Grid>
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                sm="auto"
+                className={classes.location}
+              >
+                <Typography variant="h6" align="center" noWrap>
+                  Simijaca - Cundinamarca
+                </Typography>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </div>
