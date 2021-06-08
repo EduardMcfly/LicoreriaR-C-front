@@ -1,12 +1,13 @@
 import React from 'react';
 import { ApolloQueryResult, useApolloClient } from '@apollo/client';
+import { mergeDeep } from '@apollo/client/utilities';
 
-import { QueryProductsArgs } from '../../graphqlAPI/types-graphql';
 import {
+  QueryProductsArgs,
   TDataProducts,
   PRODUCTS_QUERY,
-} from '../../graphqlAPI/products/index';
-import { mergeDeep } from '@apollo/client/utilities';
+} from 'graphqlAPI';
+import { getFilteredData } from './utils';
 
 interface ProductsPropsBase {
   variables?: QueryProductsArgs;
@@ -74,36 +75,12 @@ export const ProductsProvider = ({
     [client, variables],
   );
 
-  const getFilteredData = React.useCallback(
-    (
-      data: TDataProducts | undefined,
-      newFilter: QueryProductsArgs['filter'],
-    ): TDataProducts | undefined => {
-      const products = data?.products;
-      if (products)
-        return {
-          ...data,
-          products: {
-            ...products,
-            data: products.data.filter(({ name }) => {
-              if (newFilter)
-                return !!name
-                  .toLowerCase()
-                  .match(newFilter.toLowerCase());
-              return false;
-            }),
-          },
-        };
-    },
-    [],
-  );
-
   React.useEffect(() => {
     if (variables.filter)
       setResult((result) => ({
         data: getFilteredData(result.data, variables.filter),
       }));
-  }, [setResult, getFilteredData, variables.filter]);
+  }, [setResult, variables.filter]);
   const subscribe = React.useRef<ZenObservable.Subscription>();
 
   React.useEffect(() => {
