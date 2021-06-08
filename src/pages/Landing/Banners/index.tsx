@@ -46,7 +46,7 @@ export const Banners = () => {
 
   return (
     <div className={classes.root}>
-      <Grid container spacing={4} innerRef={grid}>
+      <Grid container spacing={4} innerRef={grid} justify="center">
         <Grid item xs={12}>
           <Filter />
         </Grid>
