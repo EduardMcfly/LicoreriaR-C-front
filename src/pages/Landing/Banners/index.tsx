@@ -7,6 +7,7 @@ import { useProducts } from 'contexts';
 import Products from './Products';
 import { Loading } from './Loading';
 import { Filter } from './Filter';
+import EmptyProduct from './EmptyProduct';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -52,6 +53,11 @@ export const Banners = () => {
         </Grid>
         {data && <Products data={data} />}
         {loading && <Loading />}
+        {!loading && !data?.products?.data.length && (
+          <Grid item container justify="center">
+            <EmptyProduct />
+          </Grid>
+        )}
       </Grid>
     </div>
   );
