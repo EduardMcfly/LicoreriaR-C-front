@@ -1,19 +1,20 @@
 import React from 'react';
-import { ApolloQueryResult, QueryResult } from '@apollo/client';
+import { ApolloQueryResult, useApolloClient } from '@apollo/client';
 
-import { useProducts as useProductsBase } from 'graphqlAPI';
 import { QueryProductsArgs } from '../../graphqlAPI/types-graphql';
-import { TDataProducts } from '../../graphqlAPI/products/index';
+import {
+  TDataProducts,
+  PRODUCTS_QUERY,
+} from '../../graphqlAPI/products/index';
 import { mergeDeep } from '@apollo/client/utilities';
 
 interface ProductsPropsBase {
   variables?: QueryProductsArgs;
 }
 
-type ProductsProps = Pick<
-  QueryResult<TDataProducts, QueryProductsArgs>,
-  'data' | 'loading'
-> & {
+type ProductsProps = {
+  data?: TDataProducts;
+  loading: boolean;
   fetchMore: () =>
     | Promise<void | ApolloQueryResult<TDataProducts>>
     | undefined;
@@ -21,6 +22,7 @@ type ProductsProps = Pick<
   setVariables: React.Dispatch<
     React.SetStateAction<Partial<QueryProductsArgs>>
   >;
+  cancel: () => void;
 };
 
 const ProductsContext = React.createContext<ProductsProps>(
@@ -31,6 +33,8 @@ export const ProductsProvider = ({
   children,
   variables: variablesBase,
 }: React.PropsWithChildren<ProductsPropsBase>) => {
+  const client = useApolloClient();
+
   const [variables, setVariables] = React.useState(
     mergeDeep<QueryProductsArgs[]>(
       { pagination: { limit: 10 } },
@@ -39,10 +43,87 @@ export const ProductsProvider = ({
       },
     ),
   );
-  const { data, fetchMore, ...rest } = useProductsBase({
-    variables: { ...variables },
+
+  interface State {
+    loading: boolean;
+    data?: TDataProducts;
+  }
+
+  const [{ loading, data }, setResultBase] = React.useState<State>({
+    loading: true,
+    data: undefined,
   });
-  const [loading, setLoading] = React.useState(false);
+
+  const setResult = React.useCallback(
+    (action: React.SetStateAction<Partial<State>>) => {
+      setResultBase((result) => {
+        const newResult =
+          typeof action === 'function' ? action(result) : action;
+        return { ...result, ...newResult };
+      });
+    },
+    [],
+  );
+
+  const getQuery = React.useCallback(
+    () =>
+      client.watchQuery<TDataProducts, QueryProductsArgs>({
+        variables,
+        query: PRODUCTS_QUERY,
+      }),
+    [client, variables],
+  );
+
+  const getFilteredData = React.useCallback(
+    (
+      data: TDataProducts | undefined,
+      newFilter: QueryProductsArgs['filter'],
+    ): TDataProducts | undefined => {
+      const products = data?.products;
+      if (products)
+        return {
+          ...data,
+          products: {
+            ...products,
+            data: products.data.filter(({ name }) => {
+              if (newFilter)
+                return !!name
+                  .toLowerCase()
+                  .match(newFilter.toLowerCase());
+              return false;
+            }),
+          },
+        };
+    },
+    [],
+  );
+
+  React.useEffect(() => {
+    if (variables.filter)
+      setResult((result) => ({
+        data: getFilteredData(result.data, variables.filter),
+      }));
+  }, [setResult, getFilteredData, variables.filter]);
+  const subscribe = React.useRef<ZenObservable.Subscription>();
+
+  React.useEffect(() => {
+    setResult({
+      loading: true,
+    });
+    if (subscribe.current) subscribe.current.unsubscribe();
+    const query = getQuery();
+    subscribe.current = query.subscribe(
+      ({ data }) => {
+        setResult({ data, loading: false });
+      },
+      () => {
+        setResult({ loading: false });
+      },
+    );
+    return () => {
+      subscribe.current?.unsubscribe();
+    };
+  }, [variables, setResult, getQuery]);
 
   const cursor = React.useMemo(() => data?.products.cursor, [data]);
 
@@ -50,7 +131,9 @@ export const ProductsProvider = ({
     const after = cursor?.after;
 
     if (after) {
-      setLoading(true);
+      setResult({ loading: true });
+      const query = getQuery();
+      const fetchMore = query.fetchMore.bind(query);
       return fetchMore({
         variables: mergeDeep(variables, {
           pagination: { after },
@@ -71,18 +154,21 @@ export const ProductsProvider = ({
           };
         },
       })
-        .catch((e) => {
-          console.error(e);
+        .then(({ data }) => {
+          setResult({ data, loading: false });
         })
-        .finally(() => setLoading(false));
+        .catch((e) => {
+          setResult({ loading: false });
+        });
     }
-  }, [fetchMore, cursor, variables]);
-  const allLoading = loading || rest.loading;
+  }, [setResult, getQuery, cursor, variables]);
+
+  const allLoading = loading;
 
   return (
     <ProductsContext.Provider
       value={{
-        data,
+        data: data,
         loading: allLoading,
         fetchMore: fetchMoreProducts,
         variables,
@@ -92,6 +178,9 @@ export const ProductsProvider = ({
             ...values,
           };
           setVariables(newVariables);
+        },
+        cancel: () => {
+          subscribe.current?.unsubscribe();
         },
       }}
     >
