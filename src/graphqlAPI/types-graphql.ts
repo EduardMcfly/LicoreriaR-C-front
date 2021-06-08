@@ -15,61 +15,17 @@ export type Scalars = {
   Upload: any;
 };
 
-export type Query = {
-  __typename?: 'Query';
-  products: ProductConnection;
-  product: Product;
-  categories: Array<Category>;
-  category: Category;
-  cartProducts: Array<Product>;
-  cartProduct: Product;
-};
-
-
-export type QueryProductsArgs = {
-  pagination?: Maybe<Pagination>;
-  categories?: Maybe<Array<Scalars['String']>>;
-  filter?: Maybe<Scalars['String']>;
-  category?: Maybe<Scalars['String']>;
-};
-
-
-export type QueryProductArgs = {
-  id: Scalars['String'];
-};
-
-
-export type QueryCategoryArgs = {
-  id: Scalars['String'];
-};
-
-
-export type QueryCartProductsArgs = {
-  products: Array<Scalars['ID']>;
-};
-
-
-export type QueryCartProductArgs = {
-  product: Scalars['ID'];
-};
-
-export type ProductConnection = {
-  __typename?: 'ProductConnection';
-  data: Array<Product>;
-  cursor: PageInfo;
-};
-
-export type Product = {
-  __typename?: 'Product';
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
+export type After = {
+  __typename?: 'After';
+  id?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
   categoryId?: Maybe<Scalars['String']>;
-  category?: Maybe<Category>;
-  price: Scalars['Float'];
-  image?: Maybe<Scalars['String']>;
-  amount?: Maybe<Scalars['Float']>;
-  creationDate: Scalars['DateTime'];
+};
+
+export type AfterInput = {
+  id?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  categoryId?: Maybe<Scalars['String']>;
 };
 
 export type Category = {
@@ -81,39 +37,13 @@ export type Category = {
   products?: Maybe<Array<Product>>;
 };
 
-
-export type PageInfo = {
-  __typename?: 'PageInfo';
-  after?: Maybe<Scalars['String']>;
-  arrayAfter?: Maybe<Array<Maybe<After>>>;
-  count: Scalars['Int'];
+export type CategoryInput = {
+  name: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  image?: Maybe<Scalars['Upload']>;
+  imageUrl?: Maybe<Scalars['String']>;
 };
 
-export type After = {
-  __typename?: 'After';
-  id?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
-  categoryId?: Maybe<Scalars['String']>;
-};
-
-export type Pagination = {
-  after?: Maybe<Scalars['String']>;
-  arrayAfter?: Maybe<Array<AfterInput>>;
-  direction?: Maybe<OrderTypes>;
-  limit?: Maybe<Scalars['Int']>;
-};
-
-export type AfterInput = {
-  id?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
-  categoryId?: Maybe<Scalars['String']>;
-};
-
-/** The basic directions */
-export enum OrderTypes {
-  Asc = 'Asc',
-  Desc = 'Desc'
-}
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -139,7 +69,7 @@ export type MutationCreateProductsArgs = {
 
 
 export type MutationEditProductArgs = {
-  product: ProductInput;
+  product: ProductEditInput;
   id: Scalars['String'];
 };
 
@@ -169,20 +99,100 @@ export type MutationDeleteCategoryArgs = {
   id: Scalars['String'];
 };
 
-export type ProductInput = {
+/** The basic directions */
+export enum OrderTypes {
+  Asc = 'Asc',
+  Desc = 'Desc'
+}
+
+export type PageInfo = {
+  __typename?: 'PageInfo';
+  after?: Maybe<Scalars['String']>;
+  arrayAfter?: Maybe<Array<Maybe<After>>>;
+  count: Scalars['Int'];
+};
+
+export type Pagination = {
+  after?: Maybe<Scalars['String']>;
+  arrayAfter?: Maybe<Array<AfterInput>>;
+  direction?: Maybe<OrderTypes>;
+  limit?: Maybe<Scalars['Int']>;
+};
+
+export type Product = {
+  __typename?: 'Product';
+  id: Scalars['ID'];
   name: Scalars['String'];
   description?: Maybe<Scalars['String']>;
+  categoryId?: Maybe<Scalars['String']>;
+  category?: Maybe<Category>;
   price: Scalars['Float'];
-  amount: Scalars['Float'];
+  image?: Maybe<Scalars['String']>;
+  amount?: Maybe<Scalars['Float']>;
+  creationDate: Scalars['DateTime'];
+};
+
+export type ProductConnection = {
+  __typename?: 'ProductConnection';
+  data: Array<Product>;
+  cursor: PageInfo;
+};
+
+export type ProductEditInput = {
+  description?: Maybe<Scalars['String']>;
   image?: Maybe<Scalars['Upload']>;
   imageUrl?: Maybe<Scalars['String']>;
+  category?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  price?: Maybe<Scalars['Float']>;
+  amount?: Maybe<Scalars['Float']>;
+};
+
+export type ProductInput = {
+  description?: Maybe<Scalars['String']>;
+  image?: Maybe<Scalars['Upload']>;
+  imageUrl?: Maybe<Scalars['String']>;
+  category?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  price: Scalars['Float'];
+  amount: Scalars['Float'];
+};
+
+export type Query = {
+  __typename?: 'Query';
+  products: ProductConnection;
+  product?: Maybe<Product>;
+  categories: Array<Category>;
+  category: Category;
+  cartProducts: Array<Product>;
+  cartProduct: Product;
+};
+
+
+export type QueryProductsArgs = {
+  pagination?: Maybe<Pagination>;
+  categories?: Maybe<Array<Scalars['String']>>;
+  filter?: Maybe<Scalars['String']>;
   category?: Maybe<Scalars['String']>;
 };
 
 
-export type CategoryInput = {
-  name: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
-  image?: Maybe<Scalars['Upload']>;
-  imageUrl?: Maybe<Scalars['String']>;
+export type QueryProductArgs = {
+  id: Scalars['ID'];
 };
+
+
+export type QueryCategoryArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryCartProductsArgs = {
+  products: Array<Scalars['ID']>;
+};
+
+
+export type QueryCartProductArgs = {
+  product: Scalars['ID'];
+};
+
