@@ -23,6 +23,9 @@
     "use-react-router": "^1.0.7"
   },
   "devDependencies": {
+    "@capacitor/android": "^3.0.0",
+    "@capacitor/cli": "^3.0.0",
+    "@capacitor/core": "^3.0.0",
     "@graphql-codegen/cli": "^1.21.3",
     "@graphql-codegen/typescript": "^1.21.1",
     "@testing-library/jest-dom": "^5.11.9",
