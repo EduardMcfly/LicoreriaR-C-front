@@ -98,7 +98,10 @@ export const FormProduct = (
     FieldImage.image,
   );
 
-  const setField = (name: keyof Fields, value: any) => {
+  const setField = <Key extends keyof Fields>(
+    name: Key,
+    value: Fields[Key],
+  ) => {
     setValues({
       ...values,
       [name]: value,
