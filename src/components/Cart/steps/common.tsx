@@ -4,7 +4,7 @@ import { useShop } from 'contexts';
 import { getUrlWhatsapp } from 'utils';
 
 export const useOnBuy = () => {
-  const { products } = useShop();
+  const { products, removeProducts } = useShop();
   return () => {
     let text = `Hola\n`;
     text += `Estoy interad@ en comprar estos productos:\n`;
@@ -17,7 +17,8 @@ export const useOnBuy = () => {
     }
     let url = getUrlWhatsapp();
     url += qs.stringify({ text });
-    window.location.href = url;
+    window.open(url, '_blank')?.focus();
+    removeProducts();
   };
 };
 
