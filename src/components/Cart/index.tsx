@@ -1,9 +1,8 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
+import clsx from 'clsx';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -30,6 +29,8 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     marginLeft: theme.spacing(2),
+  },
+  fillFlex: {
     flex: 1,
   },
   dialogContent: {
@@ -89,7 +90,11 @@ export default function CartDialog({
       {fullScreen && (
         <AppBar className={classes.appBar}>
           <Toolbar>
-            <Typography className={classes.title}>{title}</Typography>
+            <Typography
+              className={clsx(classes.title, classes.fillFlex)}
+            >
+              {title}
+            </Typography>
             <IconButton
               edge="start"
               color="inherit"
@@ -102,34 +107,29 @@ export default function CartDialog({
         </AppBar>
       )}
       {!fullScreen && (
-        <DialogTitle id="responsive-dialog-title">
-          {title}
-        </DialogTitle>
+        <Toolbar>
+          <Typography variant="h5" className={classes.fillFlex}>
+            {title}
+          </Typography>
+          <IconButton
+            edge="start"
+            color="inherit"
+            onClick={handleClose}
+            aria-label="close"
+          >
+            <CloseIcon />
+          </IconButton>
+        </Toolbar>
       )}
       <DialogContent className={classes.dialogContent}>
         <Stepper activeStep={activeStep} orientation="vertical">
-          {steps.map(({ label, content, buttons }, i) => {
+          {steps.map(({ label, content }, i) => {
             const Content = content;
-            const mapButtons = buttons.map<StepButton>((button) => {
-              if (isValidElementType(button)) return button;
-              const { action } = button;
-              return {
-                ...button,
-                onClick: () => {
-                  handleAction(action);
-                },
-              };
-            });
             return (
               <Step key={i}>
                 <StepLabel>{label}</StepLabel>
                 <StepContent>
                   <Content />
-                  <StepActions
-                    {...{
-                      buttons: mapButtons,
-                    }}
-                  />
                 </StepContent>
               </Step>
             );
@@ -137,14 +137,26 @@ export default function CartDialog({
         </Stepper>
       </DialogContent>
       <DialogActions className={classes.dialogActions}>
-        <Button
-          autoFocus
-          size="small"
-          onClick={handleClose}
-          color="primary"
-        >
-          Cerrar
-        </Button>
+        {steps.map(({ buttons }, i) => {
+          if (activeStep !== i) return null;
+          const mapButtons = buttons.map<StepButton>((button) => {
+            if (isValidElementType(button)) return button;
+            const { action } = button;
+            return {
+              ...button,
+              onClick: () => {
+                handleAction(action);
+              },
+            };
+          });
+          return (
+            <StepActions
+              {...{
+                buttons: mapButtons,
+              }}
+            />
+          );
+        })}
       </DialogActions>
     </Dialog>
   );
