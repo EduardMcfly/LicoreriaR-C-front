@@ -9,7 +9,6 @@ import { ButtonGroup, Grid, makeStyles } from '@material-ui/core';
 
 import {
   Scalars,
-  Maybe,
   useCreateProduct,
   useEditProduct,
   ProductEditInput,
@@ -75,7 +74,8 @@ export const FormProduct = (
   const classes = useStyles();
   const [createProduct, createProductResult] = useCreateProduct();
   const [editProduct, editProductResult] = useEditProduct();
-  const [values, setValues] = React.useState<Fields>(() => {
+
+  const getDefaultValues = (): Fields => {
     const newValues: Partial<Fields> = {};
     for (const key in valuesBase)
       if (valuesBase.hasOwnProperty(key)) {
@@ -87,10 +87,13 @@ export const FormProduct = (
       ...defaultValues,
       ...newValues,
     };
-  });
+  };
+
+  const [values, setValues] = React.useState(getDefaultValues);
 
   const loading =
     createProductResult.loading || editProductResult.loading;
+
   const [fieldImage, setFieldImage] = React.useState<FieldImage>(
     FieldImage.image,
   );
@@ -140,9 +143,9 @@ export const FormProduct = (
           <TextField
             label="Precio"
             name="price"
-            value={values.price}
+            value={values.price !== '' ? values.price : ''}
             onChange={({ target: { value } }) => {
-              setField('price', +value);
+              setField('price', value === '' ? '' : +value);
             }}
             InputProps={{
               inputComponent: NumberFormatCustom as any,
@@ -152,9 +155,9 @@ export const FormProduct = (
           <TextField
             label="Cantidad"
             name="amount"
-            value={values.amount}
+            value={values.amount !== '' ? values.amount : ''}
             onChange={({ target: { value } }) => {
-              setField('amount', +value);
+              setField('amount', value === '' ? '' : +value);
             }}
             margin="dense"
             type="number"
@@ -266,8 +269,10 @@ export const FormProduct = (
                 };
                 if (name) setVariables({ name });
                 if (description) setVariables({ description });
-                if (price) setVariables({ price });
-                if (amount) setVariables({ amount });
+                if (typeof price === 'number')
+                  setVariables({ price });
+                if (typeof amount === 'number')
+                  setVariables({ amount });
                 if (image) setVariables({ image });
                 if (imageUrl) setVariables({ imageUrl });
                 if (editVariables) {
@@ -275,7 +280,7 @@ export const FormProduct = (
                     variables: { id, product: editVariables },
                   });
                   onClose && onClose();
-                  setValues(defaultValues);
+                  setValues(getDefaultValues());
                 }
               }
             }}
