@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.ryc.app',
-  appName: 'licoreriaryc',
+  appName: 'Licorería R&C',
   webDir: 'build',
   bundledWebRuntime: false,
   server: {
