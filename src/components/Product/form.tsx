@@ -7,14 +7,15 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { ButtonGroup, Grid, makeStyles } from '@material-ui/core';
 
-import { useCreateProduct } from 'graphqlAPI';
+import {
+  Scalars,
+  Maybe,
+  useCreateProduct,
+  useEditProduct,
+  ProductEditInput,
+} from 'graphqlAPI';
 import NumberFormatCustom from '../NumberFormatCustom';
 import { DialogContentLoading } from '../Dialog/DialogContentLoading';
-
-interface AddProductProps {
-  open: boolean;
-  onClose?: () => void;
-}
 
 const useStyles = makeStyles((theme) => ({
   fileRoot: { marginTop: theme.spacing(1) },
@@ -27,10 +28,30 @@ const useStyles = makeStyles((theme) => ({
 interface Fields {
   name: string;
   description: string;
+  category: Scalars['ID'];
   price: number | '';
   amount: number | '';
   image?: File;
   imageUrl?: string;
+}
+
+type PartialAndNull<T> = {
+  [P in keyof T]?: T[P] | null;
+};
+
+interface Base {
+  open: boolean;
+  onClose?: () => void;
+  values?: PartialAndNull<Fields>;
+}
+
+interface EditProductProps extends Base {
+  mode?: 'edit';
+  id: Scalars['ID'];
+}
+
+interface CreateProductProps extends Base {
+  mode?: 'create';
 }
 
 enum FieldImage {
@@ -41,16 +62,35 @@ enum FieldImage {
 const defaultValues: Fields = {
   name: '',
   description: '',
+  category: '',
   price: '',
   amount: '',
   imageUrl: '',
 };
 
-export const AddProduct = ({ open, onClose }: AddProductProps) => {
+export const FormProduct = (
+  props: EditProductProps | CreateProductProps,
+) => {
+  const { open, onClose, values: valuesBase } = props;
   const classes = useStyles();
-  const [createProduct, { loading }] = useCreateProduct();
-  const [values, setValues] = React.useState<Fields>(defaultValues);
+  const [createProduct, createProductResult] = useCreateProduct();
+  const [editProduct, editProductResult] = useEditProduct();
+  const [values, setValues] = React.useState<Fields>(() => {
+    const newValues: Partial<Fields> = {};
+    for (const key in valuesBase)
+      if (valuesBase.hasOwnProperty(key)) {
+        const a = key as keyof Fields;
+        const value = valuesBase[a];
+        if (value) newValues[a] = value as any;
+      }
+    return {
+      ...defaultValues,
+      ...newValues,
+    };
+  });
 
+  const loading =
+    createProductResult.loading || editProductResult.loading;
   const [fieldImage, setFieldImage] = React.useState<FieldImage>(
     FieldImage.image,
   );
@@ -69,7 +109,9 @@ export const AddProduct = ({ open, onClose }: AddProductProps) => {
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">
-          Nuevo producto
+          {props.mode === 'create'
+            ? 'Nuevo producto'
+            : 'Editar producto'}
         </DialogTitle>
         <DialogContent className={classes.loadingRoot}>
           <TextField
@@ -195,7 +237,8 @@ export const AddProduct = ({ open, onClose }: AddProductProps) => {
                 image,
                 imageUrl,
               } = values;
-              if (price && name && amount) {
+              if (props.mode === 'create') {
+                if (!(price && name && amount)) return;
                 await createProduct({
                   variables: {
                     product: {
@@ -210,6 +253,30 @@ export const AddProduct = ({ open, onClose }: AddProductProps) => {
                 });
                 onClose && onClose();
                 setValues(defaultValues);
+              } else if (props.mode === 'edit') {
+                const { id } = props;
+                let editVariables: ProductEditInput | undefined;
+                const setVariables = (
+                  values: Partial<ProductEditInput>,
+                ) => {
+                  editVariables = {
+                    ...editVariables,
+                    ...values,
+                  };
+                };
+                if (name) setVariables({ name });
+                if (description) setVariables({ description });
+                if (price) setVariables({ price });
+                if (amount) setVariables({ amount });
+                if (image) setVariables({ image });
+                if (imageUrl) setVariables({ imageUrl });
+                if (editVariables) {
+                  await editProduct({
+                    variables: { id, product: editVariables },
+                  });
+                  onClose && onClose();
+                  setValues(defaultValues);
+                }
               }
             }}
             color="primary"
@@ -221,4 +288,4 @@ export const AddProduct = ({ open, onClose }: AddProductProps) => {
     </div>
   );
 };
-export default AddProduct;
+export default FormProduct;
