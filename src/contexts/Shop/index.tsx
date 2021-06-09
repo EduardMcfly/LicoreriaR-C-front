@@ -23,6 +23,7 @@ export interface ShopProps extends ShopPropsBase {
   addProduct: (item: CartProductBase) => void;
   changeAmount: (item: CartProductBase) => void;
   removeProduct: (item: CartProduct['id']) => void;
+  removeProducts: () => void;
   loading: boolean;
 }
 
@@ -147,6 +148,11 @@ export const ShopProvider = ({
     saveStorage();
   };
 
+  const removeProducts = () => {
+    setProducts(new Map());
+    saveStorage();
+  };
+
   const onChangeMap: ChangeMap = ({ center, zoom }) => {
     let newState: Partial<UserMap> | null = null;
     if (center) newState = { ...(newState || {}), center };
@@ -165,6 +171,7 @@ export const ShopProvider = ({
         addProduct,
         changeAmount,
         removeProduct,
+        removeProducts,
         loading,
         map: {
           ...map,
