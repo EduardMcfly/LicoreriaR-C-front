@@ -2,6 +2,7 @@
   "name": "licoreriaryc-front",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://www.licoreriaryc.com",
   "dependencies": {
     "@apollo/client": "^3.3.12",
     "@material-ui/core": "^4.11.3",
@@ -39,12 +40,13 @@
     "@types/react": "^17.0.2",
     "@types/react-dom": "^17.0.1",
     "@types/react-is": "^17.0.0",
+    "env-cmd": "^10.1.0",
     "react-scripts": "4.0.3",
     "typescript": "~4.2.2"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "env-cmd -f .env.production react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "graphql": "graphql-codegen --config codegen.yml"
