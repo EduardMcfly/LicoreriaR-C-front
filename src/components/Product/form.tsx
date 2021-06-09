@@ -12,9 +12,12 @@ import {
   useCreateProduct,
   useEditProduct,
   ProductEditInput,
+  Product,
 } from 'graphqlAPI';
+import CategorySearch from 'components/Category/CategorySearch';
+
 import NumberFormatCustom from '../NumberFormatCustom';
-import { DialogContentLoading } from '../Dialog/DialogContentLoading';
+import { DialogContentLoading } from '../Dialog';
 
 const useStyles = makeStyles((theme) => ({
   fileRoot: { marginTop: theme.spacing(1) },
@@ -27,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 interface Fields {
   name: string;
   description: string;
-  category: Scalars['ID'];
+  category: Product['categoryId'];
   price: number | '';
   amount: number | '';
   image?: File;
@@ -61,7 +64,7 @@ enum FieldImage {
 const defaultValues: Fields = {
   name: '',
   description: '',
-  category: '',
+  category: null,
   price: '',
   amount: '',
   imageUrl: '',
@@ -143,6 +146,15 @@ export const FormProduct = (
             type="text"
             fullWidth
           />
+          <CategorySearch
+            value={values.category}
+            onChange={(category) => {
+              setField('category', category?.id);
+            }}
+            textFieldProps={{
+              margin: 'dense',
+            }}
+          />
           <TextField
             label="Precio"
             name="price"
@@ -154,6 +166,7 @@ export const FormProduct = (
               inputComponent: NumberFormatCustom as any,
             }}
             fullWidth
+            margin="dense"
           />
           <TextField
             label="Cantidad"
@@ -242,6 +255,7 @@ export const FormProduct = (
                 amount,
                 image,
                 imageUrl,
+                category,
               } = values;
               if (props.mode === 'create') {
                 if (!(price && name && amount)) return;
@@ -254,6 +268,7 @@ export const FormProduct = (
                       amount,
                       image,
                       imageUrl,
+                      category,
                     },
                   },
                 });
@@ -272,6 +287,7 @@ export const FormProduct = (
                 };
                 if (name) setVariables({ name });
                 if (description) setVariables({ description });
+                if (category) setVariables({ category });
                 if (typeof price === 'number')
                   setVariables({ price });
                 if (typeof amount === 'number')
