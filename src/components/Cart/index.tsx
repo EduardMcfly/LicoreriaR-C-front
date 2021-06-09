@@ -66,6 +66,7 @@ export default function CartDialog({
   const handleAction = (action?: Action | number) => {
     if (action === Action.buy) {
       onBuy();
+      onClose();
       return;
     }
     const getNewActiveStep = () => {
