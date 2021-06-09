@@ -12,7 +12,10 @@ import {
   MutationCreateProductArgs,
 } from '../types-graphql';
 import { productFragment } from './fragments';
-import { QueryProductArgs } from '../types-graphql';
+import {
+  QueryProductArgs,
+  MutationEditProductArgs,
+} from '../types-graphql';
 
 export type TDataProducts = Pick<Query, 'products' | '__typename'>;
 export const PRODUCTS_QUERY = gql`
@@ -75,10 +78,10 @@ export const useProduct = (props?: UseProductProps) => {
 export const CREATE_PRODUCT_MUTATION = gql`
   mutation ($product: ProductInput!) {
     createProduct(product: $product) {
-      id
-      name
+      ...ProductFragment
     }
   }
+  ${productFragment}
 `;
 
 export const useCreateProduct = () => {
@@ -86,6 +89,24 @@ export const useCreateProduct = () => {
     Pick<Mutation, 'createProduct'>,
     MutationCreateProductArgs
   >(CREATE_PRODUCT_MUTATION, {
+    refetchQueries: [{ query: PRODUCTS_QUERY }],
+  });
+};
+
+export const EDIT_PRODUCT_MUTATION = gql`
+  mutation ($id: ID!, $product: ProductEditInput!) {
+    editProduct(id: $id, product: $product) {
+      ...ProductFragment
+    }
+  }
+  ${productFragment}
+`;
+
+export const useEditProduct = () => {
+  return useMutation<
+    Pick<Mutation, 'editProduct'>,
+    MutationEditProductArgs
+  >(EDIT_PRODUCT_MUTATION, {
     refetchQueries: [{ query: PRODUCTS_QUERY }],
   });
 };
