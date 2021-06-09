@@ -1,2 +1,2 @@
 export * from './AvatarProduct';
-export * from './add';
+export * from './form';
