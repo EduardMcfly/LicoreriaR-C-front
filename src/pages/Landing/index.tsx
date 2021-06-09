@@ -15,8 +15,9 @@ import texture from 'assets/texture.png';
 import background from 'assets/background.png';
 import { AppName } from 'constantsApp';
 import { Header, Footer } from 'components/Layout';
+import FormProduct from 'components/Product/form';
 import { useIsAdmin } from 'contexts';
-import AddProduct from '../../components/Product/add';
+
 import Banners from './Banners/index';
 import MoreInformation from './MoreInformation';
 
@@ -173,7 +174,7 @@ export const Landing = () => {
         <Banners />
       </div>
       <Footer />
-      <AddProduct
+      <FormProduct
         open={open}
         onClose={() => {
           setOpen(false);
