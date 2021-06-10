@@ -8,5 +8,6 @@ export const productFragment = gql`
     description
     price
     amount
+    categoryId
   }
 `;
