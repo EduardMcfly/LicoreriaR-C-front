@@ -1,13 +1,19 @@
 import React from 'react';
-
+import clsx from 'clsx';
 import AutoComplete, {
   createFilterOptions,
 } from '@material-ui/lab/Autocomplete';
 import TextField, {
   TextFieldProps,
 } from '@material-ui/core/TextField';
+import { CircularProgress } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 import { Category, useCategories, Product } from 'graphqlAPI';
+
+const useStyles = makeStyles((theme) => ({
+  input: { paddingRight: theme.spacing(2) },
+}));
 
 const filterCategory = createFilterOptions<Category>({
   stringify: ({ name }) => [name].map((a) => a || '').join(' '),
@@ -23,14 +29,16 @@ interface CategorySearchProps {
 }
 
 const CategorySearch = (props: CategorySearchProps) => {
+  const classes = useStyles();
   const [inputValue, setState] = React.useState('');
 
   const { value: id, onChange, textFieldProps } = props;
 
-  const res = useCategories();
-  const categories = (res && res.data && res.data.categories) || [];
+  const { data, loading } = useCategories();
+  const categories = (data && data.categories) || [];
 
   const value = categories.find((category) => category.id === id);
+
   return (
     <AutoComplete<Category>
       renderInput={(params) => (
@@ -42,6 +50,18 @@ const CategorySearch = (props: CategorySearchProps) => {
           autoComplete="off"
           value={inputValue}
           {...textFieldProps}
+          InputProps={{
+            ...params.InputProps,
+            ...textFieldProps?.InputProps,
+            className: clsx(classes.input),
+            endAdornment: (
+              <React.Fragment>
+                {loading ? (
+                  <CircularProgress color="inherit" size={20} />
+                ) : null}
+              </React.Fragment>
+            ),
+          }}
         />
       )}
       onInputChange={(e) => {
@@ -57,9 +77,11 @@ const CategorySearch = (props: CategorySearchProps) => {
       onChange={(_event, option) => {
         onChange(option);
       }}
-      value={value}
+      value={value || null}
       getOptionSelected={(option, value) => option.id === value.id}
       filterOptions={filterCategory}
+      loadingText={'Cargando...'}
+      {...{ loading }}
     />
   );
 };
