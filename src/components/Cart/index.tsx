@@ -152,6 +152,7 @@ export default function CartDialog({
           });
           return (
             <StepActions
+              key={i}
               {...{
                 buttons: mapButtons,
               }}
