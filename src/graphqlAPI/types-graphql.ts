@@ -52,9 +52,15 @@ export type Mutation = {
   editProduct: Product;
   deleteProduct: Scalars['Boolean'];
   createCategory: Category;
-  createCategories: Array<Category>;
+  createCategories: Array<Order>;
   editCategory: Category;
   deleteCategory: Scalars['Boolean'];
+  createOrder: Order;
+  editOrder: Order;
+  addProductOrder: Order;
+  editProductOrder: Order;
+  deleteProductOrder: Order;
+  deleteOrder: Scalars['Boolean'];
 };
 
 
@@ -70,7 +76,7 @@ export type MutationCreateProductsArgs = {
 
 export type MutationEditProductArgs = {
   product: ProductEditInput;
-  id: Scalars['String'];
+  id: Scalars['ID'];
 };
 
 
@@ -85,7 +91,7 @@ export type MutationCreateCategoryArgs = {
 
 
 export type MutationCreateCategoriesArgs = {
-  categories: Array<CategoryInput>;
+  orders: Array<OrderInput>;
 };
 
 
@@ -97,6 +103,79 @@ export type MutationEditCategoryArgs = {
 
 export type MutationDeleteCategoryArgs = {
   id: Scalars['String'];
+};
+
+
+export type MutationCreateOrderArgs = {
+  products: Array<ProductOrderInput>;
+  location: OrderLocationInput;
+  orderDate: Scalars['DateTime'];
+  deliveryDate?: Maybe<Scalars['DateTime']>;
+};
+
+
+export type MutationEditOrderArgs = {
+  product: OrderInputEdit;
+  id: Scalars['ID'];
+};
+
+
+export type MutationAddProductOrderArgs = {
+  product: ProductOrderInput;
+  id: Scalars['ID'];
+};
+
+
+export type MutationEditProductOrderArgs = {
+  unitPrice: Scalars['Float'];
+  amount: Scalars['Int'];
+  product: Scalars['ID'];
+  id: Scalars['ID'];
+};
+
+
+export type MutationDeleteProductOrderArgs = {
+  product: Scalars['ID'];
+  id: Scalars['ID'];
+};
+
+
+export type MutationDeleteOrderArgs = {
+  id: Scalars['ID'];
+};
+
+export type Order = {
+  __typename?: 'Order';
+  id: Scalars['ID'];
+  products: Array<ProductOrder>;
+  location: OrderLocation;
+  orderDate: Scalars['DateTime'];
+  deliveryDate?: Maybe<Scalars['DateTime']>;
+};
+
+export type OrderInput = {
+  products: Array<ProductOrderInput>;
+  location: OrderLocationInput;
+  orderDate: Scalars['DateTime'];
+  deliveryDate?: Maybe<Scalars['DateTime']>;
+};
+
+export type OrderInputEdit = {
+  products?: Maybe<Array<ProductOrderInput>>;
+  location?: Maybe<OrderLocationInput>;
+  orderDate?: Maybe<Scalars['DateTime']>;
+  deliveryDate?: Maybe<Scalars['DateTime']>;
+};
+
+export type OrderLocation = {
+  __typename?: 'OrderLocation';
+  lat: Scalars['Float'];
+  lng: Scalars['Float'];
+};
+
+export type OrderLocationInput = {
+  lat: Scalars['Float'];
+  lng: Scalars['Float'];
 };
 
 /** The basic directions */
@@ -158,6 +237,19 @@ export type ProductInput = {
   amount: Scalars['Float'];
 };
 
+export type ProductOrder = {
+  __typename?: 'ProductOrder';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  amount: Scalars['Int'];
+  unitPrice: Scalars['Int'];
+};
+
+export type ProductOrderInput = {
+  id: Scalars['ID'];
+  amount: Scalars['Int'];
+};
+
 export type Query = {
   __typename?: 'Query';
   products: ProductConnection;
@@ -166,6 +258,8 @@ export type Query = {
   category: Category;
   cartProducts: Array<Product>;
   cartProduct: Product;
+  orders: Array<Order>;
+  order: Order;
 };
 
 
@@ -194,5 +288,10 @@ export type QueryCartProductsArgs = {
 
 export type QueryCartProductArgs = {
   product: Scalars['ID'];
+};
+
+
+export type QueryOrderArgs = {
+  id: Scalars['ID'];
 };
 
