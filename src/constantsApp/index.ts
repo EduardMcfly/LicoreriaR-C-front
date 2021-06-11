@@ -9,6 +9,7 @@ if (!PhoneNumber) {
 export enum PathRoutes {
   LANDING = '/landing',
   ROOT = '/',
+  ORDER = '/order/:id',
 }
 
 type Format =
