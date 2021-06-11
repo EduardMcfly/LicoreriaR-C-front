@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Products } from './Products';
 import Map from './Map';
+import { DetailsOrder } from './DetailsOrder';
 import { StepButtonObject, StepButtonComponent } from './StepActions';
 import { Action } from './common';
 
@@ -28,6 +29,25 @@ export const steps: StepType[] = [
         disabled: ({ products }) =>
           !products.length ||
           !products.every(({ amount }) => !!amount),
+      },
+    ],
+  },
+  {
+    label: 'Detalles de su pedido',
+    content: DetailsOrder,
+    buttons: [
+      {
+        label: 'Atrás',
+        action: Action.back,
+        buttonProps: { color: 'primary' },
+      },
+      {
+        label: 'Siguiente',
+        action: Action.next,
+        disabled: ({ userInfo }) =>
+          !userInfo.name ||
+          !userInfo.orderDate ||
+          !userInfo.orderTime,
       },
     ],
   },
