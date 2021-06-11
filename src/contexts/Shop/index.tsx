@@ -9,7 +9,12 @@ import {
   getStorageMap,
   setStorageMap,
 } from './utils';
-import { UserMap, CartProductBase, CartProduct } from './types';
+import {
+  UserMap,
+  CartProductBase,
+  CartProduct,
+  UserInfo,
+} from './types';
 
 interface ShopPropsBase {}
 
@@ -17,8 +22,11 @@ type ChangeMap = (
   value: Pick<UserMap, keyof UserMap> | UserMap,
 ) => any;
 
+type ChangeUserInfo = (value: Partial<UserInfo> | UserInfo) => any;
+
 export interface ShopProps extends ShopPropsBase {
   products: CartProduct[];
+  userInfo: UserInfo & { onChange: ChangeUserInfo };
   map: UserMap & { onChange: ChangeMap };
   addProduct: (item: CartProductBase) => void;
   changeAmount: (item: CartProductBase) => void;
@@ -41,6 +49,13 @@ export const ShopProvider = ({
   const [products, setProducts] = React.useState(
     () => new Map<CartProduct['id'], CartProduct>(),
   );
+  const now = new Date();
+  const [userInfo, setUserInfo] = React.useState<UserInfo>({
+    name: '',
+    orderDate: now,
+    orderTime: '',
+  });
+
   const [map, setMap] = React.useState<UserMap>(getStorageMap());
 
   const productsBase = useProducts();
@@ -164,6 +179,21 @@ export const ShopProvider = ({
     }
   };
 
+  const onChangeUserInfo: ChangeUserInfo = ({
+    name,
+    orderDate,
+    orderTime,
+  }) => {
+    let newState: Partial<UserInfo> | null = null;
+    if (name) newState = { ...(newState || {}), name };
+    if (orderDate) newState = { ...(newState || {}), orderDate };
+    if (orderTime) newState = { ...(newState || {}), orderTime };
+    if (newState) {
+      const newUserInfo = { ...userInfo, ...newState };
+      setUserInfo(newUserInfo);
+    }
+  };
+
   return (
     <ShopContext.Provider
       value={{
@@ -177,6 +207,7 @@ export const ShopProvider = ({
           ...map,
           onChange: onChangeMap,
         },
+        userInfo: { ...userInfo, onChange: onChangeUserInfo },
       }}
     >
       {children}
