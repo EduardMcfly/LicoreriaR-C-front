@@ -9,7 +9,7 @@ import { maxDaysOrder } from '../../constants';
 import { Typography } from '@material-ui/core';
 
 const dateFormat = 'yyyy-MM-dd';
-export const DetailsOrder = () => {
+export const OrderDetails = () => {
   const { userInfo } = useShop();
   const { name, orderDate, orderTime, onChange } = userInfo;
 
@@ -74,4 +74,4 @@ export const DetailsOrder = () => {
   );
 };
 
-export default DetailsOrder;
+export default OrderDetails;

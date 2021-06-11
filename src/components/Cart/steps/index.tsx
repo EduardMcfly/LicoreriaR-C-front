@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Products } from './Products';
 import Map from './Map';
-import { DetailsOrder } from './DetailsOrder';
+import { OrderDetails } from './OrderDetails';
 import { StepButtonObject, StepButtonComponent } from './StepActions';
 import { Action } from './common';
 
@@ -34,7 +34,7 @@ export const steps: StepType[] = [
   },
   {
     label: 'Detalles de su pedido',
-    content: DetailsOrder,
+    content: OrderDetails,
     buttons: [
       {
         label: 'Atrás',
