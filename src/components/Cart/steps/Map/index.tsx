@@ -29,7 +29,6 @@ const Map = () => {
         zoom={zoom}
         onChange={(a) => {
           onChange(a);
-          console.log(a);
         }}
         onClick={({ lat, lng }) => {
           onChange({ center: { lat, lng } });
