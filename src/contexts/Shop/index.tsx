@@ -185,9 +185,11 @@ export const ShopProvider = ({
     orderTime,
   }) => {
     let newState: Partial<UserInfo> | null = null;
-    if (name) newState = { ...(newState || {}), name };
+    if (typeof name === 'string')
+      newState = { ...(newState || {}), name };
     if (orderDate) newState = { ...(newState || {}), orderDate };
-    if (orderTime) newState = { ...(newState || {}), orderTime };
+    if (typeof orderTime === 'string')
+      newState = { ...(newState || {}), orderTime };
     if (newState) {
       const newUserInfo = { ...userInfo, ...newState };
       setUserInfo(newUserInfo);
