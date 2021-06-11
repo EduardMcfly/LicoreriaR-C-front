@@ -10,7 +10,9 @@ export interface StepButtonObject {
   state?: boolean;
   disabled?:
     | boolean
-    | ((value: Pick<ShopProps, 'products' | 'map'>) => boolean);
+    | ((
+        value: Pick<ShopProps, 'products' | 'map' | 'userInfo'>,
+      ) => boolean);
   onClick?: () => void;
   buttonProps?: ButtonProps;
 }
@@ -23,7 +25,7 @@ interface StepActionsProps {
 }
 
 export const StepActions = ({ buttons }: StepActionsProps) => {
-  const { products, map } = useShop();
+  const { products, map, userInfo } = useShop();
   return (
     <DialogActions>
       {buttons.map((button, i) => {
@@ -43,7 +45,7 @@ export const StepActions = ({ buttons }: StepActionsProps) => {
           ...button,
         };
         if (typeof disabled === 'function') {
-          disabled = disabled({ map, products });
+          disabled = disabled({ map, products, userInfo });
         }
         return (
           state && (
