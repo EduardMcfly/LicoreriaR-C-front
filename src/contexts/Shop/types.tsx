@@ -7,6 +7,12 @@ type UserMapBase = Pick<MapProps, 'center' | 'zoom'>;
 export type UserMap = UserMapBase &
   Pick<MapProps, 'defaultCenter' | 'defaultZoom'>;
 
+export interface UserInfo {
+  name: string;
+  orderDate: Date;
+  orderTime: string;
+}
+
 export interface CartProductBase {
   id: Product['id'];
   amount: number;
