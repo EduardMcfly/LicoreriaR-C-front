@@ -63,10 +63,11 @@ export default function CartDialog({
 
   const title = 'Carrito de compras';
 
-  const handleAction = (action?: Action | number) => {
+  const handleAction = async (action?: Action | number) => {
     if (action === Action.buy) {
-      onBuy();
+      await onBuy();
       onClose();
+      setActiveStep(0);
       return;
     }
     const getNewActiveStep = () => {
