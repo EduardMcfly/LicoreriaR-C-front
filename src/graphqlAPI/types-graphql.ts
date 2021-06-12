@@ -108,6 +108,7 @@ export type MutationDeleteCategoryArgs = {
 
 export type MutationCreateOrderArgs = {
   products: Array<ProductOrderInput>;
+  client: Scalars['String'];
   location: OrderLocationInput;
   orderDate: Scalars['DateTime'];
   deliveryDate?: Maybe<Scalars['DateTime']>;
@@ -147,6 +148,7 @@ export type MutationDeleteOrderArgs = {
 export type Order = {
   __typename?: 'Order';
   id: Scalars['ID'];
+  client: Scalars['String'];
   products: Array<ProductOrder>;
   location: OrderLocation;
   orderDate: Scalars['DateTime'];
@@ -155,12 +157,14 @@ export type Order = {
 
 export type OrderInput = {
   products: Array<ProductOrderInput>;
+  client: Scalars['String'];
   location: OrderLocationInput;
   orderDate: Scalars['DateTime'];
   deliveryDate?: Maybe<Scalars['DateTime']>;
 };
 
 export type OrderInputEdit = {
+  client?: Maybe<Scalars['String']>;
   products?: Maybe<Array<ProductOrderInput>>;
   location?: Maybe<OrderLocationInput>;
   orderDate?: Maybe<Scalars['DateTime']>;
@@ -241,6 +245,7 @@ export type ProductOrder = {
   __typename?: 'ProductOrder';
   id: Scalars['ID'];
   name: Scalars['String'];
+  image: Scalars['String'];
   amount: Scalars['Int'];
   unitPrice: Scalars['Int'];
 };
