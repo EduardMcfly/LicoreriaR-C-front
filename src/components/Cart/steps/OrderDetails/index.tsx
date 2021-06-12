@@ -1,15 +1,11 @@
-import parse from 'date-fns/parse';
 import format from 'date-fns/format';
-import isBefore from 'date-fns/isBefore';
-import addMinutes from 'date-fns/addMinutes';
-import differenceInDays from 'date-fns/differenceInDays';
 import addDays from 'date-fns/addDays';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 import { useShop } from 'contexts';
-import { maxDaysOrder, minDeliveryTime } from '../../constants';
+import { maxDaysOrder } from '../../constants';
 
 const dateFormat = 'yyyy-MM-dd';
 
@@ -26,8 +22,8 @@ export const OrderDetails = () => {
   };
   const date = getDate(orderDate);
   const time = orderTime;
-  const minDate = new Date().setHours(0, 0, 0, 0);
   const minDateFormat = getDate(new Date().setHours(0, 0, 0, 0));
+
   return (
     <Grid>
       <TextField
@@ -50,8 +46,9 @@ export const OrderDetails = () => {
         name="date"
         value={date}
         onChange={({ target: { value } }) => {
-          const newValue = parse(value, dateFormat, new Date());
-          if (!isNaN(+newValue)) onChange({ orderDate: newValue });
+          onChange({
+            orderDate: value,
+          });
         }}
         margin="dense"
         type="date"
@@ -67,21 +64,7 @@ export const OrderDetails = () => {
         name="hour"
         value={time}
         onChange={({ target: { value } }) => {
-          const formatTime = 'HH:mm';
-
-          const someDay = differenceInDays(orderDate, minDate) === 0;
-
-          if (someDay) {
-            const min = addMinutes(new Date(), minDeliveryTime);
-            onChange({
-              orderTime: isBefore(parse(value, formatTime, min), min)
-                ? format(min, formatTime)
-                : value,
-            });
-          } else
-            onChange({
-              orderTime: value,
-            });
+          onChange({ orderTime: value });
         }}
         margin="dense"
         type="time"
