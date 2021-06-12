@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Product, useCartProducts } from 'graphqlAPI';
 import { useProducts } from 'contexts/Products';
+import format from 'date-fns/format';
 import {
   getValidAmount,
   getStorage,
@@ -53,7 +54,7 @@ export const ShopProvider = ({
   const [userInfo, setUserInfo] = React.useState<UserInfo>({
     name: '',
     orderDate: now,
-    orderTime: '',
+    orderTime: format(now, 'HH:mm'),
   });
 
   const [map, setMap] = React.useState<UserMap>(getStorageMap());
