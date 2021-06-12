@@ -3,12 +3,14 @@ import React from 'react';
 import { Product, useCartProducts } from 'graphqlAPI';
 import { useProducts } from 'contexts/Products';
 import format from 'date-fns/format';
+import parse from 'date-fns/parse';
 import {
   getValidAmount,
   getStorage,
   setStorage,
   getStorageMap,
   setStorageMap,
+  getNewHour,
 } from './utils';
 import {
   UserMap,
@@ -23,7 +25,15 @@ type ChangeMap = (
   value: Pick<UserMap, keyof UserMap> | UserMap,
 ) => any;
 
-type ChangeUserInfo = (value: Partial<UserInfo> | UserInfo) => any;
+type UserInfoValues = {
+  name: string;
+  orderDate: string | Date;
+  orderTime: string;
+};
+
+type ChangeUserInfo = (
+  value: Partial<UserInfoValues> | UserInfoValues,
+) => any;
 
 export interface ShopProps extends ShopPropsBase {
   products: CartProduct[];
@@ -185,12 +195,30 @@ export const ShopProvider = ({
     orderDate,
     orderTime,
   }) => {
-    let newState: Partial<UserInfo> | null = null;
-    if (typeof name === 'string')
-      newState = { ...(newState || {}), name };
-    if (orderDate) newState = { ...(newState || {}), orderDate };
+    let newState: Partial<UserInfo> | undefined = undefined;
+    const setState = (value: Partial<UserInfo>) => ({
+      ...(newState || {}),
+      ...value,
+    });
+
+    if (typeof name === 'string') newState = setState({ name });
+    if (orderDate) {
+      const dateFormat = 'yyyy-MM-dd';
+      const newValue =
+        orderDate instanceof Date
+          ? orderDate
+          : parse(orderDate, dateFormat, new Date());
+
+      if (!isNaN(+newValue))
+        newState = setState({
+          orderDate: newValue,
+          orderTime: getNewHour(userInfo.orderTime, newValue),
+        });
+    }
     if (typeof orderTime === 'string')
-      newState = { ...(newState || {}), orderTime };
+      newState = setState({
+        orderTime: getNewHour(orderTime, userInfo.orderDate),
+      });
     if (newState) {
       const newUserInfo = { ...userInfo, ...newState };
       setUserInfo(newUserInfo);
