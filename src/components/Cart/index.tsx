@@ -55,7 +55,7 @@ export default function CartDialog({
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const [activeStep, setActiveStep] = React.useState(0);
 
-  const onBuy = useOnBuy();
+  const [onBuy, { loading }] = useOnBuy();
 
   const handleClose = () => {
     onClose();
@@ -79,6 +79,20 @@ export default function CartDialog({
     if (newActiveStep >= 0 && newActiveStep <= steps.length)
       setActiveStep(newActiveStep);
   };
+
+  const step = steps[activeStep];
+
+  const mapButtons = step.buttons.map<StepButton>((button) => {
+    if (isValidElementType(button)) return button;
+    const { action } = button;
+    return {
+      ...button,
+      disabled: loading || button.disabled,
+      onClick: () => {
+        handleAction(action);
+      },
+    };
+  });
 
   return (
     <Dialog
@@ -139,27 +153,11 @@ export default function CartDialog({
         </Stepper>
       </DialogContent>
       <DialogActions className={classes.dialogActions}>
-        {steps.map(({ buttons }, i) => {
-          if (activeStep !== i) return null;
-          const mapButtons = buttons.map<StepButton>((button) => {
-            if (isValidElementType(button)) return button;
-            const { action } = button;
-            return {
-              ...button,
-              onClick: () => {
-                handleAction(action);
-              },
-            };
-          });
-          return (
-            <StepActions
-              key={i}
-              {...{
-                buttons: mapButtons,
-              }}
-            />
-          );
-        })}
+        <StepActions
+          {...{
+            buttons: mapButtons,
+          }}
+        />
       </DialogActions>
     </Dialog>
   );
