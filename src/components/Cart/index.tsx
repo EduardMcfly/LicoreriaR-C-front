@@ -18,6 +18,7 @@ import {
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
+import { DialogContentLoading } from '../Dialog';
 import steps from './steps';
 import { StepActions, StepButton } from './steps/StepActions';
 import { Action, useOnBuy } from './steps/common';
@@ -38,6 +39,9 @@ const useStyles = makeStyles((theme) => ({
   },
   dialogActions: {
     justifyContent: 'center',
+  },
+  loadingRoot: {
+    position: 'relative',
   },
 }));
 
@@ -137,7 +141,9 @@ export default function CartDialog({
           </IconButton>
         </Toolbar>
       )}
-      <DialogContent className={classes.dialogContent}>
+      <DialogContent
+        className={clsx(classes.dialogContent, classes.loadingRoot)}
+      >
         <Stepper activeStep={activeStep} orientation="vertical">
           {steps.map(({ label, content }, i) => {
             const Content = content;
@@ -151,6 +157,9 @@ export default function CartDialog({
             );
           })}
         </Stepper>
+        {loading && (
+          <DialogContentLoading size={60} color="secondary" />
+        )}
       </DialogContent>
       <DialogActions className={classes.dialogActions}>
         <StepActions
