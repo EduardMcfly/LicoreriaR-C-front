@@ -1,4 +1,5 @@
 import { stringify, ParsedUrlQueryInput } from 'querystring';
+import { generatePath } from 'react-router';
 
 export const AppName = process.env.REACT_APP_NAME;
 export const PhoneNumber = process.env.REACT_APP_PHONE;
@@ -43,3 +44,9 @@ export const createAPIImageRoute = (
     ...rest,
   })}`;
 };
+
+export type RecordRoute<K extends keyof any> = Record<K, string>;
+
+export type RouteOrderProps = RecordRoute<'id'>;
+export const createRouteOrder = (params: RouteOrderProps) =>
+  generatePath(PathRoutes.ORDER, params);
