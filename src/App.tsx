@@ -17,6 +17,7 @@ import {
   SessionProvider,
 } from './contexts';
 import { client } from './client';
+import Analytics from './Analytics';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <ProductsProvider>
           <ShopProvider>
             <HashRouter>
+              <Analytics />
               <SessionProvider>
                 <Switch>
                   <Route
