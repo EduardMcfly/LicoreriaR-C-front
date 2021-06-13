@@ -6,5 +6,6 @@ declare namespace NodeJS {
     REACT_APP_API: string;
     REACT_APP_MAPS: string;
     REACT_APP_PHONE: string;
+    REACT_APP_TRACKING_ID?: string;
   }
 }
