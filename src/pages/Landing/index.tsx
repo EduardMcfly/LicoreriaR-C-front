@@ -34,14 +34,10 @@ const useStyles = makeStyles((theme) => {
       '&:hover': {
         color: emphasize(emphasize(contrastText, 1), 1),
         '& $overlay': {
-          background: fade(contrastText, 0.3),
+          background: fade(theme.palette.primary.main, 0.7),
         },
         '& $text': {
-          borderRadius: theme.spacing(2),
-          background: emphasize(
-            fade(theme.palette.background.paper, 0.9),
-            0.8,
-          ),
+          background: fade(emphasize(contrastText, 0.8), 0.4),
           padding: theme.spacing(8, 0),
         },
       },
@@ -74,7 +70,7 @@ const useStyles = makeStyles((theme) => {
       width: '100%',
     },
     text: { transition: `all ${timeTransition} ease` },
-    location: { color: theme.palette.background.paper },
+    location: {},
     summaryButton: {
       marginTop: theme.spacing(-2),
     },
