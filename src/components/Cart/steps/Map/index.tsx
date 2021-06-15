@@ -27,6 +27,7 @@ const Map = () => {
         defaultZoom={defaultZoom || 12}
         center={center}
         zoom={zoom}
+        options={{ gestureHandling: 'greedy' }}
         onChange={(a) => {
           onChange(a);
         }}
