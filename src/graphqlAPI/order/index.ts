@@ -1,53 +1,36 @@
 import { gql, QueryHookOptions, useQuery } from '@apollo/client';
 
-import { QueryOrderArgs, Query } from '../types-graphql';
+import { Query } from '../types-graphql';
+import { orderFragment } from './fragments';
 
 export type TDataOrder = Pick<Query, 'order' | '__typename'>;
-export const ORDER_PRODUCTS_QUERY = gql`
-  query ($products: [ID!]!) {
-    order(products: $products) {
-      id
-      location {
-        lat
-        lng
-      }
-      orderDate
+export const ORDER_QUERY = gql`
+  query ($id: ID!) {
+    order(id: $id) {
+      ...OrderFragment
     }
   }
+  ${orderFragment}
 `;
 
-type UseOrderProps = QueryHookOptions<TDataOrder, QueryOrderArgs>;
+type UseOrderProps = QueryHookOptions<TDataOrder>;
 export const useOrder = (props?: UseOrderProps) => {
-  return useQuery<TDataOrder, QueryOrderArgs>(
-    ORDER_PRODUCTS_QUERY,
-    props,
-  );
+  return useQuery<TDataOrder>(ORDER_QUERY, props);
 };
 
 export type TDataOrders = Pick<Query, 'orders' | '__typename'>;
-export const ORDERS_PRODUCTS_QUERY = gql`
+export const ORDERS_QUERY = gql`
   query {
     orders {
-      id
-      location {
-        lat
-        lng
-      }
-      products {
-        id
-        name
-        amount
-        unitPrice
-      }
-      orderDate
-      deliveryDate
+      ...OrderFragment
     }
   }
+  ${orderFragment}
 `;
 
 type UseOrdersProps = QueryHookOptions<TDataOrders>;
 export const useOrders = (props?: UseOrdersProps) => {
-  return useQuery<TDataOrders>(ORDERS_PRODUCTS_QUERY, props);
+  return useQuery<TDataOrders>(ORDERS_QUERY, props);
 };
 
 export * from './mutation';
