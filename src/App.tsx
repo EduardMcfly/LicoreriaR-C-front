@@ -1,6 +1,5 @@
-import React from 'react';
 import {
-  HashRouter,
+  BrowserRouter,
   Switch,
   Route,
   Redirect,
@@ -11,6 +10,7 @@ import { ApolloProvider } from '@apollo/client';
 import { ThemeProvider } from 'components/ThemeContext';
 import { PathRoutes } from './constantsApp';
 import { Landing } from './pages/Landing';
+import Order from './pages/Order';
 import {
   ShopProvider,
   ProductsProvider,
@@ -26,7 +26,7 @@ function App() {
         <CssBaseline />
         <ProductsProvider>
           <ShopProvider>
-            <HashRouter>
+            <BrowserRouter>
               <Analytics />
               <SessionProvider>
                 <Switch>
@@ -35,6 +35,11 @@ function App() {
                     path={PathRoutes.LANDING}
                     component={Landing}
                   />
+                  <Route
+                    exact
+                    path={PathRoutes.ORDER}
+                    component={Order}
+                  />
                   <Redirect
                     exact
                     from={PathRoutes.ROOT}
@@ -42,7 +47,7 @@ function App() {
                   />
                 </Switch>
               </SessionProvider>
-            </HashRouter>
+            </BrowserRouter>
           </ShopProvider>
         </ProductsProvider>
       </ThemeProvider>
