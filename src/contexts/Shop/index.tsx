@@ -35,13 +35,16 @@ type ChangeUserInfo = (
   value: Partial<UserInfoValues> | UserInfoValues,
 ) => any;
 
+export type ChangeAmount = (item: CartProductBase) => void;
+export type RemoveProduct = (item: CartProduct['id']) => void;
+
 export interface ShopProps extends ShopPropsBase {
   products: CartProduct[];
   userInfo: UserInfo & { onChange: ChangeUserInfo };
   map: UserMap & { onChange: ChangeMap };
   addProduct: (item: CartProductBase) => void;
-  changeAmount: (item: CartProductBase) => void;
-  removeProduct: (item: CartProduct['id']) => void;
+  changeAmount: ChangeAmount;
+  removeProduct: RemoveProduct;
   removeProducts: () => void;
   loading: boolean;
 }
