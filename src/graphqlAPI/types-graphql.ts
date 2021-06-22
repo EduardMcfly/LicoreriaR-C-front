@@ -245,7 +245,7 @@ export type ProductOrder = {
   __typename?: 'ProductOrder';
   id: Scalars['ID'];
   name: Scalars['String'];
-  image: Scalars['String'];
+  image?: Maybe<Scalars['String']>;
   amount: Scalars['Int'];
   unitPrice: Scalars['Int'];
 };
@@ -264,7 +264,7 @@ export type Query = {
   cartProducts: Array<Product>;
   cartProduct: Product;
   orders: Array<Order>;
-  order: Order;
+  order?: Maybe<Order>;
 };
 
 
