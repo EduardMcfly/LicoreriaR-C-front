@@ -1,3 +1,4 @@
+import { FormatOptions } from 'currency-formatter';
 import { stringify, ParsedUrlQueryInput } from 'querystring';
 import { generatePath } from 'react-router';
 
@@ -50,3 +51,8 @@ export type RecordRoute<K extends keyof any> = Record<K, string>;
 export type RouteOrderProps = RecordRoute<'id'>;
 export const createRouteOrder = (params: RouteOrderProps) =>
   generatePath(PathRoutes.ORDER, params);
+
+export const currencyFormat: FormatOptions = {
+  code: 'COP',
+  precision: 0,
+};
