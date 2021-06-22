@@ -3,9 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Grid } from '@material-ui/core';
 
 import { useProducts } from 'contexts';
-
+import { Loading } from 'components/Loading';
 import Products from './Products';
-import { Loading } from './Loading';
 import { Filter } from './Filter';
 import EmptyProduct from './EmptyProduct';
 
