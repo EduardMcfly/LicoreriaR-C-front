@@ -19,5 +19,5 @@ export interface CartProductBase {
 }
 
 export interface CartProduct extends CartProductBase {
-  product: Product;
+  product: Pick<Product, 'image' | 'name' | 'price' | 'amount'>;
 }
