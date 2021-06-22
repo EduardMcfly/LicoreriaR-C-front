@@ -28,7 +28,7 @@ export const Order = ({ match }: OrderProps) => {
   const { id } = match.params;
   const { data, loading } = useOrder({ variables: { id } });
 
-  const products = data?.order.products;
+  const products = data?.order?.products;
   const total = React.useMemo(
     () =>
       products?.reduce(
