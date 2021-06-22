@@ -10,6 +10,7 @@ export const orderFragment = gql`
     products {
       id
       name
+      image
       amount
       unitPrice
     }
