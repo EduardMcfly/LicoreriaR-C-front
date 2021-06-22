@@ -18,7 +18,7 @@ import { Header, Footer } from 'components/Layout';
 import FormProduct from 'components/Product/form';
 import { useIsAdmin } from 'contexts';
 
-import Banners from './Banners/index';
+import Banners from './Banners';
 import MoreInformation from './MoreInformation';
 
 const useStyles = makeStyles((theme) => {
