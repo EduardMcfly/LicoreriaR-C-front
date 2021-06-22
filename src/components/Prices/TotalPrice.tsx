@@ -1,6 +1,8 @@
 import { Grid, ListItemText, Typography } from '@material-ui/core';
 import currencyFormatter from 'currency-formatter';
 
+import { currencyFormat } from 'constantsApp';
+
 interface TotalPriceProps {
   className?: string;
   amount: number;
@@ -19,10 +21,7 @@ export function TotalPrice(props: TotalPriceProps) {
         <ListItemText
           primary={currencyFormatter.format(
             props.price * props.amount,
-            {
-              code: 'COP',
-              precision: 0,
-            },
+            currencyFormat,
           )}
         />
       </Grid>
