@@ -22,12 +22,14 @@ interface AmountProps {
   value: number;
   handleChange: (value: number) => void;
   formControlProps?: FormControlProps;
+  edit?: boolean;
 }
 
 export const Amount = ({
   value,
   handleChange,
   formControlProps,
+  edit = true,
 }: AmountProps) => {
   const classes = useStyles();
   const onChange = (value: number) => {
@@ -38,35 +40,42 @@ export const Amount = ({
       <Typography variant="caption" align="center">
         Cantidad
       </Typography>
-      <Input
-        type="number"
-        value={value || ''}
-        classes={{ input: classes.textCenter }}
-        startAdornment={
-          <IconButton
-            color="primary"
-            aria-label="reduce"
-            onClick={() => {
-              onChange(value - 1);
-            }}
-          >
-            <RemoveIcon fontSize="small" />
-          </IconButton>
-        }
-        endAdornment={
-          <IconButton
-            color="primary"
-            aria-label="increase"
-            onClick={() => {
-              onChange(value + 1);
-            }}
-          >
-            <AddIcon fontSize="small" />
-          </IconButton>
-        }
-        onChange={({ target: { value } }) => onChange(+value)}
-        disableUnderline
-      />
+      {!edit && (
+        <Typography variant="body1" align="center">
+          {value}
+        </Typography>
+      )}
+      {edit && (
+        <Input
+          type="number"
+          value={value || ''}
+          classes={{ input: classes.textCenter }}
+          startAdornment={
+            <IconButton
+              color="primary"
+              aria-label="reduce"
+              onClick={() => {
+                onChange(value - 1);
+              }}
+            >
+              <RemoveIcon fontSize="small" />
+            </IconButton>
+          }
+          endAdornment={
+            <IconButton
+              color="primary"
+              aria-label="increase"
+              onClick={() => {
+                onChange(value + 1);
+              }}
+            >
+              <AddIcon fontSize="small" />
+            </IconButton>
+          }
+          onChange={({ target: { value } }) => onChange(+value)}
+          disableUnderline
+        />
+      )}
     </FormControl>
   );
 };
