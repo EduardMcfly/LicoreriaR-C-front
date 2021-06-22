@@ -1,4 +1,8 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# LicoreriaRyC
+
+## Live project
+
+[https://www.licoreriaryc.com/](https://www.licoreriaryc.com/)
 
 ## Available Scripts
 
