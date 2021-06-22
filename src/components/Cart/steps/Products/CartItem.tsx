@@ -9,7 +9,11 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { makeStyles } from '@material-ui/core';
 
 import { createAPIImageRoute } from 'constantsApp';
-import { useShop, CartProduct } from 'contexts/Shop';
+import {
+  CartProduct,
+  ChangeAmount,
+  RemoveProduct,
+} from 'contexts/Shop';
 import { Product } from 'graphqlAPI';
 import beer from 'assets/beer.png';
 
@@ -30,14 +34,19 @@ const useStyles = makeStyles((theme) => ({
 interface CartItemProps {
   id: Product['id'];
   cartProduct: CartProduct;
+  edit?: boolean;
+  changeAmount?: ChangeAmount;
+  removeProduct?: RemoveProduct;
 }
 
 export const CartItem = ({
   id,
   cartProduct,
+  edit = true,
+  changeAmount,
+  removeProduct,
 }: CartItemProps): JSX.Element | null => {
   const classes = useStyles();
-  const shop = useShop();
   const { amount, product } = cartProduct;
   if (!product) return null;
   const { image, name, price } = product;
@@ -48,7 +57,7 @@ export const CartItem = ({
 
   return (
     <Grid container alignItems="center" className={classes.gridRoot}>
-      <Grid item xs={12} md={5}>
+      <Grid item xs={12} md={edit ? 5 : 6}>
         <ListItem>
           <ListItemAvatar>
             <AvatarProduct
@@ -74,30 +83,34 @@ export const CartItem = ({
       </Grid>
       <Grid item xs={12} md={2}>
         <Amount
+          edit={edit}
           handleChange={(newAmount) => {
             const max = getMax();
-            shop.changeAmount({
-              id,
-              amount: newAmount > max ? max : newAmount,
-            });
+            changeAmount &&
+              changeAmount({
+                id,
+                amount: newAmount > max ? max : newAmount,
+              });
           }}
           value={amount}
         />
       </Grid>
       <Prices price={price} amount={amount} xs={6} md={2} />
-      <Grid item xs={12} md={1}>
-        <Grid container justify="center" alignItems="center">
-          <IconButton
-            color="primary"
-            aria-label="Remove"
-            onClick={() => {
-              shop.removeProduct(id);
-            }}
-          >
-            <DeleteIcon fontSize="small" />
-          </IconButton>
+      {edit && (
+        <Grid item xs={12} md={1}>
+          <Grid container justify="center" alignItems="center">
+            <IconButton
+              color="primary"
+              aria-label="Remove"
+              onClick={() => {
+                removeProduct && removeProduct(id);
+              }}
+            >
+              <DeleteIcon fontSize="small" />
+            </IconButton>
+          </Grid>
         </Grid>
-      </Grid>
+      )}
     </Grid>
   );
 };
