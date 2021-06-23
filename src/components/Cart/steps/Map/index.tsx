@@ -1,10 +1,7 @@
-import GoogleMapReact from 'google-map-react';
-
-import { useShop } from 'contexts';
-import { Marker } from './Marker';
 import { makeStyles } from '@material-ui/core';
 
-const { REACT_APP_MAPS } = process.env;
+import { useShop } from 'contexts';
+import MapBase from 'components/Map';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,22 +18,18 @@ const Map = () => {
 
   return (
     <div className={classes.root}>
-      <GoogleMapReact
-        bootstrapURLKeys={{ key: REACT_APP_MAPS }}
+      <MapBase
         defaultCenter={defaultCenter}
         defaultZoom={defaultZoom || 12}
         center={center}
         zoom={zoom}
-        options={{ gestureHandling: 'greedy' }}
         onChange={(a) => {
           onChange(a);
         }}
         onClick={({ lat, lng }) => {
           onChange({ center: { lat, lng } });
         }}
-      >
-        {center && <Marker lat={center.lat} lng={center.lng} />}
-      </GoogleMapReact>
+      />
     </div>
   );
 };
