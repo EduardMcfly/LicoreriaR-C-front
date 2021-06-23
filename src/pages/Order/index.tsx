@@ -8,6 +8,7 @@ import { Header } from 'components/Layout/Header';
 import { Loading } from 'components/Loading';
 import { Total } from './Total';
 import { Product } from './product';
+import EmptyOrder from './EmptyOrder';
 
 type OrderProps = RouteComponentProps<{
   id: string;
@@ -57,6 +58,11 @@ export const Order = ({ match }: OrderProps) => {
                 {products?.map((product) => (
                   <Product {...{ product }} />
                 ))}
+                {!loading && !products?.length && (
+                  <Grid container item xs={12} justify="center">
+                    <EmptyOrder />
+                  </Grid>
+                )}
                 {total && <Total {...{ total }} />}
               </Grid>
             </Paper>
