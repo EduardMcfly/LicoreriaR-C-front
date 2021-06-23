@@ -8,10 +8,11 @@ import {
   ToolbarProps,
 } from '@material-ui/core';
 
-import { AppName } from 'constantsApp';
+import { AppName, PathRoutes } from 'constantsApp';
 import logo from 'assets/logo.png';
 import { appBarSpacer } from '../../ThemeContext/styles';
 import { Items } from './Items';
+import { ToolbarLinkRef } from './ToolbarLinkRef';
 
 const useStyles = makeStyles((theme) => ({
   appBarSpacer: appBarSpacer(theme, true),
@@ -32,7 +33,12 @@ export const Header = (props?: HeaderProps) => {
   return (
     <>
       <AppBar {...appBarProps}>
-        <Toolbar variant="regular" {...toolbarProps}>
+        <Toolbar
+          variant="regular"
+          component={ToolbarLinkRef}
+          to={PathRoutes.ROOT}
+          {...toolbarProps}
+        >
           <Avatar src={logo} className={classes.icon} />
           <Typography variant="h5">{AppName}</Typography>
           {items && <Items />}
