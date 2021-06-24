@@ -19,6 +19,14 @@ const useStyles = makeStyles((theme) => ({
   icon: {
     margin: theme.spacing(0, 2, 0, 0),
   },
+  toolbarRoot: {
+    position: 'relative',
+    margin: theme.spacing(0, 2),
+  },
+  toolbarItem: {
+    marginLeft: 'auto',
+    width: theme.spacing(12),
+  },
 }));
 
 interface HeaderProps {
@@ -33,16 +41,22 @@ export const Header = (props?: HeaderProps) => {
   return (
     <>
       <AppBar {...appBarProps}>
-        <Toolbar
-          variant="regular"
-          component={ToolbarLinkRef}
-          to={PathRoutes.LANDING}
-          {...toolbarProps}
-        >
-          <Avatar src={logo} className={classes.icon} />
-          <Typography variant="h5">{AppName}</Typography>
+        <div className={classes.toolbarRoot}>
+          <Toolbar
+            variant="regular"
+            component={ToolbarLinkRef}
+            to={PathRoutes.LANDING}
+            disableGutters
+            {...toolbarProps}
+          >
+            <Avatar src={logo} className={classes.icon} />
+            <Typography variant="h5" noWrap>
+              {AppName}
+            </Typography>
+            <div className={classes.toolbarItem} />
+          </Toolbar>
           {items && <Items />}
-        </Toolbar>
+        </div>
       </AppBar>
       <div className={classes.appBarSpacer} />
     </>
