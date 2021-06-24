@@ -10,7 +10,7 @@ export const EmptyOrder = () => {
   return (
     <div className={classes.root}>
       <Icon404 />
-      <Typography color="primary" variant="h6" align="center">
+      <Typography color="error" variant="h6" align="center" paragraph>
         Tu orden no fue encontrada
       </Typography>
     </div>
