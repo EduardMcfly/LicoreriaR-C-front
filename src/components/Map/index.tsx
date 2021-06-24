@@ -1,9 +1,8 @@
+import clsx from 'clsx';
 import GoogleMapReact, { Props } from 'google-map-react';
 import { makeStyles } from '@material-ui/core';
 
-import { useShop } from 'contexts';
 import { Marker } from './Marker';
-import clsx from 'clsx';
 
 const { REACT_APP_MAPS } = process.env;
 
