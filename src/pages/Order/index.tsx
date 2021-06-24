@@ -1,7 +1,7 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import { Paper, Grid } from '@material-ui/core';
+import { Paper, Grid, Typography, Divider } from '@material-ui/core';
 
 import { useOrder } from 'graphqlAPI';
 import { Header } from 'components/Layout/Header';
@@ -9,6 +9,9 @@ import { Loading } from 'components/Loading';
 import { Total } from './Total';
 import { Product } from './product';
 import EmptyOrder from './EmptyOrder';
+import Location from './Location';
+import OrderInformation from './OrderInformation';
+import DeliveryInformation from './DeliveryInformation';
 
 type OrderProps = RouteComponentProps<{
   id: string;
@@ -29,7 +32,9 @@ export const Order = ({ match }: OrderProps) => {
   const { id } = match.params;
   const { data, loading } = useOrder({ variables: { id } });
 
-  const products = data?.order?.products;
+  const { products, location, orderDate, deliveryDate } = {
+    ...data?.order,
+  };
   const total = React.useMemo(
     () =>
       products?.reduce(
@@ -46,8 +51,19 @@ export const Order = ({ match }: OrderProps) => {
         toolbarProps={{ className: classes.toolbar }}
       />
       <div className={classes.content}>
-        <Grid container justify="center">
-          <Grid item xs={12} sm={8} md={7} lg={6} xl={5}>
+        <Grid
+          container
+          justify="center"
+          spacing={2}
+          alignItems="center"
+        >
+          <Grid item xs={12}>
+            <Typography variant="h4" align="center">
+              Orden
+            </Typography>
+            <Divider />
+          </Grid>
+          <Grid item xs={12} sm={10} md={7} lg={6} xl={8}>
             <Paper elevation={4} className={classes.paper}>
               <Grid container>
                 {loading && (
@@ -55,8 +71,14 @@ export const Order = ({ match }: OrderProps) => {
                     <Loading />
                   </Grid>
                 )}
+                {orderDate && <OrderInformation {...{ orderDate }} />}
+                {!loading && (
+                  <DeliveryInformation
+                    {...{ deliveryDate, orderDate }}
+                  />
+                )}
                 {products?.map((product) => (
-                  <Product {...{ product }} />
+                  <Product key={product.id} {...{ product }} />
                 ))}
                 {!loading && !products?.length && (
                   <Grid container item xs={12} justify="center">
@@ -67,6 +89,24 @@ export const Order = ({ match }: OrderProps) => {
               </Grid>
             </Paper>
           </Grid>
+          {location && (
+            <Grid item xs={12} xl={4}>
+              <Grid container justify="center" spacing={2}>
+                <Grid item xs={12} sm={10} md={7} lg={6} xl={12}>
+                  <Paper elevation={4} className={classes.paper}>
+                    <Typography
+                      variant="subtitle1"
+                      align="center"
+                      gutterBottom
+                    >
+                      Lugar de entrega
+                    </Typography>
+                    <Location location={location} />
+                  </Paper>
+                </Grid>
+              </Grid>
+            </Grid>
+          )}
         </Grid>
       </div>
     </>
