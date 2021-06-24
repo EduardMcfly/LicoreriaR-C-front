@@ -36,7 +36,7 @@ export const Header = (props?: HeaderProps) => {
         <Toolbar
           variant="regular"
           component={ToolbarLinkRef}
-          to={PathRoutes.ROOT}
+          to={PathRoutes.LANDING}
           {...toolbarProps}
         >
           <Avatar src={logo} className={classes.icon} />
