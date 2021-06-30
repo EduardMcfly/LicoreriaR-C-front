@@ -9,8 +9,8 @@ export type UserMap = UserMapBase &
 
 export interface UserInfo {
   name: string;
-  orderDate: Date;
-  orderTime: string;
+  orderDate?: Date;
+  orderTime?: string;
 }
 
 export interface CartProductBase {
