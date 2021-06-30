@@ -1,4 +1,5 @@
 import { UserMap, CartProductBase, CartProduct } from './types';
+import set from 'date-fns/set';
 import format from 'date-fns/format';
 import parse from 'date-fns/parse';
 import differenceInDays from 'date-fns/differenceInDays';
@@ -57,12 +58,20 @@ export const setStorageMap = (userMap: UserMap) => {
   localStorage.setItem(keyStorageMap, JSON.stringify(userMap));
 };
 
-export function getNewHour(value: string, newDate: Date) {
-  const formatTime = 'HH:mm';
-  const minDate = new Date().setHours(0, 0, 0, 0);
+export const getMinDateTime = () =>
+  addMinutes(
+    set(new Date(), { milliseconds: 0, seconds: 0 }),
+    minDeliveryTime,
+  );
+
+const formatTime = 'HH:mm';
+export function getNewHour(value?: string, newDate?: Date) {
+  const minDate = getMinDateTime();
+  if (!value) value = format(minDate, formatTime);
+  if (!newDate) newDate = minDate;
   const someDay = !differenceInDays(newDate, minDate);
   if (someDay) {
-    const min = addMinutes(new Date(), minDeliveryTime);
+    const min = minDate;
     return isBefore(parse(value, formatTime, min), min)
       ? format(min, formatTime)
       : value;
