@@ -63,11 +63,8 @@ export const ShopProvider = ({
   const [products, setProducts] = React.useState(
     () => new Map<CartProduct['id'], CartProduct>(),
   );
-  const now = new Date();
   const [userInfo, setUserInfo] = React.useState<UserInfo>({
     name: '',
-    orderDate: now,
-    orderTime: format(now, 'HH:mm'),
   });
 
   const [map, setMap] = React.useState<UserMap>(getStorageMap());
