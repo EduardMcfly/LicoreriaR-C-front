@@ -203,16 +203,10 @@ export const ShopProvider = ({
 
     if (typeof name === 'string') newState = setState({ name });
     if (orderDate) {
-      const dateFormat = 'yyyy-MM-dd';
-      const newValue =
-        orderDate instanceof Date
-          ? orderDate
-          : parse(orderDate, dateFormat, new Date());
-
-      if (!isNaN(+newValue))
+      if (!isNaN(+orderDate))
         newState = setState({
-          orderDate: newValue,
-          orderTime: getNewHour(userInfo.orderTime, newValue),
+          orderDate: orderDate,
+          orderTime: getNewHour(userInfo.orderTime, orderDate),
         });
     }
     if (typeof orderTime === 'string')
