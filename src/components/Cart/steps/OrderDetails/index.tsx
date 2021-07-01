@@ -1,16 +1,26 @@
+import React from 'react';
 import format from 'date-fns/format';
 import addDays from 'date-fns/addDays';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import { useShop } from 'contexts';
+import { getMinDateTime, useShop, dateFormat } from 'contexts';
 import { maxDaysOrder } from '../../constants';
-
-const dateFormat = 'yyyy-MM-dd';
 
 export const OrderDetails = () => {
   const { userInfo } = useShop();
+
+  const [now, setNow] = React.useState(getMinDateTime);
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      const newNow = getMinDateTime();
+      if (+newNow > +now) setNow(newNow);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [now]);
+
   const { name, orderDate, orderTime, onChange } = userInfo;
 
   const getDate = (date: Date | number): string => {
@@ -20,9 +30,10 @@ export const OrderDetails = () => {
       return getDate(new Date());
     }
   };
-  const date = getDate(orderDate);
+
+  const date = orderDate;
   const time = orderTime;
-  const minDateFormat = getDate(new Date().setHours(0, 0, 0, 0));
+  const minDateFormat = getDate(now);
 
   return (
     <Grid>
@@ -71,7 +82,7 @@ export const OrderDetails = () => {
         fullWidth
         InputLabelProps={{ shrink: true }}
         inputProps={{
-          min: format(new Date(), 'HH:mm'),
+          min: format(now, 'HH:mm'),
         }}
       />
     </Grid>
