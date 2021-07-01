@@ -6,7 +6,7 @@ import differenceInDays from 'date-fns/differenceInDays';
 import addMinutes from 'date-fns/addMinutes';
 import isBefore from 'date-fns/isBefore';
 
-import { minDeliveryTime } from './constants';
+import { minDeliveryTime, dateFormat } from './constants';
 
 const min = 0;
 export const getValidAmount = (amount: number) =>
@@ -65,11 +65,22 @@ export const getMinDateTime = () =>
   );
 
 const formatTime = 'HH:mm';
-export function getNewHour(value?: string, newDate?: Date) {
+
+export function getNewDate(newDate: Date) {
+  const minDate = getMinDateTime();
+  return isBefore(newDate, minDate) ? newDate : minDate;
+}
+
+export function getNewHour(value?: string, newDate?: string | Date) {
   const minDate = getMinDateTime();
   if (!value) value = format(minDate, formatTime);
   if (!newDate) newDate = minDate;
-  const someDay = !differenceInDays(newDate, minDate);
+  const someDay = !differenceInDays(
+    newDate instanceof Date
+      ? newDate
+      : parse(newDate, dateFormat, new Date()),
+    minDate,
+  );
   if (someDay) {
     const min = minDate;
     return isBefore(parse(value, formatTime, min), min)
