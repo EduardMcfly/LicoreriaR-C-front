@@ -4,7 +4,10 @@ import { Product, useCartProducts } from 'graphqlAPI';
 import { useProducts } from 'contexts/Products';
 import format from 'date-fns/format';
 import parse from 'date-fns/parse';
+
+import { dateFormat, orderTimeFormat } from './constants';
 import {
+  getMinDateTime,
   getValidAmount,
   getStorage,
   setStorage,
@@ -27,7 +30,7 @@ type ChangeMap = (
 
 type UserInfoValues = {
   name: string;
-  orderDate: string | Date;
+  orderDate: string;
   orderTime: string;
 };
 
@@ -63,9 +66,43 @@ export const ShopProvider = ({
   const [products, setProducts] = React.useState(
     () => new Map<CartProduct['id'], CartProduct>(),
   );
-  const [userInfo, setUserInfo] = React.useState<UserInfo>({
-    name: '',
+
+  const getFormat = (
+    now: Date,
+  ): Pick<UserInfo, 'orderDate' | 'orderTime'> => {
+    const orderDate = format(now, dateFormat);
+    return {
+      orderDate,
+      orderTime: getNewHour(format(now, orderTimeFormat), orderDate),
+    };
+  };
+
+  const [userInfo, setUserInfo] = React.useState<UserInfo>(() => {
+    const now = getMinDateTime();
+    return {
+      name: '',
+      ...getFormat(now),
+    };
   });
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      const now = getMinDateTime();
+      const dateTime = parse(
+        `${userInfo.orderDate} ${userInfo.orderTime}`,
+        `${dateFormat} ${orderTimeFormat}`,
+        new Date(),
+      );
+      if (+now > +dateTime)
+        setUserInfo({
+          ...userInfo,
+          ...getFormat(now),
+        });
+    }, 1e4);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [userInfo, setUserInfo]);
 
   const [map, setMap] = React.useState<UserMap>(getStorageMap());
 
