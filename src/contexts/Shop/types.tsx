@@ -9,7 +9,7 @@ export type UserMap = UserMapBase &
 
 export interface UserInfo {
   name: string;
-  orderDate?: Date;
+  orderDate?: string;
   orderTime?: string;
 }
 
