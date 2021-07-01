@@ -249,3 +249,4 @@ export const ShopConsumer = ShopContext.Consumer;
 export const useShop = () => React.useContext(ShopContext);
 export * from './utils';
 export * from './types';
+export * from './constants';
