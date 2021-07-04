@@ -1,10 +1,10 @@
 import React from 'react';
 
 import { Products } from './Products';
-import Map from './Map';
 import { OrderDetails } from './OrderDetails';
 import { StepButtonObject, StepButtonComponent } from './StepActions';
 import { Action } from './common';
+import AddressInformation from './AddressInformation';
 
 interface StepType {
   label: React.ReactNode;
@@ -50,8 +50,8 @@ export const steps: StepType[] = [
     ],
   },
   {
-    label: 'Selecciona tu ubicación',
-    content: Map,
+    label: 'Información del domicilio',
+    content: AddressInformation,
     buttons: [
       {
         label: 'Atrás',
@@ -61,7 +61,8 @@ export const steps: StepType[] = [
       {
         label: 'Comprar',
         action: Action.buy,
-        disabled: ({ map }) => !map.center,
+        disabled: ({ map, userInfo }) =>
+          !map.center || !userInfo.name,
       },
     ],
   },
