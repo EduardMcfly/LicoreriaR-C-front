@@ -45,9 +45,7 @@ export const steps: StepType[] = [
         label: 'Siguiente',
         action: Action.next,
         disabled: ({ userInfo }) =>
-          !userInfo.name ||
-          !userInfo.orderDate ||
-          !userInfo.orderTime,
+          !userInfo.orderDate || !userInfo.orderTime,
       },
     ],
   },

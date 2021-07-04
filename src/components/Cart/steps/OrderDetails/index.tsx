@@ -21,7 +21,7 @@ export const OrderDetails = () => {
     return () => clearInterval(interval);
   }, [now]);
 
-  const { name, orderDate, orderTime, onChange } = userInfo;
+  const { orderDate, orderTime, onChange } = userInfo;
 
   const getDate = (date: Date | number): string => {
     try {
@@ -37,18 +37,6 @@ export const OrderDetails = () => {
 
   return (
     <Grid>
-      <TextField
-        label="Nombre completo"
-        name="name"
-        value={name}
-        onChange={({ target: { value } }) => {
-          onChange({ name: value });
-        }}
-        margin="dense"
-        type="text"
-        autoFocus
-        fullWidth
-      />
       <Typography gutterBottom variant="body2">
         Datos del pedido
       </Typography>
