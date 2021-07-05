@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { Product, useCartProducts } from 'graphqlAPI';
-import { useProducts } from 'contexts/Products';
+import { Order } from 'graphqlAPI';
 import format from 'date-fns/format';
 import parse from 'date-fns/parse';
 
@@ -41,8 +40,11 @@ export type RemoveProduct = (item: CartProduct['id']) => void;
 
 export interface ShopProps extends ShopPropsBase {
   products: CartProduct[];
-  userInfo: UserInfo & { onChange: ChangeUserInfo };
+  userInfo: UserInfo & { dateTime?: Date; onChange: ChangeUserInfo };
   map: UserMap & { onChange: ChangeMap };
+  orders: Order[];
+  addOrder: (item: Order) => void;
+  removeOrder: (item: Order['id']) => void;
   addProduct: (item: CartProductBase) => void;
   changeAmount: ChangeAmount;
   removeProduct: RemoveProduct;
@@ -68,6 +70,7 @@ export const ShopProvider = ({
     removeProducts,
   } = useShopProducts();
 
+  const [orders, setOrders] = React.useState<Order[]>([]);
   const getFormat = (
     now: Date,
   ): Pick<UserInfo, 'orderDate' | 'orderTime'> => {
@@ -86,26 +89,44 @@ export const ShopProvider = ({
     };
   });
 
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      const now = getMinDateTime();
-      const dateTime = parse(
+  const getDateTime = () => {
+    try {
+      return parse(
         `${userInfo.orderDate} ${userInfo.orderTime}`,
         `${dateFormat} ${orderTimeFormat}`,
         new Date(),
       );
-      if (+now > +dateTime)
-        setUserInfo({
-          ...userInfo,
+    } catch (error) {}
+  };
+
+  const dateTime = getDateTime();
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      const now = getMinDateTime();
+
+      if (dateTime && +now > +dateTime)
+        setUserInfo((state) => ({
+          ...state,
           ...getFormat(now),
-        });
+        }));
     }, 1e4);
     return () => {
       clearInterval(interval);
     };
-  }, [userInfo, setUserInfo]);
+  }, [dateTime, setUserInfo]);
 
   const [map, setMap] = React.useState<UserMap>(getStorageMap());
+
+  const removeOrder = (id: Order['id']) => {
+    setOrders((newOrders) =>
+      newOrders.filter((order) => order.id !== id),
+    );
+  };
+
+  const addOrder = (order: Order) => {
+    setOrders((newOrders) => [order, ...newOrders]);
+  };
 
   const onChangeMap: ChangeMap = ({ center, zoom }) => {
     let newState: Partial<UserMap> | null = null;
@@ -160,7 +181,14 @@ export const ShopProvider = ({
           ...map,
           onChange: onChangeMap,
         },
-        userInfo: { ...userInfo, onChange: onChangeUserInfo },
+        userInfo: {
+          ...userInfo,
+          dateTime,
+          onChange: onChangeUserInfo,
+        },
+        removeOrder,
+        addOrder,
+        orders,
       }}
     >
       {children}
