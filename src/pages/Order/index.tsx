@@ -6,12 +6,14 @@ import { Paper, Grid, Typography, Divider } from '@material-ui/core';
 import { useOrder } from 'graphqlAPI';
 import { Header } from 'components/Layout/Header';
 import { Loading } from 'components/Loading';
-import { Total } from './Total';
 import { Product } from './product';
-import EmptyOrder from './EmptyOrder';
-import Location from './Location';
-import OrderInformation from './OrderInformation';
-import DeliveryInformation from './DeliveryInformation';
+import {
+  OrderInformation,
+  Total,
+  EmptyOrder,
+  Location,
+  DeliveryInformation,
+} from '../../components/Order';
 
 type OrderProps = RouteComponentProps<{
   id: string;

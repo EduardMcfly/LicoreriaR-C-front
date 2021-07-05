@@ -15,7 +15,7 @@ interface LocationProps {
   location: OrderLocation;
 }
 
-const Location = ({ location }: LocationProps) => {
+export const Location = ({ location }: LocationProps) => {
   const classes = useStyles();
   const { lat, lng } = location;
 
