@@ -18,6 +18,7 @@ import {
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
+import { useShop } from 'contexts/Shop';
 import { DialogContentLoading } from '../Dialog';
 import steps from './steps';
 import { StepActions, StepButton } from './steps/StepActions';
@@ -57,6 +58,7 @@ export default function CartDialog({
   const classes = useStyles();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const { addOrder } = useShop();
   const [activeStep, setActiveStep] = React.useState(0);
 
   const [onBuy, { loading }] = useOnBuy();
@@ -68,10 +70,17 @@ export default function CartDialog({
   const title = 'Carrito de compras';
 
   const handleAction = async (action?: Action | number) => {
-    if (action === Action.buy) {
-      await onBuy();
+    if (action === Action.close) {
       onClose();
       setActiveStep(0);
+      return;
+    }
+    if (action === Action.buy) {
+      const order = await onBuy();
+      if (order) {
+        setActiveStep(steps.length - 1);
+        addOrder(order);
+      }
       return;
     }
     const getNewActiveStep = () => {
