@@ -1,5 +1,6 @@
 import { useMutation, gql } from '@apollo/client';
 import { Mutation, MutationCreateOrderArgs } from '../types-graphql';
+import { orderFragment } from './fragments';
 
 export const CREATE_ORDER_MUTATION = gql`
   mutation (
@@ -14,10 +15,10 @@ export const CREATE_ORDER_MUTATION = gql`
       location: $location
       products: $products
     ) {
-      id
-      orderDate
+      ...OrderFragment
     }
   }
+  ${orderFragment}
 `;
 
 export const useCreateOrder = () => {
