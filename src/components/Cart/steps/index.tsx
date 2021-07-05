@@ -5,6 +5,7 @@ import { OrderDetails } from './OrderDetails';
 import { StepButtonObject, StepButtonComponent } from './StepActions';
 import { Action } from './common';
 import AddressInformation from './AddressInformation';
+import Result from './Result';
 
 interface StepType {
   label: React.ReactNode;
@@ -63,6 +64,16 @@ export const steps: StepType[] = [
         action: Action.buy,
         disabled: ({ map, userInfo }) =>
           !map.center || !userInfo.name,
+      },
+    ],
+  },
+  {
+    label: 'Resultado de tu pedido',
+    content: Result,
+    buttons: [
+      {
+        label: 'Cerrar',
+        action: Action.close,
       },
     ],
   },
