@@ -1,13 +1,13 @@
 import qs from 'querystring';
-
-import { useShop } from 'contexts';
-import { ProductOrderInput, useCreateOrder } from 'graphqlAPI';
-import { getUrlWhatsapp } from 'utils';
-import { createRouteOrder } from '../../../constantsApp/index';
 import { ApolloError } from '@apollo/client';
 
+import { useShop } from 'contexts';
+import { Order, ProductOrderInput, useCreateOrder } from 'graphqlAPI';
+import { getUrlWhatsapp } from 'utils';
+import { createRouteOrder } from 'constantsApp';
+
 type OnBuy = [
-  () => Promise<void>,
+  () => Promise<Order | undefined>,
   {
     loading: boolean;
     error?: ApolloError;
@@ -19,8 +19,8 @@ export const useOnBuy = (): OnBuy => {
   const [createOrder, { loading, error }] = useCreateOrder();
   const handler = async () => {
     const { center } = map;
-    const { name, orderDate } = userInfo;
-    if (!center || !orderDate || !name) return;
+    const { name, dateTime } = userInfo;
+    if (!center || !dateTime || !name) return;
     const { lat, lng } = center;
 
     const { data, errors } = await createOrder({
@@ -30,19 +30,13 @@ export const useOnBuy = (): OnBuy => {
         ),
         client: name,
         location: { lat, lng },
-        orderDate,
+        orderDate: dateTime,
       },
     });
     const order = data?.createOrder;
     if (!order || errors) throw new Error('Error creating order');
-    const { origin } = window.location;
-    let text = `Hola\n`;
-    text += `Esta es mi orden de compra:\n`;
-    text += origin + createRouteOrder({ id: order.id });
-    let url = getUrlWhatsapp();
-    url += qs.stringify({ text });
-    window.open(url, '_blank')?.focus();
     removeProducts();
+    return order;
   };
   return [handler, { loading, error }];
 };
@@ -51,4 +45,15 @@ export enum Action {
   back = 'back',
   next = 'next',
   buy = 'buy',
+  close = 'close',
+}
+
+export function sendWhatsapp(order: Order) {
+  const { origin } = window.location;
+  let text = `Hola\n`;
+  text += `Esta es mi orden de compra:\n`;
+  text += origin + createRouteOrder({ id: order.id });
+  let url = getUrlWhatsapp();
+  url += qs.stringify({ text });
+  window.open(url, '_blank')?.focus();
 }
