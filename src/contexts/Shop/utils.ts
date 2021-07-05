@@ -6,6 +6,7 @@ import differenceInDays from 'date-fns/differenceInDays';
 import addMinutes from 'date-fns/addMinutes';
 import isBefore from 'date-fns/isBefore';
 
+import { Order } from 'graphqlAPI';
 import { minDeliveryTime, dateFormat } from './constants';
 
 const min = 0;
@@ -34,6 +35,26 @@ export const setStorage = (products: CartProduct[]) => {
         amount,
       })),
     ),
+  );
+};
+
+const keyOrders = 'orders';
+
+export const getOrders = () => {
+  try {
+    const products: Order[] = JSON.parse(
+      localStorage.getItem(keyOrders) || '',
+    );
+    return products;
+  } catch (error) {
+    return [];
+  }
+};
+
+export const setOrders = (orders: Order[]) => {
+  localStorage.setItem(
+    keyOrders,
+    JSON.stringify(orders.map<Order['id']>(({ id }) => id)),
   );
 };
 
