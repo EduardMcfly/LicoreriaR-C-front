@@ -54,11 +54,16 @@ export const DeliveryInformation = ({
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          {dateTime && (
+          {(dateTime && (
             <Typography color="primary" variant="h6" align="center">
               Entregado el {dateTime}
             </Typography>
-          )}
+          )) ||
+            (!hasProblem && (
+              <Typography color="primary" variant="h6" align="center">
+                Se está preparando la entrega
+              </Typography>
+            ))}
           {hasProblem && (
             <Typography color="error" variant="h6" align="center">
               {deliveryCanceled && 'La entrega se cancelo'}
