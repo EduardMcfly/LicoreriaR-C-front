@@ -6,11 +6,9 @@ import format from 'date-fns/format';
 import parse from 'date-fns/parse';
 
 import { dateFormat, orderTimeFormat } from './constants';
+import { useShopProducts } from './hooks';
 import {
   getMinDateTime,
-  getValidAmount,
-  getStorage,
-  setStorage,
   getStorageMap,
   setStorageMap,
   getNewHour,
@@ -56,16 +54,19 @@ const ShopContext = React.createContext<ShopProps>(
   Object.create(null),
 );
 
-const array: Product[] = [];
-
 export const ShopProvider = ({
   children,
 }: React.PropsWithChildren<
   ShopPropsBase & { isCreating?: boolean }
 >) => {
-  const [products, setProducts] = React.useState(
-    () => new Map<CartProduct['id'], CartProduct>(),
-  );
+  const {
+    loading,
+    addProduct,
+    getProducts,
+    changeAmount,
+    removeProduct,
+    removeProducts,
+  } = useShopProducts();
 
   const getFormat = (
     now: Date,
@@ -105,116 +106,6 @@ export const ShopProvider = ({
   }, [userInfo, setUserInfo]);
 
   const [map, setMap] = React.useState<UserMap>(getStorageMap());
-
-  const productsBase = useProducts();
-
-  const productsLoaded = productsBase.data?.products.data;
-
-  const [productsStorage] = React.useState(getStorage);
-  const loadedStorageProducts = React.useRef(false);
-
-  const productsNotExist = productsStorage
-    .map(({ id }) => id)
-    .filter(
-      (id) => !productsLoaded?.some((product) => product.id === id),
-    );
-
-  const [loading, setLoading] = React.useState(true);
-
-  const cartProducts = useCartProducts({
-    variables: {
-      products: productsNotExist,
-    },
-    skip:
-      !!productsBase.loading || !productsNotExist.length || !loading,
-  });
-
-  const loadingAll = productsBase.loading || cartProducts.loading;
-
-  React.useEffect(() => {
-    if (loading && !loadingAll) setLoading(false);
-  }, [loading, loadingAll]);
-
-  const cartProductsData = cartProducts.data?.cartProducts;
-
-  const allProducts = React.useMemo(() => {
-    if (loadingAll) return array;
-    return [...(productsLoaded || []), ...(cartProductsData || [])];
-  }, [productsLoaded, cartProductsData, loadingAll]);
-
-  const getProduct = React.useCallback(
-    (id: CartProduct['id']) =>
-      allProducts.find((product) => product.id === id),
-    [allProducts],
-  );
-
-  React.useEffect(() => {
-    if (loadingAll || loadedStorageProducts.current) return;
-    loadedStorageProducts.current = true;
-    const newProducts = new Map<string, CartProduct>();
-    for (const productStorage of productsStorage) {
-      const { id } = productStorage;
-      const product = getProduct(id);
-      if (product) {
-        newProducts.set(id, {
-          id,
-          amount: productStorage.amount,
-          product,
-        });
-      }
-    }
-    setProducts(newProducts);
-  }, [productsStorage, getProduct, loadingAll]);
-
-  const getProducts = React.useCallback(
-    () => Array.from(products.values()),
-    [products],
-  );
-
-  const saveStorage = React.useCallback(() => {
-    setStorage(getProducts());
-  }, [getProducts]);
-
-  const addProduct = (item: CartProductBase) => {
-    const { id, amount } = item;
-    const product = getProduct(id);
-    if (product) {
-      const cartProduct = products.get(id);
-      products.set(id, {
-        ...item,
-        amount:
-          ((cartProduct && cartProduct.amount) || 0) +
-          getValidAmount(amount),
-        product,
-      });
-      setProducts(new Map(products));
-      saveStorage();
-    }
-  };
-
-  const changeAmount = (item: CartProductBase) => {
-    const { id, amount } = item;
-    const product = products.get(id);
-    if (product) {
-      products.set(id, {
-        ...product,
-        amount: getValidAmount(amount),
-      });
-      setProducts(new Map(products));
-      saveStorage();
-    }
-  };
-
-  const removeProduct = (id: CartProduct['id']) => {
-    products.delete(id);
-    setProducts(new Map(products));
-    saveStorage();
-  };
-
-  const removeProducts = () => {
-    setProducts(new Map());
-    saveStorage();
-  };
 
   const onChangeMap: ChangeMap = ({ center, zoom }) => {
     let newState: Partial<UserMap> | null = null;
